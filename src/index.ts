@@ -6,6 +6,8 @@ import { Layout } from "./common/layout/Layout";
 import { MenuModel } from "./menu/model/MenuModel";
 import { MenuItemModel } from "./menu/model/MenuItemModel";
 import { Style } from "./common/Style";
+import { LayoutModel } from "./common/layout/Layout";
+import { PopupModel } from "./common/PopupModel";
 
 export { Menu, attachMenu, PopupControl, KeyboardControl };
-export type { Layout, MenuModel, MenuItemModel, Style }
+export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel }
