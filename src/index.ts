@@ -13,6 +13,14 @@ import { ControlContextProvider } from "./context/controls/ControlContextProvide
 import { LayoutContextProvider } from "./context/layout/LayoutContextProvider";
 import { Popup } from "./common/popup/Popup";
 import { useControlsLock } from "./controls/useControlsLock";
+import { LockStatus } from "./controls/useControlsLock";
 
-export { Menu, attachMenu, PopupControl, KeyboardControl, useInitLayoutContext, ControlContextProvider, LayoutContextProvider };
-export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel, Popup, useControlsLock }
+export {
+  Menu, attachMenu,
+  PopupControl, KeyboardControl,
+  useInitLayoutContext,
+  ControlContextProvider,
+  LayoutContextProvider,
+  Popup,
+};
+export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel, useControlsLock, LockStatus }
