@@ -7,7 +7,7 @@ import { List } from "abstract-list";
 
 interface Props {
   uid?: string;
-  items: List<MenuItem>;
+  items: List<MenuItem> | MenuItem[];
   maxRows?: number;
   onSelect(item: MenuItem): void;
   onClose(): Promise<void>;
