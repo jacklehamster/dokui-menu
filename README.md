@@ -1,10 +1,10 @@
-# bun-template
+# dokui-menu
 
-[![npm version](https://badge.fury.io/js/bun-template.svg)](https://www.npmjs.com/package/bun-template)
+[![npm version](https://badge.fury.io/js/dokui-menu.svg)](https://www.npmjs.com/package/dokui-menu)
 
-Bun template for creating projects using bunjs
+Popup menus for JRPG like games.
 
-![](https://jacklehamster.github.io/bun-template/icon.png)
+![](https://jacklehamster.github.io/dokui-menu/icon.png)
 ## Install bun
 
 https://bun.sh/
