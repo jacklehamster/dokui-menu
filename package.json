@@ -2,7 +2,7 @@
   "name": "dokui-menu",
   "module": "src/index.ts",
   "description": "UI menu for Dobuki Game Engine.",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "keywords": [
     "bun",
     "bunjs",
