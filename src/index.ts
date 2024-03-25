@@ -21,6 +21,6 @@ export {
   useInitLayoutContext,
   ControlContextProvider,
   LayoutContextProvider,
-  Popup,
+  Popup, useControlsLock,
 };
-export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel, useControlsLock, LockStatus }
+export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel, LockStatus }
