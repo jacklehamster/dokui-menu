@@ -11,6 +11,8 @@ import { PopupModel } from "./common/PopupModel";
 import { useInitLayoutContext } from "./context/layout/useInitLayoutContext";
 import { ControlContextProvider } from "./context/controls/ControlContextProvider";
 import { LayoutContextProvider } from "./context/layout/LayoutContextProvider";
+import { Popup } from "./common/popup/Popup";
+import { useControlsLock } from "./controls/useControlsLock";
 
 export { Menu, attachMenu, PopupControl, KeyboardControl, useInitLayoutContext, ControlContextProvider, LayoutContextProvider };
-export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel }
+export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel, Popup, useControlsLock }
