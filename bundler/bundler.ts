@@ -5,6 +5,7 @@ async function bundle() {
     minify: false,
     sourcemap: "external",
     target: "browser",
+    external: ["react"],
   });
 }
 

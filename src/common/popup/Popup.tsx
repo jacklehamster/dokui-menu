@@ -2,10 +2,10 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
+import React from 'react';
 import { CSSProperties, useEffect, useState } from 'react';
 import './css/Popup.css';
 import { usePopupLayout } from '../layout/usePopupLayout';
-import { useUniquePopupOnLayout } from '../layout/useUniquePopupOnLayout';
 import { PopupProps } from '../ElemProps';
 
 //  Hack until I get proper CSS to work
@@ -47,12 +47,9 @@ export function Popup({
     requestAnimationFrame(() => setH(100));
   }, [setH]);
 
-  const { top, left, right, bottom, width, height } = usePopupLayout({
+  const { top, left, right, bottom, width, height, visible } = usePopupLayout({
     layout,
   });
-
-  const { visible } = useUniquePopupOnLayout({ layout, disabled });
-
 
   return (
     <div
@@ -60,14 +57,13 @@ export function Popup({
         ...OVERLAP,
         left, top, right, bottom, width, height,
         fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
-        display: !visible ? "none": "",
+        display: visible ? "" : "none",
       }}
     >
-      <div
-      className="pop-up"
+      <div className="pop-up"
       style={{
           ...POPUP_CSS,
-          marginTop: `${removed ? 80 : 0}%`,
+          marginTop: `${removed ? `calc(${-120}px + 100%)` : "0%"}`,
           width: '100%',
           height: `${removed ? 0 : h}%`,
           overflow: 'hidden',

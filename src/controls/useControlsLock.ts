@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PopupControlListener } from "./PopupControlListener";
 import { useControlContext } from "../context/controls/ControlContextProvider";
 
@@ -8,34 +8,25 @@ export enum LockStatus {
 }
 
 interface Props {
-  uid?: string;
   listener: PopupControlListener;
-  disabled?: boolean;
 }
 
-export function useControlsLock({ uid, listener }: Props) {
-  const { popupControl, controlsLock, setControlsLock, removeControlsLock } = useControlContext();
-  const lockState = uid && controlsLock === uid ? LockStatus.UNLOCKED : LockStatus.LOCKED;
+export function useControlsLock({ listener }: Props) {
+  const { popupControl } = useControlContext();
+  const [active, setActive] = useState(true);
+
+  useEffect(() => {
+    return popupControl.registerActive(setActive);
+  }, [popupControl, setActive]);
 
   useEffect((): (() => void) | void => {
-    if (lockState === LockStatus.UNLOCKED) {
+    if (active) {
       popupControl.addListener(listener);
       return () => {
         popupControl.removeListener(listener);
       };
     }
-  }, [listener, popupControl, lockState]);
+  }, [listener, popupControl, active]);
 
-  useEffect(() => {
-    if (uid) {
-      setControlsLock(uid);
-    }
-  }, [popupControl, uid, setControlsLock]);
-
-  useEffect(() => {
-    if (uid) {
-      return () => removeControlsLock(uid);
-    }
-  }, [setControlsLock, uid]);
-  return { lockState, popupControl };
+  return { lockState: active ? LockStatus.UNLOCKED : LockStatus.LOCKED, popupControl };
 }

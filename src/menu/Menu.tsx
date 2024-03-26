@@ -1,9 +1,9 @@
+import React from 'react';
 import { map } from 'abstract-list';
 import { useMenu } from './useMenu';
 import { MenuItem } from './model/MenuItemModel';
 import { MenuModel } from './model/MenuModel';
-import { useCallback, useId, useState } from 'react';
-import { v4 as uuid } from "uuid";
+import { useCallback, useState } from 'react';
 import { Popup } from '../common/popup/Popup';
 
 export interface Props {
@@ -21,7 +21,6 @@ export function Menu({
   }: Props): JSX.Element {
 
   const { items = [], maxRows, style, layout} = menu;
-  const uid = useId();
 
   const [submenu, setSubmenu] = useState<MenuModel>();
   
@@ -38,7 +37,7 @@ export function Menu({
     } else {
       onSelect(item);
     }
-  }, [onSelect, setSubmenu, onClose, uuid]);
+  }, [onSelect, setSubmenu, onClose]);
   const [submenuRemoved, setSubmenuRemoved] = useState(false);
   const submenuClose = useCallback(async () => {
     setSubmenuRemoved(true);
@@ -47,11 +46,11 @@ export function Menu({
         setSubmenu(undefined);
         setSubmenuRemoved(false);
         resolve();
-      }, 200);
+      }, 150);
     });
   }, [setSubmenu, setSubmenuRemoved]);
 
-  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ uid, items, maxRows, onSelect: onMenuSelect, onClose });
+  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: onMenuSelect, onClose });
 
   return (
     <>

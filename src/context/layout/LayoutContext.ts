@@ -1,11 +1,12 @@
+import { UniqueLayoutWithCallback } from "unique-layout";
 import { Layout, LayoutModel } from "../../common/layout/Layout";
 
 export interface LayoutContextType {
   getLayout(layout: Layout): LayoutModel;
-  layoutReplacementCallbacks: Record<string, () => void>,
+  uniqueLayout: UniqueLayoutWithCallback;
 }
 
 export const DEFAULT_GAME_CONTEXT: LayoutContextType = {
-  layoutReplacementCallbacks: {},
   getLayout: layout => typeof (layout) === "object" ? layout : {},
+  uniqueLayout: new UniqueLayoutWithCallback(),
 };

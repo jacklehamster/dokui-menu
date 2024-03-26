@@ -17,11 +17,11 @@
     "strict": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "types": ["bun-types"]
+    "types": ["bun-types"],
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"],

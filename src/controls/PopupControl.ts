@@ -1,7 +1,15 @@
+import { UniqueLayoutWithCallback } from "unique-layout";
 import { PopupControlListener } from "./PopupControlListener";
+
+const CONTROL_TAG = "control";
 
 export class PopupControl implements PopupControlListener {
   #listeners = new Set<PopupControlListener>();
+  #uniqueControls = new UniqueLayoutWithCallback();
+
+  registerActive(setActive: (active: boolean) => void): () => void {
+    return this.#uniqueControls.registerLayout(CONTROL_TAG, setActive);
+  }
 
   onUp(): void {
     for (const listener of this.#listeners) {

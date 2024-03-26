@@ -6,7 +6,6 @@ import { MenuItem } from "./model/MenuItemModel";
 import { List } from "abstract-list";
 
 interface Props {
-  uid?: string;
   items: List<MenuItem> | MenuItem[];
   maxRows?: number;
   onSelect(item: MenuItem): void;
@@ -25,7 +24,7 @@ interface Result {
   onMenuAction(index?: number): void;
 }
 
-export function useMenu({ uid, items, maxRows, onSelect, onClose }: Props): Result {
+export function useMenu({ items, maxRows, onSelect, onClose }: Props): Result {
   const { scroll, scrollUp, scrollDown, select, moveSelection, selectedItem } = useSelection({ items, maxRows });
   const [menuHoverEnabled, setMenuHoverEnabled] = useState(false);
 
@@ -42,7 +41,6 @@ export function useMenu({ uid, items, maxRows, onSelect, onClose }: Props): Resu
   }, [items, moveSelection, selectedItem, setMenuHoverEnabled, onClose]);
 
   const { lockState } = useControlsLock({
-    uid,
     listener: useMemo<PopupControlListener>(() => ({
       onAction,
       onUp() {

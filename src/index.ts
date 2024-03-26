@@ -1,5 +1,5 @@
 import { Menu } from "./menu/Menu";
-import { attachMenu } from "./menu/attachMenu";
+import { openMenu } from "./menu/openMenu";
 import { KeyboardControl } from "./controls/KeyboardControl";
 import { PopupControl } from "./controls/PopupControl";
 import { Layout } from "./common/layout/Layout";
@@ -16,7 +16,7 @@ import { useControlsLock } from "./controls/useControlsLock";
 import { LockStatus } from "./controls/useControlsLock";
 
 export {
-  Menu, attachMenu,
+  Menu, openMenu,
   PopupControl, KeyboardControl,
   useInitLayoutContext,
   ControlContextProvider,

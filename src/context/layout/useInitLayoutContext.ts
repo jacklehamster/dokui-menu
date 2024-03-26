@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from "react";
 import { LayoutContextType } from "./LayoutContext";
 import { Layout, LayoutModel } from "../../common/layout/Layout";
+import { UniqueLayoutWithCallback } from "unique-layout";
 
 export function useInitLayoutContext() {
-  const layoutReplacementCallbacks = useMemo(() => ({}), []);
   const layoutModels = useMemo<Record<string, LayoutModel>>(() => ({}), []);
   const registerLayout = useCallback((layout: LayoutModel | LayoutModel[]) => {
     const layouts = Array.isArray(layout) ? layout : [layout];
@@ -22,11 +22,12 @@ export function useInitLayoutContext() {
     }
     return layout;
   }, [layoutModels]);
+  const uniqueLayout = useMemo(() => new UniqueLayoutWithCallback(), []);
 
   const context: LayoutContextType = useMemo(() => ({
     getLayout,
-    layoutReplacementCallbacks,
-  }), [layoutReplacementCallbacks, getLayout]);
+    uniqueLayout,
+  }), [getLayout, uniqueLayout]);
 
   return { context, registerLayout };
 }
