@@ -2,12 +2,19 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import { KeyboardControl } from "dokui-menu";
+import { KeyboardControl, openDialog } from "dokui-menu";
 import { openMenu } from "dokui-menu"
 
 export function showMenu() {
   const { popupControl } = openMenu({
+    dialog: {
+      messages: [
+        "hello",
+        "there",
+      ],
+    },
     menu: {
+      disableBack: true,
       layout: {
         name: "main",
       },
@@ -51,6 +58,75 @@ export function showMenu() {
                 label: "exit",
                 back: true,
               },
+            ],
+          },
+        },
+        {
+          label: "dialog",
+          dialog: {
+            layout: {
+              name: "main",
+              position: [150, 100],
+              size: [200, 200],
+            },
+            messages: [
+              "Hello",
+              {
+                text: "How are you?",
+                menu: {
+                  layout: {
+                    position: [150, 300],
+                    size: [300, 200],
+                  },
+                  items: [
+                    { label: "I don't know",
+                      dialog: {
+                        layout: {
+                          position: [250, 200],
+                          size: [300, 100],      
+                        },
+                        messages: ["you should know"],
+                      } 
+                    },
+                    { label: "good", back: true,
+                      dialog: {
+                        layout: {
+                          position: [250, 200],
+                          size: [300, 100],      
+                        },
+                        messages: ["That's good to know."],
+                      } 
+                    },
+                    { label: "bad", back: true },
+                  ],
+                },
+              },
+              "Bye",
+            ],
+          },
+        },
+        {
+          label: "dialog without closing menu",
+          dialog: {
+            layout: {
+              position: [150, 100],
+              size: [200, 200],
+            },
+            messages: [
+              "test dialog",
+            ],
+          },
+        },
+        {
+          label: "hidden on select",
+          hideOnSelect: true,
+          dialog: {
+            layout: {
+              position: [150, 100],
+              size: [200, 200],
+            },
+            messages: [
+              "menu hidden",
             ],
           },
         }

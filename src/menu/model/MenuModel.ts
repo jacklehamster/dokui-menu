@@ -8,4 +8,5 @@ export interface MenuModel {
   maxRows?: number;
   style?: Style;
   layout?: Layout;
+  disableBack?: boolean;
 }

@@ -9,7 +9,7 @@ interface Props {
   items: List<MenuItem> | MenuItem[];
   maxRows?: number;
   onSelect(item: MenuItem): void;
-  onClose(): Promise<void>;
+  onBack(): void;
 }
 
 interface Result {
@@ -24,7 +24,7 @@ interface Result {
   onMenuAction(index?: number): void;
 }
 
-export function useMenu({ items, maxRows, onSelect, onClose }: Props): Result {
+export function useMenu({ items, maxRows, onSelect, onBack }: Props): Result {
   const { scroll, scrollUp, scrollDown, select, moveSelection, selectedItem } = useSelection({ items, maxRows });
   const [menuHoverEnabled, setMenuHoverEnabled] = useState(false);
 
@@ -35,10 +35,7 @@ export function useMenu({ items, maxRows, onSelect, onClose }: Props): Result {
       return;
     }
     onSelect(item);
-    if (typeof (item) === "object" && item.back) {
-      onClose();
-    }
-  }, [items, moveSelection, selectedItem, setMenuHoverEnabled, onClose]);
+  }, [items, moveSelection, selectedItem, setMenuHoverEnabled]);
 
   const { lockState } = useControlsLock({
     listener: useMemo<PopupControlListener>(() => ({
@@ -51,7 +48,8 @@ export function useMenu({ items, maxRows, onSelect, onClose }: Props): Result {
         setMenuHoverEnabled(false);
         moveSelection(1);
       },
-    }), [moveSelection, setMenuHoverEnabled, onAction]),
+      onBack,
+    }), [moveSelection, setMenuHoverEnabled, onAction, onBack]),
   });
 
   return {

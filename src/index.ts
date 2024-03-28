@@ -14,6 +14,8 @@ import { LayoutContextProvider } from "./context/layout/LayoutContextProvider";
 import { Popup } from "./common/popup/Popup";
 import { useControlsLock } from "./controls/useControlsLock";
 import { LockStatus } from "./controls/useControlsLock";
+import { Dialog } from "./dialog/Dialog";
+import { openDialog } from "./dialog/openDialog";
 
 export {
   Menu, openMenu,
@@ -23,5 +25,7 @@ export {
   LayoutContextProvider,
   Popup, useControlsLock,
   LockStatus,
+
+  Dialog, openDialog,
 };
 export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel }

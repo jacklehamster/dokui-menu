@@ -1,13 +1,14 @@
 import React, { ReactNode, useContext } from 'react';
 import { DEFAULT_GAME_CONTEXT, LayoutContextType } from './LayoutContext';
+import { useInitLayoutContext } from './useInitLayoutContext';
 
 interface Props {
   children: ReactNode;
-  context: LayoutContextType;
 }
 
 const Context = React.createContext<LayoutContextType>(DEFAULT_GAME_CONTEXT);
-const LayoutContextProvider: React.FC<Props> = ({ children, context }: Props) => {
+const LayoutContextProvider: React.FC<Props> = ({ children }: Props) => {
+  const context = useInitLayoutContext();
   return <Context.Provider value={context}>{children}</Context.Provider>;
 };
 

@@ -23,6 +23,9 @@ export class KeyboardControl {
         case "Space":
           popupControl.onAction();
           break;
+        case "Escape":
+          popupControl.onBack();
+          break;
       }
       e.preventDefault();
     });

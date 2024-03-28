@@ -22,9 +22,7 @@ export function useControlsLock({ listener }: Props) {
   useEffect((): (() => void) | void => {
     if (active) {
       popupControl.addListener(listener);
-      return () => {
-        popupControl.removeListener(listener);
-      };
+      return () => popupControl.removeListener(listener);
     }
   }, [listener, popupControl, active]);
 

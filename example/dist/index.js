@@ -2683,38 +2683,51 @@ var import_react6 = __toESM(require_react(), 1);
 var import_react7 = __toESM(require_react(), 1);
 var import_react8 = __toESM(require_react(), 1);
 var import_react9 = __toESM(require_react(), 1);
+var import_react10 = __toESM(require_react(), 1);
 var jsx_dev_runtime2 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime3 = __toESM(require_jsx_dev_runtime(), 1);
+var import_react11 = __toESM(require_react(), 1);
+var import_react12 = __toESM(require_react(), 1);
 var jsx_dev_runtime4 = __toESM(require_jsx_dev_runtime(), 1);
-var import_react10 = __toESM(require_react(), 1);
 var jsx_dev_runtime5 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime6 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime7 = __toESM(require_jsx_dev_runtime(), 1);
+var import_react13 = __toESM(require_react(), 1);
+var import_react14 = __toESM(require_react(), 1);
+var jsx_dev_runtime8 = __toESM(require_jsx_dev_runtime(), 1);
 var useSelection = function({ items, maxRows }) {
   const [selectedIndex, setSelectedIndex] = import_react2.useState(0);
   const [scroll, setScroll] = import_react2.useState(0);
-  const scrollDown = import_react2.useCallback(() => {
+  const scrollDown = import_react2.useCallback((rows = 1) => {
     const len = items.length.valueOf();
-    setScroll((scroll2) => Math.min(len - (maxRows ?? len), scroll2 + 1));
+    setScroll((scroll2) => Math.min(len - (maxRows ?? len), scroll2 + rows));
   }, [setScroll, items, maxRows]);
-  const scrollUp = import_react2.useCallback(() => setScroll((scroll2) => Math.max(0, scroll2 - 1)), [setScroll]);
-  import_react2.useEffect(() => {
-    if (maxRows) {
-      if (selectedIndex - scroll >= maxRows) {
-        scrollDown();
-      } else if (selectedIndex - scroll < 0) {
-        scrollUp();
-      }
+  const scrollUp = import_react2.useCallback((rows = 1) => {
+    setScroll((scroll2) => Math.max(0, scroll2 - rows));
+  }, [setScroll]);
+  const fixScroll = import_react2.useCallback((index) => {
+    if (maxRows && index - scroll >= maxRows) {
+      scrollDown(Math.max(1, scroll - maxRows + index + 1));
     }
-  }, [selectedIndex, scroll, maxRows, scrollUp, scrollDown]);
+    if (index - scroll < 0) {
+      scrollUp(Math.max(1, scroll - index));
+    }
+  }, [scroll, maxRows, scrollUp, scrollDown]);
   const select = import_react2.useCallback((index) => {
     const len = items.length.valueOf();
-    setSelectedIndex(Math.max(0, Math.min(index, len - 1)));
+    const newIndex = Math.max(0, Math.min(index, len - 1));
+    setSelectedIndex(newIndex);
   }, [setSelectedIndex, items]);
   const moveSelection = import_react2.useCallback((dy) => {
     if (dy) {
       const len = items.length.valueOf();
-      setSelectedIndex((index) => Math.max(0, Math.min(index + dy, len - 1)));
+      setSelectedIndex((index) => {
+        const newIndex = Math.max(0, Math.min(index + dy, len - 1));
+        fixScroll(newIndex);
+        return newIndex;
+      });
     }
-  }, [setSelectedIndex, items]);
+  }, [setSelectedIndex, fixScroll, items]);
   const selectedItem = import_react2.useMemo(() => items.at(selectedIndex), [items, selectedIndex]);
   return {
     select,
@@ -2741,14 +2754,12 @@ var useControlsLock = function({ listener }) {
   import_react3.useEffect(() => {
     if (active) {
       popupControl.addListener(listener);
-      return () => {
-        popupControl.removeListener(listener);
-      };
+      return () => popupControl.removeListener(listener);
     }
   }, [listener, popupControl, active]);
   return { lockState: active ? LockStatus.UNLOCKED : LockStatus.LOCKED, popupControl };
 };
-var useMenu = function({ items, maxRows, onSelect, onClose }) {
+var useMenu = function({ items, maxRows, onSelect, onBack }) {
   const { scroll, scrollUp, scrollDown, select, moveSelection, selectedItem } = useSelection({ items, maxRows });
   const [menuHoverEnabled, setMenuHoverEnabled] = import_react.useState(false);
   const onAction = import_react.useCallback((index) => {
@@ -2757,10 +2768,7 @@ var useMenu = function({ items, maxRows, onSelect, onClose }) {
       return;
     }
     onSelect(item);
-    if (typeof item === "object" && item.back) {
-      onClose();
-    }
-  }, [items, moveSelection, selectedItem, setMenuHoverEnabled, onClose]);
+  }, [items, moveSelection, selectedItem, setMenuHoverEnabled]);
   const { lockState } = useControlsLock({
     listener: import_react.useMemo(() => ({
       onAction,
@@ -2771,8 +2779,9 @@ var useMenu = function({ items, maxRows, onSelect, onClose }) {
       onDown() {
         setMenuHoverEnabled(false);
         moveSelection(1);
-      }
-    }), [moveSelection, setMenuHoverEnabled, onAction])
+      },
+      onBack
+    }), [moveSelection, setMenuHoverEnabled, onAction, onBack])
   });
   return {
     selectedItem,
@@ -2786,6 +2795,24 @@ var useMenu = function({ items, maxRows, onSelect, onClose }) {
     }, [menuHoverEnabled]),
     onMenuAction: onAction
   };
+};
+var useInitLayoutContext = function() {
+  const layoutModels = import_react10.useMemo(() => ({}), []);
+  const getLayout = import_react10.useCallback((layout) => {
+    if (typeof layout === "string") {
+      return layoutModels[layout];
+    }
+    if (layout.name) {
+      layoutModels[layout.name] = layout;
+    }
+    return layout;
+  }, [layoutModels]);
+  const uniqueLayout = import_react10.useMemo(() => new x, []);
+  const context = import_react10.useMemo(() => ({
+    getLayout,
+    uniqueLayout
+  }), [getLayout, uniqueLayout]);
+  return context;
 };
 var usePopupLayout = function({ layout }) {
   const { getLayout, uniqueLayout } = useLayoutContext();
@@ -2812,7 +2839,8 @@ var Popup2 = function({
   layout,
   style,
   disabled,
-  removed
+  removed,
+  onBack
 }) {
   const [h, setH] = import_react7.useState(0);
   import_react7.useEffect(() => {
@@ -2821,86 +2849,153 @@ var Popup2 = function({
   const { top, left, right, bottom, width, height, visible } = usePopupLayout({
     layout
   });
-  return jsx_dev_runtime3.jsxDEV("div", {
-    style: {
-      ...OVERLAP,
-      left,
-      top,
-      right,
-      bottom,
-      width,
-      height,
-      fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
-      display: visible ? "" : "none"
-    },
-    children: jsx_dev_runtime3.jsxDEV("div", {
-      className: "pop-up",
-      style: {
-        ...POPUP_CSS,
-        marginTop: `${removed ? "calc(-120px + 100%)" : "0%"}`,
-        width: "100%",
-        height: `${removed ? 0 : h}%`,
-        overflow: "hidden",
-        transition: "height .2s, margin-top .2s",
-        outlineColor: disabled ? "whitesmoke" : "white"
-      },
-      children: jsx_dev_runtime3.jsxDEV("div", {
-        className: "double-border",
+  return jsx_dev_runtime3.jsxDEV(jsx_dev_runtime3.Fragment, {
+    children: [
+      onBack ? jsx_dev_runtime3.jsxDEV("div", {
         style: {
-          ...DOUBLE_BORDER_CSS,
-          height: `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
-          pointerEvents: disabled ? "none" : undefined,
-          borderColor: disabled ? "silver" : "white"
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          cursor: "pointer"
         },
-        children: removed ? undefined : children
+        onClick: onBack
+      }, undefined, false, undefined, this) : undefined,
+      jsx_dev_runtime3.jsxDEV("div", {
+        style: {
+          ...OVERLAP,
+          left,
+          top,
+          right,
+          bottom,
+          width,
+          height,
+          fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
+          display: visible ? "" : "none"
+        },
+        children: jsx_dev_runtime3.jsxDEV("div", {
+          className: "pop-up",
+          style: {
+            ...POPUP_CSS,
+            marginTop: `${removed ? height ? `${height}px` : "80%" : "0px"}`,
+            width: "100%",
+            height: `${removed ? 0 : h}%`,
+            overflow: "hidden",
+            opacity: removed ? 0 : 1,
+            transition: "height .2s, margin-top .2s, opacity .2s",
+            outlineColor: disabled ? "whitesmoke" : "white"
+          },
+          children: jsx_dev_runtime3.jsxDEV("div", {
+            className: "double-border",
+            style: {
+              ...DOUBLE_BORDER_CSS,
+              height: `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
+              pointerEvents: disabled ? "none" : undefined,
+              borderColor: disabled ? "silver" : "white"
+            },
+            children: removed ? undefined : children
+          }, undefined, false, undefined, this)
+        }, undefined, false, undefined, this)
       }, undefined, false, undefined, this)
-    }, undefined, false, undefined, this)
-  }, undefined, false, undefined, this);
+    ]
+  }, undefined, true, undefined, this);
 };
-var Menu = function({
+var useRemove = function() {
+  const [removed, setRemoved] = import_react11.useState(false);
+  const remove = import_react11.useCallback((onClose) => {
+    setRemoved(true);
+    const timeout = setTimeout(() => {
+      setRemoved(false);
+      onClose();
+    }, 150);
+    return () => clearTimeout(timeout);
+  }, [setRemoved]);
+  return { removed, remove };
+};
+var Container = function({
+  menu,
+  dialog,
+  onSelect,
+  onClose = async () => {
+  }
+}) {
+  const [index, setIndex] = import_react12.useState(0);
+  const onNext = import_react12.useCallback(async () => {
+    setIndex((index2) => index2 + 1);
+  }, [setIndex]);
+  const elems = import_react12.useMemo(() => {
+    return [
+      dialog ? jsx_dev_runtime4.jsxDEV(Dialog, {
+        dialog,
+        onSelect,
+        onClose: onNext
+      }, undefined, false, undefined, this) : undefined,
+      menu ? jsx_dev_runtime4.jsxDEV(Menu2, {
+        menu,
+        onSelect,
+        onClose: onNext
+      }, undefined, false, undefined, this) : undefined
+    ].filter((e) => !!e);
+  }, [menu, dialog, onSelect, onNext]);
+  import_react12.useEffect(() => {
+    if (elems.length && index >= elems.length) {
+      setIndex(0);
+      onClose();
+    }
+  }, [index, setIndex, elems, onClose]);
+  return elems[index];
+};
+var Menu2 = function({
   menu,
   onSelect,
-  onClose,
-  removed
+  onClose
 }) {
   const { items = [], maxRows, style, layout } = menu;
-  const [submenu, setSubmenu] = import_react6.useState();
-  const onMenuSelect = import_react6.useCallback((item) => {
+  const { removed, remove } = useRemove();
+  const [sub, setSub] = import_react6.useState({});
+  const [postClose, setPostClose] = import_react6.useState();
+  const [hidden, setHidden] = import_react6.useState(false);
+  const onBack = import_react6.useCallback(() => {
+    remove(onClose);
+  }, [remove, onClose]);
+  const executeMenuItem = import_react6.useCallback((item) => {
     if (typeof item === "object") {
-      if (item.submenu) {
-        setSubmenu(item.submenu);
+      if (item.hideOnSelect) {
+        setHidden(true);
       }
-      {
+      if (item.dialog || item.submenu) {
+        const { dialog, submenu, ...rest } = item;
+        setSub({ dialog, menu: submenu });
+        setPostClose(rest);
+      } else {
+        setPostClose(undefined);
+        setSub({});
         onSelect(item);
-      }
-      if (item.back) {
-        onClose();
+        if (item.back) {
+          onBack();
+        }
       }
     } else {
       onSelect(item);
     }
-  }, [onSelect, setSubmenu, onClose]);
-  const [submenuRemoved, setSubmenuRemoved] = import_react6.useState(false);
-  const submenuClose = import_react6.useCallback(async () => {
-    setSubmenuRemoved(true);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setSubmenu(undefined);
-        setSubmenuRemoved(false);
-        resolve();
-      }, 150);
-    });
-  }, [setSubmenu, setSubmenuRemoved]);
-  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: onMenuSelect, onClose });
-  return jsx_dev_runtime4.jsxDEV(jsx_dev_runtime4.Fragment, {
+  }, [onSelect, setSub, onBack, setPostClose, setHidden]);
+  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack });
+  const onCloseSub = import_react6.useCallback(async () => {
+    setSub({});
+    if (postClose) {
+      executeMenuItem(postClose);
+    }
+    setHidden(false);
+  }, [setSub, executeMenuItem, setHidden, postClose]);
+  return jsx_dev_runtime5.jsxDEV(jsx_dev_runtime5.Fragment, {
     children: [
-      jsx_dev_runtime4.jsxDEV(Popup2, {
+      jsx_dev_runtime5.jsxDEV(Popup2, {
         layout: layout ?? {},
         style,
         disabled,
-        removed,
+        removed: removed || hidden,
+        onBack: menu.disableBack ? undefined : onBack,
         children: [
-          jsx_dev_runtime4.jsxDEV("svg", {
+          jsx_dev_runtime5.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -2910,23 +3005,23 @@ var Menu = function({
               display: scroll > 0 ? "" : "none",
               left: `calc(50% - 100px)`
             },
-            onMouseDown: () => scrollUp(),
-            children: jsx_dev_runtime4.jsxDEV("polygon", {
+            onClick: () => scrollUp(),
+            children: jsx_dev_runtime5.jsxDEV("polygon", {
               points: "100,10 110,20 90,20",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime4.jsxDEV("div", {
+          jsx_dev_runtime5.jsxDEV("div", {
             style: {
               paddingTop: 10,
               cursor: menuHoverEnabled ? "inherit" : "auto"
             },
-            children: jsx_dev_runtime4.jsxDEV("div", {
+            children: jsx_dev_runtime5.jsxDEV("div", {
               style: { height: `calc(100% - 27px)`, overflow: "hidden" },
-              children: jsx_dev_runtime4.jsxDEV("div", {
+              children: jsx_dev_runtime5.jsxDEV("div", {
                 style: { marginTop: scroll * -31, transition: "margin-top .2s" },
                 children: z(items, (item, index) => {
-                  return jsx_dev_runtime4.jsxDEV("div", {
+                  return jsx_dev_runtime5.jsxDEV("div", {
                     style: {
                       color: selectedItem === item ? "black" : disabled ? "silver" : "white",
                       backgroundColor: selectedItem !== item ? "black" : disabled ? "silver" : "white",
@@ -2944,7 +3039,7 @@ var Menu = function({
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime4.jsxDEV("svg", {
+          jsx_dev_runtime5.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -2954,60 +3049,32 @@ var Menu = function({
               display: scroll + (maxRows ?? items.length.valueOf()) < items.length.valueOf() ? "" : "none",
               left: `calc(50% - 100px)`
             },
-            onMouseDown: () => scrollDown(),
-            children: jsx_dev_runtime4.jsxDEV("polygon", {
+            onClick: () => scrollDown(),
+            children: jsx_dev_runtime5.jsxDEV("polygon", {
               points: "100,20 110,10 90,10",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this)
         ]
       }, undefined, true, undefined, this),
-      submenu && jsx_dev_runtime4.jsxDEV(Menu, {
-        menu: submenu,
+      jsx_dev_runtime5.jsxDEV(Container, {
+        menu: sub.menu,
+        dialog: sub.dialog,
         onSelect,
-        onClose: submenuClose,
-        removed: submenuRemoved
+        onClose: onCloseSub
       }, undefined, false, undefined, this)
     ]
   }, undefined, true, undefined, this);
 };
-var useInitLayoutContext = function() {
-  const layoutModels = import_react10.useMemo(() => ({}), []);
-  const registerLayout = import_react10.useCallback((layout) => {
-    const layouts = Array.isArray(layout) ? layout : [layout];
-    layouts.forEach((layout2) => {
-      if (layout2.name) {
-        layoutModels[layout2.name] = layout2;
-      }
-    });
-  }, [layoutModels]);
-  const getLayout = import_react10.useCallback((layout) => {
-    if (typeof layout === "string") {
-      return layoutModels[layout];
-    }
-    if (layout.name) {
-      layoutModels[layout.name] = layout;
-    }
-    return layout;
-  }, [layoutModels]);
-  const uniqueLayout2 = import_react10.useMemo(() => new x, []);
-  const context = import_react10.useMemo(() => ({
-    getLayout,
-    uniqueLayout: uniqueLayout2
-  }), [getLayout, uniqueLayout2]);
-  return { context, registerLayout };
-};
-var BasicMenu = function(props) {
-  const { context } = useInitLayoutContext();
-  const onClose = props.onClose ?? props.detach;
+var BasicPopup = function(props) {
   const onSelect = props.onSelect ?? ((item) => console.log(item));
-  return jsx_dev_runtime5.jsxDEV(LayoutContextProvider, {
-    context,
-    children: jsx_dev_runtime5.jsxDEV(ControlContextProvider, {
+  return jsx_dev_runtime6.jsxDEV(LayoutContextProvider, {
+    children: jsx_dev_runtime6.jsxDEV(ControlContextProvider, {
       popupControl: props.popupControl,
-      children: jsx_dev_runtime5.jsxDEV(Menu, {
-        menu: { ...props.menu },
-        onClose,
+      children: jsx_dev_runtime6.jsxDEV(Container, {
+        menu: props.menu,
+        dialog: props.dialog,
+        onClose: props.onClose,
         onSelect
       }, undefined, false, undefined, this)
     }, undefined, false, undefined, this)
@@ -3015,17 +3082,18 @@ var BasicMenu = function(props) {
 };
 var openMenu = function({
   menu,
+  dialog,
   onSelect,
-  root = document.body
+  root = document.body,
+  popupControl = new PopupControl
 }) {
   const rootElem = document.createElement("div");
   const reactRoot = client.default.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
-  const popupControl = new PopupControl;
-  const html = jsx_dev_runtime5.jsxDEV(BasicMenu, {
+  const html = jsx_dev_runtime7.jsxDEV(BasicPopup, {
+    dialog,
     menu,
     onSelect,
-    onClose: detach,
     detach,
     popupControl
   }, undefined, false, undefined, this);
@@ -3033,6 +3101,72 @@ var openMenu = function({
   root.appendChild(rootElem);
   return { popupControl, detach };
 };
+var useDialogState = function() {
+  const [index, setIndex] = import_react14.useState(0);
+  return {
+    index,
+    setIndex,
+    next: import_react14.useCallback(() => setIndex((index2) => index2 + 1), [setIndex])
+  };
+};
+var Dialog = function({ dialog, onSelect, onClose }) {
+  const { next, index } = useDialogState();
+  const [menu, setMenu] = import_react13.useState();
+  const { lockState, popupControl } = useControlsLock({
+    listener: import_react13.useMemo(() => ({
+      onAction: next,
+      onBack: next
+    }), [next])
+  });
+  const message = import_react13.useMemo(() => {
+    const message2 = dialog.messages.at(index);
+    return typeof message2 == "string" ? { text: message2 } : message2;
+  }, [index]);
+  import_react13.useEffect(() => {
+    if (message?.menu) {
+      setMenu(message?.menu);
+    }
+  }, [message, setMenu]);
+  const { removed, remove } = useRemove();
+  import_react13.useEffect(() => {
+    if (index >= dialog.messages.length.valueOf()) {
+      remove(onClose);
+    }
+  }, [dialog, index, remove, onClose]);
+  const onCloseMenu = import_react13.useCallback(async () => {
+    setMenu(undefined);
+    next();
+  }, [setMenu, next]);
+  return jsx_dev_runtime8.jsxDEV(jsx_dev_runtime8.Fragment, {
+    children: [
+      jsx_dev_runtime8.jsxDEV(Popup2, {
+        layout: dialog.layout ?? {},
+        style: dialog.style,
+        disabled: lockState === LockStatus.LOCKED,
+        removed,
+        onBack: dialog.disableBack ? undefined : next,
+        children: jsx_dev_runtime8.jsxDEV("div", {
+          style: {
+            padding: 10,
+            width: "100%",
+            height: "100%"
+          },
+          onClick: () => popupControl.onAction(),
+          children: jsx_dev_runtime8.jsxDEV("progressive-text", {
+            period: "30",
+            children: message?.text
+          }, undefined, false, undefined, this)
+        }, undefined, false, undefined, this)
+      }, undefined, false, undefined, this),
+      jsx_dev_runtime8.jsxDEV(Container, {
+        menu,
+        onSelect,
+        onClose: onCloseMenu
+      }, undefined, false, undefined, this)
+    ]
+  }, undefined, true, undefined, this);
+};
+var jsx_dev_runtime9 = __toESM(require_jsx_dev_runtime(), 1);
 var __create2 = Object.create;
 var __defProp2 = Object.defineProperty;
 var __getProtoOf2 = Object.getPrototypeOf;
@@ -3557,7 +3691,7 @@ var require_react_dom_development = __commonJS2((exports) => {
       var HostPortal = 4;
       var HostComponent = 5;
       var HostText = 6;
-      var Fragment2 = 7;
+      var Fragment32 = 7;
       var Mode = 8;
       var ContextConsumer = 9;
       var ContextProvider = 10;
@@ -4514,7 +4648,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             return "DehydratedFragment";
           case ForwardRef:
             return getWrappedName$1(type, type.render, "ForwardRef");
-          case Fragment2:
+          case Fragment32:
             return "Fragment";
           case HostComponent:
             return type;
@@ -13844,7 +13978,7 @@ var require_react_dom_development = __commonJS2((exports) => {
           }
         }
         function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-          if (current2 === null || current2.tag !== Fragment2) {
+          if (current2 === null || current2.tag !== Fragment32) {
             var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
             created.return = returnFiber;
             return created;
@@ -14246,7 +14380,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             if (child.key === key) {
               var elementType = element.type;
               if (elementType === REACT_FRAGMENT_TYPE) {
-                if (child.tag === Fragment2) {
+                if (child.tag === Fragment32) {
                   deleteRemainingChildren(returnFiber, child.sibling);
                   var existing = useFiber(child, element.props.children);
                   existing.return = returnFiber;
@@ -18287,7 +18421,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
             return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
           }
-          case Fragment2:
+          case Fragment32:
             return updateFragment(current2, workInProgress2, renderLanes2);
           case Mode:
             return updateMode(current2, workInProgress2, renderLanes2);
@@ -18554,7 +18688,7 @@ var require_react_dom_development = __commonJS2((exports) => {
           case SimpleMemoComponent:
           case FunctionComponent:
           case ForwardRef:
-          case Fragment2:
+          case Fragment32:
           case Mode:
           case Profiler:
           case ContextConsumer:
@@ -22764,7 +22898,7 @@ var require_react_dom_development = __commonJS2((exports) => {
         return fiber;
       }
       function createFiberFromFragment(elements, mode, lanes, key) {
-        var fiber = createFiber(Fragment2, elements, key, mode);
+        var fiber = createFiber(Fragment32, elements, key, mode);
         fiber.lanes = lanes;
         return fiber;
       }
@@ -23909,6 +24043,11 @@ class PopupControl {
       listener.onAction?.();
     }
   }
+  onBack() {
+    for (const listener of this.#listeners) {
+      listener.onBack?.();
+    }
+  }
   addListener(listener) {
     this.#listeners.add(listener);
   }
@@ -23944,7 +24083,8 @@ var DEFAULT_GAME_CONTEXT = {
   uniqueLayout: new x
 };
 var Context2 = import_react9.default.createContext(DEFAULT_GAME_CONTEXT);
-var LayoutContextProvider = ({ children, context }) => {
+var LayoutContextProvider = ({ children }) => {
+  const context = useInitLayoutContext();
   return jsx_dev_runtime2.jsxDEV(Context2.Provider, {
     value: context,
     children
@@ -23977,11 +24117,11 @@ var DOUBLE_BORDER_CSS = {
   color: "white",
   padding: 10,
   cursor: "pointer",
-  transition: "border-color .3s"
+  transition: "border-color .3s",
+  userSelect: "none"
 };
 var DOUBLE_BORDER_HEIGHT_OFFSET = 27;
 var DEFAULT_FONT_SIZE = 24;
-var uniqueLayout = new x;
 var client = __toESM2(require_client(), 1);
 
 class KeyboardControl {
@@ -24007,16 +24147,83 @@ class KeyboardControl {
         case "Space":
           popupControl.onAction();
           break;
+        case "Escape":
+          popupControl.onBack();
+          break;
       }
       e.preventDefault();
     });
   }
 }
 
+class ProgressiveText extends HTMLElement {
+  #observer;
+  #containerText;
+  #hiddenText;
+  #animationFrameRequest = 0;
+  constructor() {
+    super();
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    this.#containerText = shadowRoot.appendChild(document.createElement("span"));
+    this.#hiddenText = shadowRoot.appendChild(document.createElement("span"));
+    this.#hiddenText.style.color = "#00000020";
+    this.#observer = new MutationObserver((mutationsList) => this.handleMutation(mutationsList));
+  }
+  connectedCallback() {
+    this.childNodes.forEach((node) => {
+      this.#observer.observe(node, { characterData: true });
+      this.startProgressingText(node.textContent ?? "");
+    });
+  }
+  disconnectedCallback() {
+    this.#observer.disconnect();
+  }
+  handleMutation(mutationsList) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === "characterData") {
+        this.startProgressingText(mutation.target.textContent ?? "");
+      }
+    }
+  }
+  startProgressingText(text) {
+    cancelAnimationFrame(this.#animationFrameRequest);
+    let period = parseInt(this.getAttribute("period") ?? "10");
+    if (isNaN(period)) {
+      console.warn("Invalid period: ", period);
+      period = 10;
+      return;
+    }
+    let startTime = 0;
+    const loop = (time) => {
+      if (!startTime) {
+        startTime = time;
+      }
+      const numChars = Math.floor((time - startTime) / period);
+      const visibleText = text.slice(0, numChars);
+      const hiddenText = text.slice(numChars);
+      this.#containerText.textContent = visibleText;
+      this.#hiddenText.textContent = hiddenText;
+      if (numChars <= text.length) {
+        requestAnimationFrame(loop);
+      }
+    };
+    this.#animationFrameRequest = requestAnimationFrame(loop);
+  }
+}
+customElements.define("progressive-text", ProgressiveText);
+var client2 = __toESM2(require_client(), 1);
+
 // src/index.tsx
 function showMenu() {
   const { popupControl } = openMenu({
+    dialog: {
+      messages: [
+        "hello",
+        "there"
+      ]
+    },
     menu: {
+      disableBack: true,
       layout: {
         name: "main"
       },
@@ -24060,6 +24267,78 @@ function showMenu() {
                 label: "exit",
                 back: true
               }
+            ]
+          }
+        },
+        {
+          label: "dialog",
+          dialog: {
+            layout: {
+              name: "main",
+              position: [150, 100],
+              size: [200, 200]
+            },
+            messages: [
+              "Hello",
+              {
+                text: "How are you?",
+                menu: {
+                  layout: {
+                    position: [150, 300],
+                    size: [300, 200]
+                  },
+                  items: [
+                    {
+                      label: "I don't know",
+                      dialog: {
+                        layout: {
+                          position: [250, 200],
+                          size: [300, 100]
+                        },
+                        messages: ["you should know"]
+                      }
+                    },
+                    {
+                      label: "good",
+                      back: true,
+                      dialog: {
+                        layout: {
+                          position: [250, 200],
+                          size: [300, 100]
+                        },
+                        messages: ["That's good to know."]
+                      }
+                    },
+                    { label: "bad", back: true }
+                  ]
+                }
+              },
+              "Bye"
+            ]
+          }
+        },
+        {
+          label: "dialog without closing menu",
+          dialog: {
+            layout: {
+              position: [150, 100],
+              size: [200, 200]
+            },
+            messages: [
+              "test dialog"
+            ]
+          }
+        },
+        {
+          label: "hidden on select",
+          hideOnSelect: true,
+          dialog: {
+            layout: {
+              position: [150, 100],
+              size: [200, 200]
+            },
+            messages: [
+              "menu hidden"
             ]
           }
         }

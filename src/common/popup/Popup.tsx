@@ -6,7 +6,7 @@ import React from 'react';
 import { CSSProperties, useEffect, useState } from 'react';
 import './css/Popup.css';
 import { usePopupLayout } from '../layout/usePopupLayout';
-import { PopupProps } from '../ElemProps';
+import { PopupProps } from '../PopupProps';
 
 //  Hack until I get proper CSS to work
 const OVERLAP: CSSProperties = {
@@ -30,6 +30,7 @@ const DOUBLE_BORDER_CSS: CSSProperties = {
   padding: 10,
   cursor: 'pointer',
   transition: 'border-color .3s',
+  userSelect: 'none',
 };
 
 const DOUBLE_BORDER_HEIGHT_OFFSET = 27;
@@ -41,6 +42,7 @@ export function Popup({
   style,
   disabled,
   removed,
+  onBack,
 }: PopupProps): JSX.Element {
   const [h, setH] = useState(0);
   useEffect(() => {
@@ -52,6 +54,13 @@ export function Popup({
   });
 
   return (
+    <>
+    {onBack ? <div style={{
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+      cursor: "pointer",
+    }} onClick={onBack} /> : undefined}
     <div
       style={{
         ...OVERLAP,
@@ -63,11 +72,12 @@ export function Popup({
       <div className="pop-up"
       style={{
           ...POPUP_CSS,
-          marginTop: `${removed ? `calc(${-120}px + 100%)` : "0%"}`,
+          marginTop: `${removed ? height ? `${height}px` : "80%" : "0px"}`,
           width: '100%',
           height: `${removed ? 0 : h}%`,
           overflow: 'hidden',
-          transition: 'height .2s, margin-top .2s',
+          opacity: removed ? 0 : 1,
+          transition: 'height .2s, margin-top .2s, opacity .2s',
           outlineColor: disabled ? "whitesmoke" : "white",
         }}
       >
@@ -84,5 +94,6 @@ export function Popup({
         </div>
       </div>
     </div>
+    </>
   );
 }

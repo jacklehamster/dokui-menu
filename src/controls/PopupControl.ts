@@ -41,6 +41,12 @@ export class PopupControl implements PopupControlListener {
     }
   }
 
+  onBack(): void {
+    for (const listener of this.#listeners) {
+      listener.onBack?.();
+    }
+  }
+
   addListener(listener: PopupControlListener): void {
     this.#listeners.add(listener);
   }
