@@ -5,12 +5,37 @@
 import { KeyboardControl, openDialog } from "dokui-menu";
 import { openMenu } from "dokui-menu"
 
+const sampleSrc = "https://cdn.britannica.com/59/182359-050-C6F38CA3/Scarlett-Johansson-Natasha-Romanoff-Avengers-Age-of.jpg";
+const pikaSrc = "https://media.tenor.com/rbx3ph5SLRUAAAAi/pikachu-pokemon.gif";
+const byeSrc = "https://images.vexels.com/media/users/3/272491/isolated/preview/d6d58dbb207e59b46ab9e797b32ae014-bye-word-glossy-sign.png";
+
 export function showMenu() {
   const { popupControl } = openMenu({
     dialog: {
       messages: [
-        "hello",
-        "there",
+        {
+          text: "hello",
+          pictures: [{
+            layout: {
+              position: [350,100],
+              size: [200, 200],
+              positionFromRight: true,
+            },
+            images: [{ src: pikaSrc }],
+          }],    
+        },
+        "there!",
+        {
+          text: "bye",
+          pictures: [{
+            layout: {
+              position: [350,100],
+              size: [200, 200],
+              positionFromRight: true,
+            },
+            images: [{ src:  byeSrc }],
+          }],    
+        },
       ],
     },
     menu: {
@@ -24,6 +49,20 @@ export function showMenu() {
         {
           label: "third",
           submenu: {
+            pictures: [{
+              layout: {
+                position: [350,350],
+                size: [300, 300],
+                positionFromBottom: true,
+                positionFromRight: true,
+              },
+              images: [
+                {
+                  src: sampleSrc,
+                },
+              ],
+            }],
+        
             maxRows: 3,
             layout: {
               position: [150, 100],
@@ -64,6 +103,15 @@ export function showMenu() {
         {
           label: "dialog",
           dialog: {
+            pictures: [{
+              layout: {
+                position: [350,350],
+                size: [300, 300],
+                positionFromBottom: true,
+                positionFromRight: true,
+              },
+              images: [{ src: sampleSrc }],
+            }],      
             layout: {
               name: "main",
               position: [150, 100],

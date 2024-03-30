@@ -120,8 +120,10 @@ export function Menu({
           <polygon points="100,20 110,10 90,10" style={{ fill: "white" }}/>
         </svg>
       </Popup>
-      <Container menu={sub.menu} dialog={sub.dialog} onSelect={onSelect}
+      <Container menu={sub.menu} dialog={sub.dialog} pictures={menu.pictures}
+        onSelect={onSelect}
         onClose={onCloseSub}
+        removed={removed}
       />
     </>);
 }

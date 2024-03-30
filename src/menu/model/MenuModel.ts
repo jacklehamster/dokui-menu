@@ -1,12 +1,10 @@
 import { List } from "abstract-list";
 import { MenuItem } from "./MenuItemModel";
-import { Style } from "../../common/Style";
-import { Layout } from "../../common/layout/Layout";
+import { PopupModel } from "../../common/PopupModel";
+import { PictureModel } from "@/picture/model/PictureModel";
 
-export interface MenuModel {
+export interface MenuModel extends PopupModel {
+  pictures?: PictureModel[];
   items?: List<MenuItem> | MenuItem[];
   maxRows?: number;
-  style?: Style;
-  layout?: Layout;
-  disableBack?: boolean;
 }

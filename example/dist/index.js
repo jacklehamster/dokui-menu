@@ -2692,9 +2692,10 @@ var jsx_dev_runtime4 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime5 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime6 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime7 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime8 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react13 = __toESM(require_react(), 1);
 var import_react14 = __toESM(require_react(), 1);
-var jsx_dev_runtime8 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime9 = __toESM(require_jsx_dev_runtime(), 1);
 var useSelection = function({ items, maxRows }) {
   const [selectedIndex, setSelectedIndex] = import_react2.useState(0);
   const [scroll, setScroll] = import_react2.useState(0);
@@ -2854,6 +2855,8 @@ var Popup2 = function({
       onBack ? jsx_dev_runtime3.jsxDEV("div", {
         style: {
           position: "absolute",
+          left: 0,
+          top: 0,
           width: "100%",
           height: "100%",
           cursor: "pointer"
@@ -2911,12 +2914,41 @@ var useRemove = function() {
   }, [setRemoved]);
   return { removed, remove };
 };
+var Picture = function({ picture, removed }) {
+  return jsx_dev_runtime4.jsxDEV(jsx_dev_runtime4.Fragment, {
+    children: jsx_dev_runtime4.jsxDEV(Popup2, {
+      layout: picture.layout ?? {},
+      style: picture.style,
+      removed,
+      children: jsx_dev_runtime4.jsxDEV("div", {
+        style: {
+          padding: 10,
+          width: "100%",
+          height: "100%"
+        },
+        children: picture.images.map((image, index) => jsx_dev_runtime4.jsxDEV("div", {
+          style: {
+            backgroundImage: `url("${image.src}")`,
+            backgroundSize: "contain",
+            width: "100%",
+            height: "100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center"
+          }
+        }, index, false, undefined, this))
+      }, undefined, false, undefined, this)
+    }, undefined, false, undefined, this)
+  }, undefined, false, undefined, this);
+};
 var Container = function({
-  menu,
+  pictures,
   dialog,
-  onSelect,
+  menu,
+  onSelect = async () => {
+  },
   onClose = async () => {
-  }
+  },
+  removed
 }) {
   const [index, setIndex] = import_react12.useState(0);
   const onNext = import_react12.useCallback(async () => {
@@ -2924,12 +2956,12 @@ var Container = function({
   }, [setIndex]);
   const elems = import_react12.useMemo(() => {
     return [
-      dialog ? jsx_dev_runtime4.jsxDEV(Dialog, {
+      dialog ? jsx_dev_runtime5.jsxDEV(Dialog, {
         dialog,
         onSelect,
         onClose: onNext
       }, undefined, false, undefined, this) : undefined,
-      menu ? jsx_dev_runtime4.jsxDEV(Menu2, {
+      menu ? jsx_dev_runtime5.jsxDEV(Menu2, {
         menu,
         onSelect,
         onClose: onNext
@@ -2942,7 +2974,15 @@ var Container = function({
       onClose();
     }
   }, [index, setIndex, elems, onClose]);
-  return elems[index];
+  return jsx_dev_runtime5.jsxDEV(jsx_dev_runtime5.Fragment, {
+    children: [
+      elems[index],
+      pictures?.map((picture, index2) => jsx_dev_runtime5.jsxDEV(Picture, {
+        removed,
+        picture
+      }, index2, false, undefined, this))
+    ]
+  }, undefined, true, undefined, this);
 };
 var Menu2 = function({
   menu,
@@ -2986,16 +3026,16 @@ var Menu2 = function({
     }
     setHidden(false);
   }, [setSub, executeMenuItem, setHidden, postClose]);
-  return jsx_dev_runtime5.jsxDEV(jsx_dev_runtime5.Fragment, {
+  return jsx_dev_runtime6.jsxDEV(jsx_dev_runtime6.Fragment, {
     children: [
-      jsx_dev_runtime5.jsxDEV(Popup2, {
+      jsx_dev_runtime6.jsxDEV(Popup2, {
         layout: layout ?? {},
         style,
         disabled,
         removed: removed || hidden,
         onBack: menu.disableBack ? undefined : onBack,
         children: [
-          jsx_dev_runtime5.jsxDEV("svg", {
+          jsx_dev_runtime6.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -3006,22 +3046,22 @@ var Menu2 = function({
               left: `calc(50% - 100px)`
             },
             onClick: () => scrollUp(),
-            children: jsx_dev_runtime5.jsxDEV("polygon", {
+            children: jsx_dev_runtime6.jsxDEV("polygon", {
               points: "100,10 110,20 90,20",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime5.jsxDEV("div", {
+          jsx_dev_runtime6.jsxDEV("div", {
             style: {
               paddingTop: 10,
               cursor: menuHoverEnabled ? "inherit" : "auto"
             },
-            children: jsx_dev_runtime5.jsxDEV("div", {
+            children: jsx_dev_runtime6.jsxDEV("div", {
               style: { height: `calc(100% - 27px)`, overflow: "hidden" },
-              children: jsx_dev_runtime5.jsxDEV("div", {
+              children: jsx_dev_runtime6.jsxDEV("div", {
                 style: { marginTop: scroll * -31, transition: "margin-top .2s" },
                 children: z(items, (item, index) => {
-                  return jsx_dev_runtime5.jsxDEV("div", {
+                  return jsx_dev_runtime6.jsxDEV("div", {
                     style: {
                       color: selectedItem === item ? "black" : disabled ? "silver" : "white",
                       backgroundColor: selectedItem !== item ? "black" : disabled ? "silver" : "white",
@@ -3039,7 +3079,7 @@ var Menu2 = function({
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime5.jsxDEV("svg", {
+          jsx_dev_runtime6.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -3050,37 +3090,38 @@ var Menu2 = function({
               left: `calc(50% - 100px)`
             },
             onClick: () => scrollDown(),
-            children: jsx_dev_runtime5.jsxDEV("polygon", {
+            children: jsx_dev_runtime6.jsxDEV("polygon", {
               points: "100,20 110,10 90,10",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this)
         ]
       }, undefined, true, undefined, this),
-      jsx_dev_runtime5.jsxDEV(Container, {
+      jsx_dev_runtime6.jsxDEV(Container, {
         menu: sub.menu,
         dialog: sub.dialog,
+        pictures: menu.pictures,
         onSelect,
-        onClose: onCloseSub
+        onClose: onCloseSub,
+        removed
       }, undefined, false, undefined, this)
     ]
   }, undefined, true, undefined, this);
 };
 var BasicPopup = function(props) {
   const onSelect = props.onSelect ?? ((item) => console.log(item));
-  return jsx_dev_runtime6.jsxDEV(LayoutContextProvider, {
-    children: jsx_dev_runtime6.jsxDEV(ControlContextProvider, {
+  return jsx_dev_runtime7.jsxDEV(LayoutContextProvider, {
+    children: jsx_dev_runtime7.jsxDEV(ControlContextProvider, {
       popupControl: props.popupControl,
-      children: jsx_dev_runtime6.jsxDEV(Container, {
-        menu: props.menu,
-        dialog: props.dialog,
-        onClose: props.onClose,
+      children: jsx_dev_runtime7.jsxDEV(Container, {
+        ...props,
         onSelect
       }, undefined, false, undefined, this)
     }, undefined, false, undefined, this)
   }, undefined, false, undefined, this);
 };
 var openMenu = function({
+  pictures,
   menu,
   dialog,
   onSelect,
@@ -3088,9 +3129,16 @@ var openMenu = function({
   popupControl = new PopupControl
 }) {
   const rootElem = document.createElement("div");
+  rootElem.style.position = "absolute";
+  rootElem.style.left = "0px";
+  rootElem.style.top = "0px";
+  rootElem.style.width = "100%";
+  rootElem.style.height = "100%";
+  rootElem.style.overflow = "hidden";
   const reactRoot = client.default.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
-  const html = jsx_dev_runtime7.jsxDEV(BasicPopup, {
+  const html = jsx_dev_runtime8.jsxDEV(BasicPopup, {
+    pictures,
     dialog,
     menu,
     onSelect,
@@ -3137,36 +3185,41 @@ var Dialog = function({ dialog, onSelect, onClose }) {
     setMenu(undefined);
     next();
   }, [setMenu, next]);
-  return jsx_dev_runtime8.jsxDEV(jsx_dev_runtime8.Fragment, {
+  return jsx_dev_runtime9.jsxDEV(jsx_dev_runtime9.Fragment, {
     children: [
-      jsx_dev_runtime8.jsxDEV(Popup2, {
+      jsx_dev_runtime9.jsxDEV(Popup2, {
         layout: dialog.layout ?? {},
         style: dialog.style,
         disabled: lockState === LockStatus.LOCKED,
         removed,
         onBack: dialog.disableBack ? undefined : next,
-        children: jsx_dev_runtime8.jsxDEV("div", {
+        children: jsx_dev_runtime9.jsxDEV("div", {
           style: {
             padding: 10,
             width: "100%",
             height: "100%"
           },
           onClick: () => popupControl.onAction(),
-          children: jsx_dev_runtime8.jsxDEV("progressive-text", {
+          children: jsx_dev_runtime9.jsxDEV("progressive-text", {
             period: "30",
             children: message?.text
           }, undefined, false, undefined, this)
         }, undefined, false, undefined, this)
       }, undefined, false, undefined, this),
-      jsx_dev_runtime8.jsxDEV(Container, {
+      jsx_dev_runtime9.jsxDEV(Container, {
+        pictures: dialog.pictures,
         menu,
         onSelect,
-        onClose: onCloseMenu
+        onClose: onCloseMenu,
+        removed
+      }, undefined, false, undefined, this),
+      jsx_dev_runtime9.jsxDEV(Container, {
+        pictures: message?.pictures
       }, undefined, false, undefined, this)
     ]
   }, undefined, true, undefined, this);
 };
-var jsx_dev_runtime9 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime10 = __toESM(require_jsx_dev_runtime(), 1);
 var __create2 = Object.create;
 var __defProp2 = Object.defineProperty;
 var __getProtoOf2 = Object.getPrototypeOf;
@@ -3691,7 +3744,7 @@ var require_react_dom_development = __commonJS2((exports) => {
       var HostPortal = 4;
       var HostComponent = 5;
       var HostText = 6;
-      var Fragment32 = 7;
+      var Fragment52 = 7;
       var Mode = 8;
       var ContextConsumer = 9;
       var ContextProvider = 10;
@@ -4648,7 +4701,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             return "DehydratedFragment";
           case ForwardRef:
             return getWrappedName$1(type, type.render, "ForwardRef");
-          case Fragment32:
+          case Fragment52:
             return "Fragment";
           case HostComponent:
             return type;
@@ -13978,7 +14031,7 @@ var require_react_dom_development = __commonJS2((exports) => {
           }
         }
         function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-          if (current2 === null || current2.tag !== Fragment32) {
+          if (current2 === null || current2.tag !== Fragment52) {
             var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
             created.return = returnFiber;
             return created;
@@ -14380,7 +14433,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             if (child.key === key) {
               var elementType = element.type;
               if (elementType === REACT_FRAGMENT_TYPE) {
-                if (child.tag === Fragment32) {
+                if (child.tag === Fragment52) {
                   deleteRemainingChildren(returnFiber, child.sibling);
                   var existing = useFiber(child, element.props.children);
                   existing.return = returnFiber;
@@ -18421,7 +18474,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
             return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
           }
-          case Fragment32:
+          case Fragment52:
             return updateFragment(current2, workInProgress2, renderLanes2);
           case Mode:
             return updateMode(current2, workInProgress2, renderLanes2);
@@ -18688,7 +18741,7 @@ var require_react_dom_development = __commonJS2((exports) => {
           case SimpleMemoComponent:
           case FunctionComponent:
           case ForwardRef:
-          case Fragment32:
+          case Fragment52:
           case Mode:
           case Profiler:
           case ContextConsumer:
@@ -22898,7 +22951,7 @@ var require_react_dom_development = __commonJS2((exports) => {
         return fiber;
       }
       function createFiberFromFragment(elements, mode, lanes, key) {
-        var fiber = createFiber(Fragment32, elements, key, mode);
+        var fiber = createFiber(Fragment52, elements, key, mode);
         fiber.lanes = lanes;
         return fiber;
       }
@@ -24218,8 +24271,29 @@ function showMenu() {
   const { popupControl } = openMenu({
     dialog: {
       messages: [
-        "hello",
-        "there"
+        {
+          text: "hello",
+          pictures: [{
+            layout: {
+              position: [350, 100],
+              size: [200, 200],
+              positionFromRight: true
+            },
+            images: [{ src: pikaSrc }]
+          }]
+        },
+        "there!",
+        {
+          text: "bye",
+          pictures: [{
+            layout: {
+              position: [350, 100],
+              size: [200, 200],
+              positionFromRight: true
+            },
+            images: [{ src: byeSrc }]
+          }]
+        }
       ]
     },
     menu: {
@@ -24233,6 +24307,19 @@ function showMenu() {
         {
           label: "third",
           submenu: {
+            pictures: [{
+              layout: {
+                position: [350, 350],
+                size: [300, 300],
+                positionFromBottom: true,
+                positionFromRight: true
+              },
+              images: [
+                {
+                  src: sampleSrc
+                }
+              ]
+            }],
             maxRows: 3,
             layout: {
               position: [150, 100],
@@ -24273,6 +24360,15 @@ function showMenu() {
         {
           label: "dialog",
           dialog: {
+            pictures: [{
+              layout: {
+                position: [350, 350],
+                size: [300, 300],
+                positionFromBottom: true,
+                positionFromRight: true
+              },
+              images: [{ src: sampleSrc }]
+            }],
             layout: {
               name: "main",
               position: [150, 100],
@@ -24350,6 +24446,9 @@ function showMenu() {
   });
   return { keyboard: new KeyboardControl(popupControl) };
 }
+var sampleSrc = "https://cdn.britannica.com/59/182359-050-C6F38CA3/Scarlett-Johansson-Natasha-Romanoff-Avengers-Age-of.jpg";
+var pikaSrc = "https://media.tenor.com/rbx3ph5SLRUAAAAi/pikachu-pokemon.gif";
+var byeSrc = "https://images.vexels.com/media/users/3/272491/isolated/preview/d6d58dbb207e59b46ab9e797b32ae014-bye-word-glossy-sign.png";
 export {
   showMenu
 };

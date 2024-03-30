@@ -1,21 +1,27 @@
 import { Menu } from "../menu/Menu";
 import { Dialog, MenuModel } from "..";
-import { DialogModel } from "@/dialog/model/DialogModel";
-import { MenuItem } from "@/menu/model/MenuItemModel";
+import { DialogModel } from "../dialog/model/DialogModel";
+import { MenuItem } from "../menu/model/MenuItemModel";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { PictureModel } from "../picture/model/PictureModel";
+import { Picture } from "../picture/Picture";
 
 export interface Props {
-  menu?: MenuModel;
+  pictures?: PictureModel[];
   dialog?: DialogModel;
-  onSelect(item: MenuItem): void;
+  menu?: MenuModel;
+  onSelect?(item: MenuItem): void;
   onClose?(): void;
+  removed?: boolean;
 }
 
 export function Container({
-  menu,
+  pictures,
   dialog,
-  onSelect,
+  menu,
+  onSelect = async() => {},
   onClose = async () => {},
+  removed,
 }: Props) {
   const [index, setIndex] = useState(0);
   const onNext = useCallback(async () => {
@@ -36,5 +42,8 @@ export function Container({
     }
   }, [index, setIndex, elems, onClose]);
 
-  return elems[index];
+  return <>
+    {elems[index]}
+    {pictures?.map((picture, index) => <Picture removed={removed} key={index} picture={picture} />)}
+  </>;
 }

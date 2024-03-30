@@ -13,7 +13,7 @@ export function BasicPopup(props: Props) {
   const onSelect = props.onSelect ?? ((item) => console.log(item));
   return <LayoutContextProvider>
           <ControlContextProvider popupControl={props.popupControl}>
-            <Container menu={props.menu} dialog={props.dialog} onClose={props.onClose} onSelect={onSelect} />
+            <Container {...props} onSelect={onSelect} />
           </ControlContextProvider>
         </LayoutContextProvider>;
 }

@@ -3,10 +3,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDialogState } from './useDialogState';
 import { DialogModel } from './model/DialogModel';
 import { MessageModel } from './model/MessageModel';
-import { LockStatus, MenuModel, Popup, useControlsLock } from '..';
 import { useRemove } from './useRemove';
-import { MenuItem } from '@/menu/model/MenuItemModel';
-import { Container } from '@/container/Container';
+import { MenuItem } from '../menu/model/MenuItemModel';
+import { Container } from '../container/Container';
+import { MenuModel } from '../menu/model/MenuModel';
+import { LockStatus, useControlsLock } from '../controls/useControlsLock';
+import { Popup } from '../common/popup/Popup';
 
 export interface Props {
   dialog: DialogModel;
@@ -67,7 +69,11 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
           <progressive-text period="30">{message?.text}</progressive-text>
         </div>
       </Popup>
-      <Container menu={menu} onSelect={onSelect} onClose={onCloseMenu} ></Container>
+      <Container pictures={dialog.pictures} menu={menu}
+        onSelect={onSelect}
+        onClose={onCloseMenu}
+        removed={removed}></Container>
+      <Container pictures={message?.pictures} />
     </>
   );
 }
