@@ -7,6 +7,9 @@ export interface MenuItemModel {
   dialog?: DialogModel;
   back?: boolean;
   hideOnSelect?: boolean;
+  builtIn?: boolean;
+  hidden?: boolean;
+  action?: () => void;
 }
 
 export type MenuItem = MenuItemModel | string;

@@ -7,8 +7,10 @@ import { useRemove } from './useRemove';
 import { MenuItem } from '../menu/model/MenuItemModel';
 import { Container } from '../container/Container';
 import { MenuModel } from '../menu/model/MenuModel';
-import { LockStatus, useControlsLock } from '../controls/useControlsLock';
+import { LockStatus, useControls } from '../controls/useControls';
 import { Popup } from '../common/popup/Popup';
+import { useActiveFocus } from '@/common/popup/useActiveFocus';
+import { useEditContext } from '@/context/edit/EditContextProvider';
 
 export interface Props {
   dialog: DialogModel;
@@ -19,8 +21,11 @@ export interface Props {
 export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
   const { next, index } = useDialogState();
   const [menu, setMenu] = useState<MenuModel>();
+  const { active } = useActiveFocus();
+  const { editing } = useEditContext();
 
-  const { lockState, popupControl } = useControlsLock({
+  const { lockState, popupControl } = useControls({
+    active,
     listener: useMemo(() => ({
       onAction: next,
       onBack: next,
@@ -61,12 +66,24 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
         onBack={dialog.disableBack ? undefined : next}
       >
         <div style={{
-          padding: 10,
           width: "100%",
           height: "100%",
+          display: "flex",
         }}
         onClick={() => popupControl.onAction()}>
-          <progressive-text period="30">{message?.text}</progressive-text>
+          <div style={{ flex: 1 }}>
+            <progressive-text period="30">{message?.text}</progressive-text>
+          </div>
+          {editing && active && <div style={{
+              textAlign: "center",
+              backgroundColor: "blue",
+              borderRadius: "50%",
+              width: "30px",
+              height: "30px",
+              color: 'white',
+            }}>
+              E
+            </div>}
         </div>
       </Popup>
       <Container pictures={dialog.pictures} menu={menu}

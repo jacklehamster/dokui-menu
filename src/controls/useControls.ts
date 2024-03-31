@@ -9,15 +9,11 @@ export enum LockStatus {
 
 interface Props {
   listener: PopupControlListener;
+  active: boolean;
 }
 
-export function useControlsLock({ listener }: Props) {
+export function useControls({ active, listener }: Props) {
   const { popupControl } = useControlContext();
-  const [active, setActive] = useState(true);
-
-  useEffect(() => {
-    return popupControl.registerActive(setActive);
-  }, [popupControl, setActive]);
 
   useEffect((): (() => void) | void => {
     if (active) {

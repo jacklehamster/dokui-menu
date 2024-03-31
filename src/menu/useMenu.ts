@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useSelection } from "./selection/useSelection";
-import { LockStatus, useControlsLock } from "../controls/useControlsLock";
+import { LockStatus, useControls } from "../controls/useControls";
 import { PopupControlListener } from "../controls/PopupControlListener";
 import { MenuItem } from "./model/MenuItemModel";
 import { List } from "abstract-list";
@@ -10,6 +10,7 @@ interface Props {
   maxRows?: number;
   onSelect(item: MenuItem): void;
   onBack(): void;
+  active: boolean;
 }
 
 interface Result {
@@ -17,6 +18,8 @@ interface Result {
   select(index: number | undefined): void;
   disabled: boolean;
   scroll: number;
+  onUp(): void;
+  onDown(): void;
   scrollUp(): void;
   scrollDown(): void;
   menuHoverEnabled: boolean;
@@ -24,7 +27,7 @@ interface Result {
   onMenuAction(index?: number): void;
 }
 
-export function useMenu({ items, maxRows, onSelect, onBack }: Props): Result {
+export function useMenu({ items, maxRows, onSelect, onBack, active }: Props): Result {
   const { scroll, scrollUp, scrollDown, select, moveSelection, selectedItem } = useSelection({ items, maxRows });
   const [menuHoverEnabled, setMenuHoverEnabled] = useState(false);
 
@@ -34,22 +37,30 @@ export function useMenu({ items, maxRows, onSelect, onBack }: Props): Result {
     if (!item) {
       return;
     }
+    if (typeof (item) === "object" && item.action) {
+      item.action();
+    }
     onSelect(item);
   }, [items, moveSelection, selectedItem, setMenuHoverEnabled]);
 
-  const { lockState } = useControlsLock({
+  const onUp = useCallback(() => {
+    setMenuHoverEnabled(false);
+    moveSelection(-1);
+  }, [setMenuHoverEnabled, moveSelection]);
+
+  const onDown = useCallback(() => {
+    setMenuHoverEnabled(false);
+    moveSelection(1);
+  }, [setMenuHoverEnabled, moveSelection]);
+
+  const { lockState } = useControls({
+    active,
     listener: useMemo<PopupControlListener>(() => ({
       onAction,
-      onUp() {
-        setMenuHoverEnabled(false);
-        moveSelection(-1);
-      },
-      onDown() {
-        setMenuHoverEnabled(false);
-        moveSelection(1);
-      },
+      onUp,
+      onDown,
       onBack,
-    }), [moveSelection, setMenuHoverEnabled, onAction, onBack]),
+    }), [moveSelection, setMenuHoverEnabled, onAction, onBack, onUp, onDown]),
   });
 
   return {
@@ -65,5 +76,7 @@ export function useMenu({ items, maxRows, onSelect, onBack }: Props): Result {
       : () => { },
       [menuHoverEnabled]),
     onMenuAction: onAction,
+    onUp,
+    onDown,
   };
 }

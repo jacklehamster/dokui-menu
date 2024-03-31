@@ -7,13 +7,13 @@ import { MenuModel } from "./menu/model/MenuModel";
 import { MenuItemModel } from "./menu/model/MenuItemModel";
 import { Style } from "./common/Style";
 import { LayoutModel } from "./common/layout/Layout";
-import { PopupModel } from "./common/PopupModel";
+import { PopupModel } from "./common/popup/PopupModel";
 import { useInitLayoutContext } from "./context/layout/useInitLayoutContext";
 import { ControlContextProvider } from "./context/controls/ControlContextProvider";
 import { LayoutContextProvider } from "./context/layout/LayoutContextProvider";
 import { Popup } from "./common/popup/Popup";
-import { useControlsLock } from "./controls/useControlsLock";
-import { LockStatus } from "./controls/useControlsLock";
+import { useControls } from "./controls/useControls";
+import { LockStatus } from "./controls/useControls";
 import { Dialog } from "./dialog/Dialog";
 import { openDialog } from "./dialog/openDialog";
 
@@ -23,7 +23,7 @@ export {
   useInitLayoutContext,
   ControlContextProvider,
   LayoutContextProvider,
-  Popup, useControlsLock,
+  Popup, useControls as useControlsLock,
   LockStatus,
 
   Dialog, openDialog,

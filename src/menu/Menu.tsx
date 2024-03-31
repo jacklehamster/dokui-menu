@@ -5,9 +5,12 @@ import { MenuItem } from './model/MenuItemModel';
 import { MenuModel } from './model/MenuModel';
 import { useCallback, useState } from 'react';
 import { Popup } from '../common/popup/Popup';
-import { useRemove } from '@/dialog/useRemove';
-import { DialogModel } from '@/dialog/model/DialogModel';
-import { Container } from '@/container/Container';
+import { useRemove } from '../dialog/useRemove';
+import { DialogModel } from '../dialog/model/DialogModel';
+import { Container } from '../container/Container';
+import { useEditMenu } from '../context/edit/useEditMenu';
+import { useActiveFocus } from '../common/popup/useActiveFocus';
+import { MenuRow } from './MenuRow';
 
 export interface Props {
   menu: MenuModel;
@@ -21,7 +24,6 @@ export function Menu({
     onClose,
   }: Props): JSX.Element {
 
-  const { items = [], maxRows, style, layout} = menu;
   const { removed, remove } = useRemove();
 
   const [sub, setSub] = useState<{ menu?: MenuModel; dialog?: DialogModel }>({});
@@ -31,6 +33,9 @@ export function Menu({
   const onBack = useCallback(() => {
     remove(onClose);
   }, [remove, onClose]);
+
+  const { active } = useActiveFocus();
+  const { items = [], maxRows, style, layout, editable, onAddSubmenu, onRemoveSubmenu, onToggleBack } = useEditMenu({menu, active});
 
   const executeMenuItem = useCallback((item: MenuItem) => {
     if (typeof(item) === "object") {
@@ -47,14 +52,14 @@ export function Menu({
         onSelect(item);
         if (item.back) {
           onBack();
-        }  
+        }
       }
     } else {
       onSelect(item);
     }
   }, [onSelect, setSub, onBack, setPostClose, setHidden]);
 
-  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack });
+  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack, active });
 
   const onCloseSub = useCallback(async () => {
     setSub({});
@@ -89,23 +94,21 @@ export function Menu({
         }}>
           <div style={{ height: `calc(100% - 27px)`, overflow: "hidden" }}>
             <div style={{ marginTop: scroll * -31, transition: "margin-top .2s" }}>
-              {map(items, (item, index) => {
-                return (
-                  <div key={index} style={{
-                      color: selectedItem === item ? 'black' : disabled ? 'silver' : 'white',
-                      backgroundColor: selectedItem !== item ? 'black' : disabled ? 'silver' : 'white',
-                      transition: 'color .05s, background-color .05s',
-                    }}
-                    onMouseMove={() => {
-                      enableMenuHover();
-                      select(index);
-                    }}
-                    onMouseOver={menuHoverEnabled ? () => select(index) : undefined}
-                    onClick={menuHoverEnabled ? () => onMenuAction(index) : undefined}>
-                    {typeof(item) === "string" ? item : item?.label}
-                  </div>
-                );
-              })}
+              {map(items, (item, index) => <MenuRow key={index} index={index} item={item} selectedItem={selectedItem}
+                  onAddSubmenu={onAddSubmenu}
+                  onRemoveSubmenu={onRemoveSubmenu}
+                  onToggleBack={onToggleBack}
+                  disabled={disabled}
+                  onMouseMove={() => {
+                    enableMenuHover();
+                    select(index);
+                  }}
+                  active={active}
+                  editable={editable}
+                  onMouseOver={menuHoverEnabled ? () => select(index) : undefined}
+                  onClick={menuHoverEnabled ? () => onMenuAction(index) : undefined}
+                ></MenuRow>
+              )}
             </div>
           </div>
         </div>

@@ -66,7 +66,7 @@ export function showMenu() {
             maxRows: 3,
             layout: {
               position: [150, 100],
-              size: [200, 130],
+              size: [200, 150],
             },
             items: [
               "3.1",
@@ -115,7 +115,7 @@ export function showMenu() {
             layout: {
               name: "main",
               position: [150, 100],
-              size: [200, 200],
+              size: [400, 180],
             },
             messages: [
               "Hello",
@@ -171,7 +171,7 @@ export function showMenu() {
           dialog: {
             layout: {
               position: [150, 100],
-              size: [200, 200],
+              size: [300, 200],
             },
             messages: [
               "menu hidden",

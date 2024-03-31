@@ -6,7 +6,7 @@ import React from 'react';
 import { CSSProperties, useEffect, useState } from 'react';
 import './css/Popup.css';
 import { usePopupLayout } from '../layout/usePopupLayout';
-import { PopupProps } from '../PopupProps';
+import { PopupProps } from './PopupProps';
 
 //  Hack until I get proper CSS to work
 const OVERLAP: CSSProperties = {

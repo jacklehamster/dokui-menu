@@ -2672,7 +2672,7 @@ var require_jsx_dev_runtime = __commonJS((exports, module) => {
 });
 
 // /Users/vincent/dokui-menu/example/node_modules/dokui-menu/dist/index.js
-var React3 = __toESM(require_react(), 1);
+var React4 = __toESM(require_react(), 1);
 var import_react = __toESM(require_react(), 1);
 var import_react2 = __toESM(require_react(), 1);
 var import_react3 = __toESM(require_react(), 1);
@@ -2690,19 +2690,27 @@ var import_react11 = __toESM(require_react(), 1);
 var import_react12 = __toESM(require_react(), 1);
 var jsx_dev_runtime4 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime5 = __toESM(require_jsx_dev_runtime(), 1);
-var jsx_dev_runtime6 = __toESM(require_jsx_dev_runtime(), 1);
-var jsx_dev_runtime7 = __toESM(require_jsx_dev_runtime(), 1);
-var jsx_dev_runtime8 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react13 = __toESM(require_react(), 1);
 var import_react14 = __toESM(require_react(), 1);
+var import_react15 = __toESM(require_react(), 1);
+var jsx_dev_runtime6 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime7 = __toESM(require_jsx_dev_runtime(), 1);
+var import_react16 = __toESM(require_react(), 1);
+var import_react17 = __toESM(require_react(), 1);
+var jsx_dev_runtime8 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime9 = __toESM(require_jsx_dev_runtime(), 1);
-var useSelection = function({ items, maxRows }) {
+var jsx_dev_runtime10 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime11 = __toESM(require_jsx_dev_runtime(), 1);
+var import_react18 = __toESM(require_react(), 1);
+var import_react19 = __toESM(require_react(), 1);
+var jsx_dev_runtime12 = __toESM(require_jsx_dev_runtime(), 1);
+var useSelection = function({ items, maxRows = items.length.valueOf() }) {
   const [selectedIndex, setSelectedIndex] = import_react2.useState(0);
   const [scroll, setScroll] = import_react2.useState(0);
+  const numItems = import_react2.useMemo(() => items.length.valueOf(), [items]);
   const scrollDown = import_react2.useCallback((rows = 1) => {
-    const len = items.length.valueOf();
-    setScroll((scroll2) => Math.min(len - (maxRows ?? len), scroll2 + rows));
-  }, [setScroll, items, maxRows]);
+    setScroll((scroll2) => Math.min(numItems - maxRows, scroll2 + rows));
+  }, [setScroll, numItems, maxRows]);
   const scrollUp = import_react2.useCallback((rows = 1) => {
     setScroll((scroll2) => Math.max(0, scroll2 - rows));
   }, [setScroll]);
@@ -2715,20 +2723,18 @@ var useSelection = function({ items, maxRows }) {
     }
   }, [scroll, maxRows, scrollUp, scrollDown]);
   const select = import_react2.useCallback((index) => {
-    const len = items.length.valueOf();
-    const newIndex = Math.max(0, Math.min(index, len - 1));
+    const newIndex = Math.max(0, Math.min(index, numItems - 1));
     setSelectedIndex(newIndex);
-  }, [setSelectedIndex, items]);
+  }, [setSelectedIndex, numItems]);
   const moveSelection = import_react2.useCallback((dy) => {
     if (dy) {
-      const len = items.length.valueOf();
       setSelectedIndex((index) => {
-        const newIndex = Math.max(0, Math.min(index + dy, len - 1));
+        const newIndex = Math.max(0, Math.min(index + dy, numItems - 1));
         fixScroll(newIndex);
         return newIndex;
       });
     }
-  }, [setSelectedIndex, fixScroll, items]);
+  }, [setSelectedIndex, fixScroll, numItems]);
   const selectedItem = import_react2.useMemo(() => items.at(selectedIndex), [items, selectedIndex]);
   return {
     select,
@@ -2746,12 +2752,8 @@ var useInitControlContext = function({ popupControl }) {
   }), [popupControl]);
   return context;
 };
-var useControlsLock = function({ listener }) {
+var useControls = function({ active, listener }) {
   const { popupControl } = useControlContext();
-  const [active, setActive] = import_react3.useState(true);
-  import_react3.useEffect(() => {
-    return popupControl.registerActive(setActive);
-  }, [popupControl, setActive]);
   import_react3.useEffect(() => {
     if (active) {
       popupControl.addListener(listener);
@@ -2760,7 +2762,7 @@ var useControlsLock = function({ listener }) {
   }, [listener, popupControl, active]);
   return { lockState: active ? LockStatus.UNLOCKED : LockStatus.LOCKED, popupControl };
 };
-var useMenu = function({ items, maxRows, onSelect, onBack }) {
+var useMenu = function({ items, maxRows, onSelect, onBack, active }) {
   const { scroll, scrollUp, scrollDown, select, moveSelection, selectedItem } = useSelection({ items, maxRows });
   const [menuHoverEnabled, setMenuHoverEnabled] = import_react.useState(false);
   const onAction = import_react.useCallback((index) => {
@@ -2768,21 +2770,27 @@ var useMenu = function({ items, maxRows, onSelect, onBack }) {
     if (!item) {
       return;
     }
+    if (typeof item === "object" && item.action) {
+      item.action();
+    }
     onSelect(item);
   }, [items, moveSelection, selectedItem, setMenuHoverEnabled]);
-  const { lockState } = useControlsLock({
+  const onUp = import_react.useCallback(() => {
+    setMenuHoverEnabled(false);
+    moveSelection(-1);
+  }, [setMenuHoverEnabled, moveSelection]);
+  const onDown = import_react.useCallback(() => {
+    setMenuHoverEnabled(false);
+    moveSelection(1);
+  }, [setMenuHoverEnabled, moveSelection]);
+  const { lockState } = useControls({
+    active,
     listener: import_react.useMemo(() => ({
       onAction,
-      onUp() {
-        setMenuHoverEnabled(false);
-        moveSelection(-1);
-      },
-      onDown() {
-        setMenuHoverEnabled(false);
-        moveSelection(1);
-      },
+      onUp,
+      onDown,
       onBack
-    }), [moveSelection, setMenuHoverEnabled, onAction, onBack])
+    }), [moveSelection, setMenuHoverEnabled, onAction, onBack, onUp, onDown])
   });
   return {
     selectedItem,
@@ -2794,7 +2802,9 @@ var useMenu = function({ items, maxRows, onSelect, onBack }) {
     menuHoverEnabled,
     enableMenuHover: import_react.useCallback(!menuHoverEnabled ? () => setMenuHoverEnabled(true) : () => {
     }, [menuHoverEnabled]),
-    onMenuAction: onAction
+    onMenuAction: onAction,
+    onUp,
+    onDown
   };
 };
 var useInitLayoutContext = function() {
@@ -2808,7 +2818,7 @@ var useInitLayoutContext = function() {
     }
     return layout;
   }, [layoutModels]);
-  const uniqueLayout = import_react10.useMemo(() => new x, []);
+  const uniqueLayout = import_react10.useMemo(() => new x2, []);
   const context = import_react10.useMemo(() => ({
     getLayout,
     uniqueLayout
@@ -2818,9 +2828,9 @@ var useInitLayoutContext = function() {
 var usePopupLayout = function({ layout }) {
   const { getLayout, uniqueLayout } = useLayoutContext();
   const layoutModel = getLayout(layout);
-  const x2 = layoutModel.position?.[0] || DEFAULT_HORIZONTAL_PADDING;
+  const x3 = layoutModel.position?.[0] || DEFAULT_HORIZONTAL_PADDING;
   const y = layoutModel.position?.[1] || DEFAULT_VERTICAL_PADDING;
-  const left = layoutModel.positionFromRight ? `calc(100% - ${x2}px)` : x2;
+  const left = layoutModel.positionFromRight ? `calc(100% - ${x3}px)` : x3;
   const top = layoutModel.positionFromBottom ? `calc(100% - ${y}px)` : y;
   const right = DEFAULT_HORIZONTAL_PADDING;
   const bottom = DEFAULT_VERTICAL_PADDING;
@@ -2984,12 +2994,240 @@ var Container = function({
     ]
   }, undefined, true, undefined, this);
 };
+var useEditControlContext = function() {
+  const [editing, setEditing] = import_react15.useState(false);
+  const context = import_react15.useMemo(() => ({
+    editing,
+    toggleEditing: () => {
+      setEditing((editing2) => !editing2);
+    }
+  }), [editing, setEditing]);
+  return context;
+};
+var EditToggle = function() {
+  const { editing, toggleEditing } = useEditContext();
+  return jsx_dev_runtime6.jsxDEV("button", {
+    style: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+      cursor: "pointer",
+      zIndex: 1000,
+      padding: "5px 15px",
+      backgroundColor: editing ? "#cceeff" : undefined
+    },
+    onClick: () => toggleEditing(),
+    children: editing ? "EDIT ON" : "EDIT OFF"
+  }, undefined, false, undefined, this);
+};
+var useEditMenu = function({ menu, active }) {
+  const { editing } = useEditContext();
+  const [editCount, setEditCount] = import_react13.useState(0);
+  const addItem = import_react13.useCallback(() => {
+    const items2 = [];
+    x(menu.items, (item) => {
+      items2.push(item);
+    });
+    items2.push({
+      label: `untitled ${editCount + 1}`
+    });
+    menu.items = items2;
+    setEditCount((count) => count + 1);
+  }, [menu, setEditCount, editCount]);
+  const onAddSubmenu = import_react13.useCallback((index) => {
+    const items2 = [];
+    x(menu.items, (item2) => items2.push(item2));
+    const item = items2[index];
+    const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
+    itemModel.submenu = itemModel.submenu ?? { items: [] };
+    items2[index] = itemModel;
+    menu.items = items2;
+    setEditCount((count) => count + 1);
+  }, [menu, setEditCount, editCount]);
+  const onRemoveSubmenu = import_react13.useCallback((index) => {
+    const items2 = [];
+    x(menu.items, (item2) => items2.push(item2));
+    const item = items2[index];
+    const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
+    delete itemModel.submenu;
+    items2[index] = itemModel;
+    menu.items = items2;
+    setEditCount((count) => count + 1);
+  }, [menu, setEditCount, editCount]);
+  const onToggleBack = import_react13.useCallback((index) => {
+    const items2 = [];
+    x(menu.items, (item2) => items2.push(item2));
+    const item = items2[index];
+    const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
+    if (itemModel.back) {
+      delete itemModel.back;
+    } else {
+      itemModel.back = true;
+    }
+    items2[index] = itemModel;
+    menu.items = items2;
+    setEditCount((count) => count + 1);
+  }, [menu, setEditCount, editCount]);
+  const items = import_react13.useMemo(() => {
+    if (!editing || !active) {
+      return menu.items;
+    }
+    const items2 = z(menu.items ?? [], (item) => item);
+    const editMenu = menu.builtIn ? [] : [
+      {
+        label: "new item",
+        builtIn: true,
+        action() {
+          addItem();
+        }
+      },
+      { label: "edit menu", builtIn: true, submenu: {
+        layout: {
+          position: [300, 300],
+          size: [300, 300]
+        },
+        builtIn: true,
+        items: [
+          { label: "edit max rows", builtIn: true },
+          { label: "edit pictures", builtIn: true },
+          { label: "exit", builtIn: true, back: true }
+        ]
+      } }
+    ];
+    return items2.concat(editMenu);
+  }, [menu, editing, active, editCount, addItem]);
+  const visibleItems = import_react13.useMemo(() => {
+    const visibleItems2 = [];
+    x(items, (item) => {
+      const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
+      if (item && !itemModel.hidden) {
+        visibleItems2.push(item);
+      }
+    });
+    return visibleItems2;
+  }, [items]);
+  return {
+    ...menu,
+    maxRows: menu.maxRows ?? menu.items?.length.valueOf(),
+    items: visibleItems,
+    editable: editing,
+    onAddSubmenu,
+    onRemoveSubmenu,
+    onToggleBack
+  };
+};
+var useActiveFocus = function() {
+  const [active, setActive] = import_react16.useState(true);
+  const { popupControl } = useControlContext();
+  import_react16.useEffect(() => {
+    return popupControl.registerActive(setActive);
+  }, [popupControl, setActive]);
+  return { active };
+};
+var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack }) {
+  const itemModel = typeof item === "string" ? { label: item } : item;
+  const rowSelected = selectedItem === item;
+  const [editMenuOn, setEditMenuOn] = import_react17.useState(false);
+  const editMenu = import_react17.useMemo(() => ({
+    builtIn: true,
+    layout: {
+      position: [50, 200],
+      size: [300, 200]
+    },
+    items: [
+      {
+        builtIn: true,
+        label: "rename"
+      },
+      {
+        builtIn: true,
+        label: "create submenu",
+        action: () => onAddSubmenu?.(index),
+        back: true,
+        hidden: !!itemModel?.submenu
+      },
+      {
+        builtIn: true,
+        label: "remove submenu",
+        action: () => onRemoveSubmenu?.(index),
+        back: true,
+        hidden: !itemModel?.submenu
+      },
+      {
+        builtIn: true,
+        label: "toggle back (" + (itemModel?.back ? "ON" : "OFF") + ")",
+        action: () => onToggleBack?.(index)
+      },
+      {
+        builtIn: true,
+        label: "exit",
+        back: true
+      }
+    ]
+  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, index]);
+  import_react17.useEffect(() => {
+    if (editable && active && rowSelected && !itemModel?.builtIn) {
+      const listener = (e) => {
+        if (e.code === "KeyE") {
+          setEditMenuOn((value) => !value);
+        }
+      };
+      document.addEventListener("keydown", listener);
+      return () => document.removeEventListener("keydown", listener);
+    }
+  }, [setEditMenuOn, editable, active, rowSelected, itemModel]);
+  return jsx_dev_runtime8.jsxDEV(jsx_dev_runtime8.Fragment, {
+    children: jsx_dev_runtime8.jsxDEV("div", {
+      style: {
+        color: rowSelected ? itemModel?.builtIn ? "#0000ee" : "black" : disabled ? "silver" : "white",
+        backgroundColor: !rowSelected ? itemModel?.builtIn ? "#0000ee" : "black" : disabled ? "silver" : "white",
+        transition: "color .05s, background-color .05s",
+        display: "flex"
+      },
+      onMouseMove,
+      onMouseOver,
+      onClick,
+      children: [
+        jsx_dev_runtime8.jsxDEV("div", {
+          style: {
+            flex: 1
+          },
+          children: itemModel?.label
+        }, undefined, false, undefined, this),
+        editable && active && rowSelected && !itemModel?.builtIn && jsx_dev_runtime8.jsxDEV("div", {
+          style: {
+            ...ICON_STYLE,
+            backgroundColor: "blue"
+          },
+          children: "E"
+        }, undefined, false, undefined, this),
+        editable && !itemModel?.builtIn && itemModel?.submenu && jsx_dev_runtime8.jsxDEV("div", {
+          style: {
+            ...ICON_STYLE,
+            backgroundColor: "green"
+          },
+          children: "S"
+        }, undefined, false, undefined, this),
+        editable && !itemModel?.builtIn && itemModel?.back && jsx_dev_runtime8.jsxDEV("div", {
+          style: {
+            ...ICON_STYLE,
+            backgroundColor: "orange"
+          },
+          children: "B"
+        }, undefined, false, undefined, this),
+        jsx_dev_runtime8.jsxDEV(Container, {
+          menu: editMenuOn ? editMenu : undefined,
+          onClose: () => setEditMenuOn(false)
+        }, undefined, false, undefined, this)
+      ]
+    }, undefined, true, undefined, this)
+  }, undefined, false, undefined, this);
+};
 var Menu2 = function({
   menu,
   onSelect,
   onClose
 }) {
-  const { items = [], maxRows, style, layout } = menu;
   const { removed, remove } = useRemove();
   const [sub, setSub] = import_react6.useState({});
   const [postClose, setPostClose] = import_react6.useState();
@@ -2997,6 +3235,8 @@ var Menu2 = function({
   const onBack = import_react6.useCallback(() => {
     remove(onClose);
   }, [remove, onClose]);
+  const { active } = useActiveFocus();
+  const { items = [], maxRows, style, layout, editable, onAddSubmenu, onRemoveSubmenu, onToggleBack } = useEditMenu({ menu, active });
   const executeMenuItem = import_react6.useCallback((item) => {
     if (typeof item === "object") {
       if (item.hideOnSelect) {
@@ -3018,7 +3258,7 @@ var Menu2 = function({
       onSelect(item);
     }
   }, [onSelect, setSub, onBack, setPostClose, setHidden]);
-  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack });
+  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack, active });
   const onCloseSub = import_react6.useCallback(async () => {
     setSub({});
     if (postClose) {
@@ -3026,16 +3266,16 @@ var Menu2 = function({
     }
     setHidden(false);
   }, [setSub, executeMenuItem, setHidden, postClose]);
-  return jsx_dev_runtime6.jsxDEV(jsx_dev_runtime6.Fragment, {
+  return jsx_dev_runtime9.jsxDEV(jsx_dev_runtime9.Fragment, {
     children: [
-      jsx_dev_runtime6.jsxDEV(Popup2, {
+      jsx_dev_runtime9.jsxDEV(Popup2, {
         layout: layout ?? {},
         style,
         disabled,
         removed: removed || hidden,
         onBack: menu.disableBack ? undefined : onBack,
         children: [
-          jsx_dev_runtime6.jsxDEV("svg", {
+          jsx_dev_runtime9.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -3046,40 +3286,41 @@ var Menu2 = function({
               left: `calc(50% - 100px)`
             },
             onClick: () => scrollUp(),
-            children: jsx_dev_runtime6.jsxDEV("polygon", {
+            children: jsx_dev_runtime9.jsxDEV("polygon", {
               points: "100,10 110,20 90,20",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime6.jsxDEV("div", {
+          jsx_dev_runtime9.jsxDEV("div", {
             style: {
               paddingTop: 10,
               cursor: menuHoverEnabled ? "inherit" : "auto"
             },
-            children: jsx_dev_runtime6.jsxDEV("div", {
+            children: jsx_dev_runtime9.jsxDEV("div", {
               style: { height: `calc(100% - 27px)`, overflow: "hidden" },
-              children: jsx_dev_runtime6.jsxDEV("div", {
+              children: jsx_dev_runtime9.jsxDEV("div", {
                 style: { marginTop: scroll * -31, transition: "margin-top .2s" },
-                children: z(items, (item, index) => {
-                  return jsx_dev_runtime6.jsxDEV("div", {
-                    style: {
-                      color: selectedItem === item ? "black" : disabled ? "silver" : "white",
-                      backgroundColor: selectedItem !== item ? "black" : disabled ? "silver" : "white",
-                      transition: "color .05s, background-color .05s"
-                    },
-                    onMouseMove: () => {
-                      enableMenuHover();
-                      select(index);
-                    },
-                    onMouseOver: menuHoverEnabled ? () => select(index) : undefined,
-                    onClick: menuHoverEnabled ? () => onMenuAction(index) : undefined,
-                    children: typeof item === "string" ? item : item?.label
-                  }, index, false, undefined, this);
-                })
+                children: z(items, (item, index) => jsx_dev_runtime9.jsxDEV(MenuRow, {
+                  index,
+                  item,
+                  selectedItem,
+                  onAddSubmenu,
+                  onRemoveSubmenu,
+                  onToggleBack,
+                  disabled,
+                  onMouseMove: () => {
+                    enableMenuHover();
+                    select(index);
+                  },
+                  active,
+                  editable,
+                  onMouseOver: menuHoverEnabled ? () => select(index) : undefined,
+                  onClick: menuHoverEnabled ? () => onMenuAction(index) : undefined
+                }, index, false, undefined, this))
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime6.jsxDEV("svg", {
+          jsx_dev_runtime9.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -3090,14 +3331,14 @@ var Menu2 = function({
               left: `calc(50% - 100px)`
             },
             onClick: () => scrollDown(),
-            children: jsx_dev_runtime6.jsxDEV("polygon", {
+            children: jsx_dev_runtime9.jsxDEV("polygon", {
               points: "100,20 110,10 90,10",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this)
         ]
       }, undefined, true, undefined, this),
-      jsx_dev_runtime6.jsxDEV(Container, {
+      jsx_dev_runtime9.jsxDEV(Container, {
         menu: sub.menu,
         dialog: sub.dialog,
         pictures: menu.pictures,
@@ -3110,12 +3351,14 @@ var Menu2 = function({
 };
 var BasicPopup = function(props) {
   const onSelect = props.onSelect ?? ((item) => console.log(item));
-  return jsx_dev_runtime7.jsxDEV(LayoutContextProvider, {
-    children: jsx_dev_runtime7.jsxDEV(ControlContextProvider, {
+  return jsx_dev_runtime10.jsxDEV(LayoutContextProvider, {
+    children: jsx_dev_runtime10.jsxDEV(ControlContextProvider, {
       popupControl: props.popupControl,
-      children: jsx_dev_runtime7.jsxDEV(Container, {
-        ...props,
-        onSelect
+      children: jsx_dev_runtime10.jsxDEV(EditContextProvider2, {
+        children: jsx_dev_runtime10.jsxDEV(Container, {
+          ...props,
+          onSelect
+        }, undefined, false, undefined, this)
       }, undefined, false, undefined, this)
     }, undefined, false, undefined, this)
   }, undefined, false, undefined, this);
@@ -3137,7 +3380,7 @@ var openMenu = function({
   rootElem.style.overflow = "hidden";
   const reactRoot = client.default.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
-  const html = jsx_dev_runtime8.jsxDEV(BasicPopup, {
+  const html = jsx_dev_runtime11.jsxDEV(BasicPopup, {
     pictures,
     dialog,
     menu,
@@ -3150,76 +3393,95 @@ var openMenu = function({
   return { popupControl, detach };
 };
 var useDialogState = function() {
-  const [index, setIndex] = import_react14.useState(0);
+  const [index, setIndex] = import_react19.useState(0);
   return {
     index,
     setIndex,
-    next: import_react14.useCallback(() => setIndex((index2) => index2 + 1), [setIndex])
+    next: import_react19.useCallback(() => setIndex((index2) => index2 + 1), [setIndex])
   };
 };
 var Dialog = function({ dialog, onSelect, onClose }) {
   const { next, index } = useDialogState();
-  const [menu, setMenu] = import_react13.useState();
-  const { lockState, popupControl } = useControlsLock({
-    listener: import_react13.useMemo(() => ({
+  const [menu, setMenu] = import_react18.useState();
+  const { active } = useActiveFocus();
+  const { editing } = useEditContext();
+  const { lockState, popupControl } = useControls({
+    active,
+    listener: import_react18.useMemo(() => ({
       onAction: next,
       onBack: next
     }), [next])
   });
-  const message = import_react13.useMemo(() => {
+  const message = import_react18.useMemo(() => {
     const message2 = dialog.messages.at(index);
     return typeof message2 == "string" ? { text: message2 } : message2;
   }, [index]);
-  import_react13.useEffect(() => {
+  import_react18.useEffect(() => {
     if (message?.menu) {
       setMenu(message?.menu);
     }
   }, [message, setMenu]);
   const { removed, remove } = useRemove();
-  import_react13.useEffect(() => {
+  import_react18.useEffect(() => {
     if (index >= dialog.messages.length.valueOf()) {
       remove(onClose);
     }
   }, [dialog, index, remove, onClose]);
-  const onCloseMenu = import_react13.useCallback(async () => {
+  const onCloseMenu = import_react18.useCallback(async () => {
     setMenu(undefined);
     next();
   }, [setMenu, next]);
-  return jsx_dev_runtime9.jsxDEV(jsx_dev_runtime9.Fragment, {
+  return jsx_dev_runtime12.jsxDEV(jsx_dev_runtime12.Fragment, {
     children: [
-      jsx_dev_runtime9.jsxDEV(Popup2, {
+      jsx_dev_runtime12.jsxDEV(Popup2, {
         layout: dialog.layout ?? {},
         style: dialog.style,
         disabled: lockState === LockStatus.LOCKED,
         removed,
         onBack: dialog.disableBack ? undefined : next,
-        children: jsx_dev_runtime9.jsxDEV("div", {
+        children: jsx_dev_runtime12.jsxDEV("div", {
           style: {
-            padding: 10,
             width: "100%",
-            height: "100%"
+            height: "100%",
+            display: "flex"
           },
           onClick: () => popupControl.onAction(),
-          children: jsx_dev_runtime9.jsxDEV("progressive-text", {
-            period: "30",
-            children: message?.text
-          }, undefined, false, undefined, this)
-        }, undefined, false, undefined, this)
+          children: [
+            jsx_dev_runtime12.jsxDEV("div", {
+              style: { flex: 1 },
+              children: jsx_dev_runtime12.jsxDEV("progressive-text", {
+                period: "30",
+                children: message?.text
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            editing && active && jsx_dev_runtime12.jsxDEV("div", {
+              style: {
+                textAlign: "center",
+                backgroundColor: "blue",
+                borderRadius: "50%",
+                width: "30px",
+                height: "30px",
+                color: "white"
+              },
+              children: "E"
+            }, undefined, false, undefined, this)
+          ]
+        }, undefined, true, undefined, this)
       }, undefined, false, undefined, this),
-      jsx_dev_runtime9.jsxDEV(Container, {
+      jsx_dev_runtime12.jsxDEV(Container, {
         pictures: dialog.pictures,
         menu,
         onSelect,
         onClose: onCloseMenu,
         removed
       }, undefined, false, undefined, this),
-      jsx_dev_runtime9.jsxDEV(Container, {
+      jsx_dev_runtime12.jsxDEV(Container, {
         pictures: message?.pictures
       }, undefined, false, undefined, this)
     ]
   }, undefined, true, undefined, this);
 };
-var jsx_dev_runtime10 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime(), 1);
 var __create2 = Object.create;
 var __defProp2 = Object.defineProperty;
 var __getProtoOf2 = Object.getPrototypeOf;
@@ -3695,7 +3957,7 @@ var require_react_dom_development = __commonJS2((exports) => {
       if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
         __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error);
       }
-      var ReactSharedInternals = React3.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+      var ReactSharedInternals = React4.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
       var suppressWarning = false;
       function setSuppressWarning(newSuppressWarning) {
         {
@@ -3744,7 +4006,7 @@ var require_react_dom_development = __commonJS2((exports) => {
       var HostPortal = 4;
       var HostComponent = 5;
       var HostText = 6;
-      var Fragment52 = 7;
+      var Fragment62 = 7;
       var Mode = 8;
       var ContextConsumer = 9;
       var ContextProvider = 10;
@@ -4404,8 +4666,8 @@ var require_react_dom_development = __commonJS2((exports) => {
           if (prefix === undefined) {
             try {
               throw Error();
-            } catch (x2) {
-              var match = x2.stack.trim().match(/\n( *(at )?)/);
+            } catch (x3) {
+              var match = x3.stack.trim().match(/\n( *(at )?)/);
               prefix = match && match[1] || "";
             }
           }
@@ -4451,23 +4713,23 @@ var require_react_dom_development = __commonJS2((exports) => {
             if (typeof Reflect === "object" && Reflect.construct) {
               try {
                 Reflect.construct(Fake, []);
-              } catch (x2) {
-                control = x2;
+              } catch (x3) {
+                control = x3;
               }
               Reflect.construct(fn, [], Fake);
             } else {
               try {
                 Fake.call();
-              } catch (x2) {
-                control = x2;
+              } catch (x3) {
+                control = x3;
               }
               fn.call(Fake.prototype);
             }
           } else {
             try {
               throw Error();
-            } catch (x2) {
-              control = x2;
+            } catch (x3) {
+              control = x3;
             }
             fn();
           }
@@ -4565,7 +4827,7 @@ var require_react_dom_development = __commonJS2((exports) => {
               var init = lazyComponent._init;
               try {
                 return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
-              } catch (x2) {
+              } catch (x3) {
               }
             }
           }
@@ -4605,8 +4867,8 @@ var require_react_dom_development = __commonJS2((exports) => {
             node = node.return;
           } while (node);
           return info;
-        } catch (x2) {
-          return "\nError generating stack: " + x2.message + "\n" + x2.stack;
+        } catch (x3) {
+          return "\nError generating stack: " + x3.message + "\n" + x3.stack;
         }
       }
       function getWrappedName(outerType, innerType, wrapperName) {
@@ -4671,7 +4933,7 @@ var require_react_dom_development = __commonJS2((exports) => {
               var init = lazyComponent._init;
               try {
                 return getComponentNameFromType(init(payload));
-              } catch (x2) {
+              } catch (x3) {
                 return null;
               }
             }
@@ -4701,7 +4963,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             return "DehydratedFragment";
           case ForwardRef:
             return getWrappedName$1(type, type.render, "ForwardRef");
-          case Fragment52:
+          case Fragment62:
             return "Fragment";
           case HostComponent:
             return type;
@@ -5096,7 +5358,7 @@ var require_react_dom_development = __commonJS2((exports) => {
         {
           if (props.value == null) {
             if (typeof props.children === "object" && props.children !== null) {
-              React3.Children.forEach(props.children, function(child) {
+              React4.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -7341,8 +7603,8 @@ var require_react_dom_development = __commonJS2((exports) => {
       var clz32 = Math.clz32 ? Math.clz32 : clz32Fallback;
       var log = Math.log;
       var LN2 = Math.LN2;
-      function clz32Fallback(x2) {
-        var asUint = x2 >>> 0;
+      function clz32Fallback(x3) {
+        var asUint = x3 >>> 0;
         if (asUint === 0) {
           return 32;
         }
@@ -9226,8 +9488,8 @@ var require_react_dom_development = __commonJS2((exports) => {
         }
         accumulateEnterLeaveTwoPhaseListeners(dispatchQueue, leave, enter, from, to);
       }
-      function is(x2, y) {
-        return x2 === y && (x2 !== 0 || 1 / x2 === 1 / y) || x2 !== x2 && y !== y;
+      function is(x3, y) {
+        return x3 === y && (x3 !== 0 || 1 / x3 === 1 / y) || x3 !== x3 && y !== y;
       }
       var objectIs = typeof Object.is === "function" ? Object.is : is;
       function shallowEqual(objA, objB) {
@@ -13222,7 +13484,7 @@ var require_react_dom_development = __commonJS2((exports) => {
         }
       }
       var fakeInternalInstance = {};
-      var emptyRefsObject = new React3.Component().refs;
+      var emptyRefsObject = new React4.Component().refs;
       var didWarnAboutStateAssignmentForComponent;
       var didWarnAboutUninitializedState;
       var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -14031,7 +14293,7 @@ var require_react_dom_development = __commonJS2((exports) => {
           }
         }
         function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-          if (current2 === null || current2.tag !== Fragment52) {
+          if (current2 === null || current2.tag !== Fragment62) {
             var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
             created.return = returnFiber;
             return created;
@@ -14433,7 +14695,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             if (child.key === key) {
               var elementType = element.type;
               if (elementType === REACT_FRAGMENT_TYPE) {
-                if (child.tag === Fragment52) {
+                if (child.tag === Fragment62) {
                   deleteRemainingChildren(returnFiber, child.sibling);
                   var existing = useFiber(child, element.props.children);
                   existing.return = returnFiber;
@@ -17047,7 +17309,7 @@ var require_react_dom_development = __commonJS2((exports) => {
               var init = lazyComponent._init;
               try {
                 outerMemoType = init(payload);
-              } catch (x2) {
+              } catch (x3) {
                 outerMemoType = null;
               }
               var outerPropTypes = outerMemoType && outerMemoType.propTypes;
@@ -18474,7 +18736,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
             return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
           }
-          case Fragment52:
+          case Fragment62:
             return updateFragment(current2, workInProgress2, renderLanes2);
           case Mode:
             return updateMode(current2, workInProgress2, renderLanes2);
@@ -18741,7 +19003,7 @@ var require_react_dom_development = __commonJS2((exports) => {
           case SimpleMemoComponent:
           case FunctionComponent:
           case ForwardRef:
-          case Fragment52:
+          case Fragment62:
           case Mode:
           case Profiler:
           case ContextConsumer:
@@ -22951,7 +23213,7 @@ var require_react_dom_development = __commonJS2((exports) => {
         return fiber;
       }
       function createFiberFromFragment(elements, mode, lanes, key) {
-        var fiber = createFiber(Fragment52, elements, key, mode);
+        var fiber = createFiber(Fragment62, elements, key, mode);
         fiber.lanes = lanes;
         return fiber;
       }
@@ -24026,6 +24288,13 @@ var require_client = __commonJS2((exports) => {
   }
   var i;
 });
+var x = function(u, j) {
+  if (u) {
+    const p = u.length.valueOf();
+    for (let f = 0;f < p; f++)
+      j(u.at(f), f);
+  }
+};
 var z = function(u, j, p = []) {
   const f = p ?? [], q = u.length.valueOf();
   f.length = q;
@@ -24058,7 +24327,7 @@ class p {
   }
 }
 
-class x extends p {
+class x2 extends p {
   constructor() {
     super((r, j) => r(j));
   }
@@ -24067,7 +24336,7 @@ var CONTROL_TAG = "control";
 
 class PopupControl {
   #listeners = new Set;
-  #uniqueControls = new x;
+  #uniqueControls = new x2;
   registerActive(setActive) {
     return this.#uniqueControls.registerLayout(CONTROL_TAG, setActive);
   }
@@ -24133,7 +24402,7 @@ var LockStatus;
 })(LockStatus || (LockStatus = {}));
 var DEFAULT_GAME_CONTEXT = {
   getLayout: (layout) => typeof layout === "object" ? layout : {},
-  uniqueLayout: new x
+  uniqueLayout: new x2
 };
 var Context2 = import_react9.default.createContext(DEFAULT_GAME_CONTEXT);
 var LayoutContextProvider = ({ children }) => {
@@ -24175,6 +24444,39 @@ var DOUBLE_BORDER_CSS = {
 };
 var DOUBLE_BORDER_HEIGHT_OFFSET = 27;
 var DEFAULT_FONT_SIZE = 24;
+var DEFAULT_EDIT_CONTEXT = {
+  editing: false,
+  toggleEditing() {
+  }
+};
+var Context3 = import_react14.default.createContext(DEFAULT_EDIT_CONTEXT);
+var EditContextProvider2 = ({ children }) => {
+  const context = useEditControlContext();
+  return jsx_dev_runtime7.jsxDEV(Context3.Provider, {
+    value: context,
+    children: [
+      jsx_dev_runtime7.jsxDEV(EditToggle, {}, undefined, false, undefined, null),
+      children
+    ]
+  }, undefined, true, undefined, null);
+};
+var useEditContext = () => {
+  const context = import_react14.useContext(Context3);
+  if (!context) {
+    throw new Error("useEditContext must be used within a Provider");
+  }
+  return context;
+};
+var ICON_STYLE = {
+  textAlign: "center",
+  borderRadius: "50%",
+  width: "30px",
+  height: "30px",
+  color: "white",
+  fontSize: "10pt",
+  alignItems: "center",
+  display: "grid"
+};
 var client = __toESM2(require_client(), 1);
 
 class KeyboardControl {
@@ -24323,7 +24625,7 @@ function showMenu() {
             maxRows: 3,
             layout: {
               position: [150, 100],
-              size: [200, 130]
+              size: [200, 150]
             },
             items: [
               "3.1",
@@ -24372,7 +24674,7 @@ function showMenu() {
             layout: {
               name: "main",
               position: [150, 100],
-              size: [200, 200]
+              size: [400, 180]
             },
             messages: [
               "Hello",
@@ -24431,7 +24733,7 @@ function showMenu() {
           dialog: {
             layout: {
               position: [150, 100],
-              size: [200, 200]
+              size: [300, 200]
             },
             messages: [
               "menu hidden"
