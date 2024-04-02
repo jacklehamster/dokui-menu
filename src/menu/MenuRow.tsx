@@ -1,7 +1,8 @@
 import { Container } from "@/container/Container";
 import { MenuItem } from "./model/MenuItemModel";
 import { MenuModel } from "./model/MenuModel";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useKeyDown } from "@/controls/useKeyDown";
 
 const ICON_STYLE: React.CSSProperties = {
   textAlign: "center",
@@ -94,17 +95,13 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
     ],
   }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, index]);
 
-  useEffect(() => {
-    if (editable && active && rowSelected && !itemModel?.builtIn) {
-      const listener = (e: KeyboardEvent) => {
-        if (e.code === "KeyE") {
-          setEditMenuOn(value => !value);
-        }
-      };
-      document.addEventListener("keydown", listener);
-      return () => document.removeEventListener("keydown", listener);  
-    }
-  }, [setEditMenuOn, editable, active, rowSelected, itemModel]);
+  useKeyDown({
+    enabled: useMemo(() => editable && active && rowSelected && !itemModel?.builtIn, [editable, active, rowSelected, itemModel]),
+    key: "KeyE",
+    callback: useCallback(() => {
+      setEditMenuOn(value => !value);
+    }, [setEditMenuOn]),
+  });
   
   return (<>
     <div style={{
@@ -117,7 +114,8 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
       onMouseOver={onMouseOver}
       onClick={editable && !itemModel?.builtIn ? () => setEditMenuOn(true) :  onClick}>
         <div style={{ flex: 1 }}>
-          {itemModel?.label}
+          {itemModel?.emoji && <span>{itemModel?.emoji}&nbsp;</span>}
+          <span>{itemModel?.label}</span>
         </div>
         {editable && active && rowSelected && !itemModel?.builtIn && <div style={{
           ...ICON_STYLE,

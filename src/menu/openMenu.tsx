@@ -8,17 +8,17 @@ import { DialogModel } from '../dialog/model/DialogModel';
 import { PictureModel } from '../picture/model/PictureModel';
 import { PromptModel } from '@/prompt/model/PromptModel';
 
-interface Props {
+interface Props<I extends MenuItem = MenuItem> {
   pictures?: PictureModel[];
   menu?: MenuModel,
   dialog?: DialogModel,
   prompt?: PromptModel,
-  onSelect(item: MenuItem): void,
+  onSelect(item: I): void,
   root?: HTMLElement;
   popupControl?: PopupControl;
 }
 
-export function openMenu({
+export function openMenu<I extends MenuItem = MenuItem>({
   pictures,
   menu,
   dialog,
@@ -26,7 +26,7 @@ export function openMenu({
   onSelect,
   root = document.body,
   popupControl = new PopupControl(),
-}: Props) {
+}: Props<I>) {
   const rootElem = document.createElement('div');
   rootElem.style.position = "absolute";
   rootElem.style.left = "0px";
@@ -37,7 +37,9 @@ export function openMenu({
   const reactRoot = ReactDOM.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
 
-  const html = <BasicPopup pictures={pictures} dialog={dialog} menu={menu} prompt={prompt} onSelect={onSelect} detach={detach} popupControl={popupControl} />;
+  const html = <BasicPopup pictures={pictures} dialog={dialog} menu={menu} prompt={prompt} onSelect={onSelect} detach={detach} popupControl={popupControl}
+    onClose={async () => setTimeout(() => detach(), 10)}
+  />;
   reactRoot.render(html);
   root.appendChild(rootElem); 
   return { popupControl, detach };

@@ -1,8 +1,9 @@
-import { DialogModel } from "@/dialog/model/DialogModel";
+import { DialogModel } from "../../dialog/model/DialogModel";
 import { MenuModel } from "./MenuModel";
-import { PromptModel } from "@/prompt/model/PromptModel";
+import { PromptModel } from "../../prompt/model/PromptModel";
 
 export interface MenuItemModel {
+  emoji?: string;
   label: string;
   submenu?: MenuModel;
   dialog?: DialogModel;
@@ -12,6 +13,7 @@ export interface MenuItemModel {
   builtIn?: boolean;
   hidden?: boolean;
   action?: () => void;
+  selected?: boolean;
 }
 
 export type MenuItem = MenuItemModel | string;

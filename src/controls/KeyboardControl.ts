@@ -24,6 +24,14 @@ export class KeyboardControl implements Active {
         case "ArrowUp":
           popupControl.onUp();
           break;
+        case "KeyA":
+        case "ArrowLeft":
+          popupControl.onLeft();
+          break;
+        case "KeyD":
+        case "ArrowRight":
+          popupControl.onRight();
+          break;
         case "Space":
           popupControl.onAction();
           break;
@@ -38,7 +46,6 @@ export class KeyboardControl implements Active {
   }
 
   activate(): void {
-    console.log("Activate keyboard control");
     document.removeEventListener("keyup", this.onKeyUp);
     document.removeEventListener("keydown", this.onKeyDown);
     document.addEventListener("keyup", this.onKeyUp);
@@ -46,7 +53,6 @@ export class KeyboardControl implements Active {
   }
 
   deactivate(): void {
-    console.log("Deactivate keyboard control");
     document.removeEventListener("keyup", this.onKeyUp);
     document.removeEventListener("keydown", this.onKeyDown);
   }

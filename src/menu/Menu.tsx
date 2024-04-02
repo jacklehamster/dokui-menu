@@ -32,9 +32,7 @@ export function Menu({
   const [postClose, setPostClose] = useState<MenuItem>();
   const [hidden, setHidden] = useState(false);
  
-  const onBack = useCallback(() => {
-    remove(onClose);
-  }, [remove, onClose]);
+  const onBack = useCallback(() => remove(onClose), [remove, onClose]);
 
   const { active } = useActiveFocus();
   const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect } = useEditMenu({menu, active});
@@ -63,7 +61,7 @@ export function Menu({
     }
   }, [onSelect, setSub, onBack, setPostClose, setHidden]);
 
-  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack, active });
+  const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, mouseHoverEnabled, enableMouseHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack, active });
 
   const onCloseSub = useCallback(async () => {
     setSub({});
@@ -73,7 +71,7 @@ export function Menu({
     setHidden(false);
   }, [setSub, executeMenuItem, setHidden, postClose]);
 
-  const clickable = useMemo(() => !disabled && menuHoverEnabled, [disabled, menuHoverEnabled])
+  const clickable = useMemo(() => !disabled && mouseHoverEnabled, [disabled, mouseHoverEnabled]);
 
   return (
     <>
@@ -110,7 +108,7 @@ export function Menu({
                   disabled={disabled}
                   onMouseMove={() => {
                     if (!disabled) {
-                      enableMenuHover();
+                      enableMouseHover();
                       select(index);  
                     }
                   }}

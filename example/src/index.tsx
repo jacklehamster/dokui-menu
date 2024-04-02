@@ -185,6 +185,20 @@ export function showMenu() {
               size: [600, 300],
             },
             label: "What is your name?",
+            defaultText: "Name",
+            randomText: [
+              "Alis",
+              "Bryan",
+              "Carlos",
+              "David",
+              "Emily",
+            ],
+            languages: ["english", "korean"],
+          },
+        },
+        {
+          label: "simpler prompt",
+          prompt: {
           },
         },
       ],

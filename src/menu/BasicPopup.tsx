@@ -16,7 +16,7 @@ export function BasicPopup(props: Props) {
   return <LayoutContextProvider>
           <ControlContextProvider popupControl={props.popupControl}>
             <EditContextProvider>
-              <Container {...props} onSelect={onSelect} />
+              <Container {...props} onSelect={onSelect} onClose={props.onClose} />
             </EditContextProvider>
           </ControlContextProvider>
         </LayoutContextProvider>;

@@ -36,7 +36,7 @@ export function Container({
     return [
       dialog ? <Dialog dialog={dialog} onSelect={onSelect} onClose={onNext} /> : undefined,
       menu ? <Menu menu={menu} onSelect={onSelect} onClose={onNext} /> : undefined,
-      prompt ? <Prompt prompt={prompt} onClose={onNext} /> : undefined,
+      prompt ? <Prompt prompt={prompt} onConfirm={onSelect} onClose={onNext} /> : undefined,
     ].filter((e): e is JSX.Element => !!e);
   }, [menu, dialog, prompt, onSelect, onNext]);
 

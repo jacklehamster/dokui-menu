@@ -1,15 +1,24 @@
-import { List } from "abstract-list";
-import { useCallback, useMemo, useState } from "react";
+import { find, List } from "abstract-list";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface Props<T> {
   items: List<T>;
   maxRows?: number;
 }
 
-export function useSelection<T>({ items, maxRows = items.length.valueOf() }: Props<T>) {
+export function useSelection<T extends ({ selected?: boolean } | string)>({ items, maxRows = items.length.valueOf() }: Props<T>) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scroll, setScroll] = useState(0);
   const numItems = useMemo(() => items.length.valueOf(), [items]);
+
+  useEffect(() => {
+    const defaultSelected = find(items, (item) => {
+      return typeof (item) === "object" && !!item?.selected;
+    });
+    if (defaultSelected >= 0) {
+      setSelectedIndex(defaultSelected);
+    }
+  }, [items, setSelectedIndex]);
 
   const scrollDown = useCallback((rows = 1) => {
     setScroll(scroll => Math.min(numItems - maxRows, scroll + rows));
