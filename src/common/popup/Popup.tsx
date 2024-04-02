@@ -43,6 +43,7 @@ export function Popup({
   disabled,
   removed,
   onBack,
+  fit,
 }: PopupProps): JSX.Element {
   const [h, setH] = useState(0);
   useEffect(() => {
@@ -51,7 +52,7 @@ export function Popup({
 
   const { top, left, right, bottom, width, height, visible } = usePopupLayout({
     layout,
-  });
+  });  
 
   return (
     <>
@@ -63,20 +64,18 @@ export function Popup({
       height: "100%",
       cursor: "pointer",
     }} onClick={onBack} /> : undefined}
-    <div
-      style={{
+    <div style={{
         ...OVERLAP,
         left, top, right, bottom, width, height,
         fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
         display: visible ? "" : "none",
-      }}
-    >
+      }}>
       <div className="pop-up"
       style={{
           ...POPUP_CSS,
           marginTop: `${removed ? height ? `${height}px` : "80%" : "0px"}`,
           width: '100%',
-          height: `${removed ? 0 : h}%`,
+          height: removed ? 0 : fit ? undefined : `${h}%`,
           overflow: 'hidden',
           opacity: removed ? 0 : 1,
           transition: 'height .2s, margin-top .2s, opacity .2s',
@@ -87,8 +86,7 @@ export function Popup({
           className="double-border"
           style={{
             ...DOUBLE_BORDER_CSS,
-            height: `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
-            pointerEvents: disabled ? 'none' : undefined,
+            height: fit ? undefined : `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
             borderColor: disabled ? "silver" : "white",
           }}
         >

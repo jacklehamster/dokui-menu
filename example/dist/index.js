@@ -2672,49 +2672,53 @@ var require_jsx_dev_runtime = __commonJS((exports, module) => {
 });
 
 // /Users/vincent/dokui-menu/example/node_modules/dokui-menu/dist/index.js
-var React4 = __toESM(require_react(), 1);
+var React5 = __toESM(require_react(), 1);
 var import_react = __toESM(require_react(), 1);
 var import_react2 = __toESM(require_react(), 1);
 var import_react3 = __toESM(require_react(), 1);
 var import_react4 = __toESM(require_react(), 1);
 var import_react5 = __toESM(require_react(), 1);
-var jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
 var import_react6 = __toESM(require_react(), 1);
+var jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
 var import_react7 = __toESM(require_react(), 1);
 var import_react8 = __toESM(require_react(), 1);
 var import_react9 = __toESM(require_react(), 1);
 var import_react10 = __toESM(require_react(), 1);
+var import_react11 = __toESM(require_react(), 1);
 var jsx_dev_runtime2 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime3 = __toESM(require_jsx_dev_runtime(), 1);
-var import_react11 = __toESM(require_react(), 1);
 var import_react12 = __toESM(require_react(), 1);
-var jsx_dev_runtime4 = __toESM(require_jsx_dev_runtime(), 1);
-var jsx_dev_runtime5 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react13 = __toESM(require_react(), 1);
+var jsx_dev_runtime4 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react14 = __toESM(require_react(), 1);
 var import_react15 = __toESM(require_react(), 1);
+var jsx_dev_runtime5 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime6 = __toESM(require_jsx_dev_runtime(), 1);
-var jsx_dev_runtime7 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react16 = __toESM(require_react(), 1);
 var import_react17 = __toESM(require_react(), 1);
+var import_react18 = __toESM(require_react(), 1);
+var jsx_dev_runtime7 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime8 = __toESM(require_jsx_dev_runtime(), 1);
+var import_react19 = __toESM(require_react(), 1);
 var jsx_dev_runtime9 = __toESM(require_jsx_dev_runtime(), 1);
+var import_react20 = __toESM(require_react(), 1);
 var jsx_dev_runtime10 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime11 = __toESM(require_jsx_dev_runtime(), 1);
-var import_react18 = __toESM(require_react(), 1);
-var import_react19 = __toESM(require_react(), 1);
 var jsx_dev_runtime12 = __toESM(require_jsx_dev_runtime(), 1);
+var import_react21 = __toESM(require_react(), 1);
+var import_react22 = __toESM(require_react(), 1);
+var jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime(), 1);
 var useSelection = function({ items, maxRows = items.length.valueOf() }) {
-  const [selectedIndex, setSelectedIndex] = import_react2.useState(0);
-  const [scroll, setScroll] = import_react2.useState(0);
-  const numItems = import_react2.useMemo(() => items.length.valueOf(), [items]);
-  const scrollDown = import_react2.useCallback((rows = 1) => {
+  const [selectedIndex, setSelectedIndex] = import_react3.useState(0);
+  const [scroll, setScroll] = import_react3.useState(0);
+  const numItems = import_react3.useMemo(() => items.length.valueOf(), [items]);
+  const scrollDown = import_react3.useCallback((rows = 1) => {
     setScroll((scroll2) => Math.min(numItems - maxRows, scroll2 + rows));
   }, [setScroll, numItems, maxRows]);
-  const scrollUp = import_react2.useCallback((rows = 1) => {
+  const scrollUp = import_react3.useCallback((rows = 1) => {
     setScroll((scroll2) => Math.max(0, scroll2 - rows));
   }, [setScroll]);
-  const fixScroll = import_react2.useCallback((index) => {
+  const fixScroll = import_react3.useCallback((index) => {
     if (maxRows && index - scroll >= maxRows) {
       scrollDown(Math.max(1, scroll - maxRows + index + 1));
     }
@@ -2722,11 +2726,11 @@ var useSelection = function({ items, maxRows = items.length.valueOf() }) {
       scrollUp(Math.max(1, scroll - index));
     }
   }, [scroll, maxRows, scrollUp, scrollDown]);
-  const select = import_react2.useCallback((index) => {
+  const select = import_react3.useCallback((index) => {
     const newIndex = Math.max(0, Math.min(index, numItems - 1));
     setSelectedIndex(newIndex);
   }, [setSelectedIndex, numItems]);
-  const moveSelection = import_react2.useCallback((dy) => {
+  const moveSelection = import_react3.useCallback((dy) => {
     if (dy) {
       setSelectedIndex((index) => {
         const newIndex = Math.max(0, Math.min(index + dy, numItems - 1));
@@ -2735,7 +2739,7 @@ var useSelection = function({ items, maxRows = items.length.valueOf() }) {
       });
     }
   }, [setSelectedIndex, fixScroll, numItems]);
-  const selectedItem = import_react2.useMemo(() => items.at(selectedIndex), [items, selectedIndex]);
+  const selectedItem = import_react3.useMemo(() => items.at(selectedIndex), [items, selectedIndex]);
   return {
     select,
     moveSelection,
@@ -2747,14 +2751,14 @@ var useSelection = function({ items, maxRows = items.length.valueOf() }) {
   };
 };
 var useInitControlContext = function({ popupControl }) {
-  const context = import_react5.useMemo(() => ({
+  const context = import_react6.useMemo(() => ({
     popupControl
   }), [popupControl]);
   return context;
 };
 var useControls = function({ active, listener }) {
   const { popupControl } = useControlContext();
-  import_react3.useEffect(() => {
+  import_react4.useEffect(() => {
     if (active) {
       popupControl.addListener(listener);
       return () => popupControl.removeListener(listener);
@@ -2764,8 +2768,8 @@ var useControls = function({ active, listener }) {
 };
 var useMenu = function({ items, maxRows, onSelect, onBack, active }) {
   const { scroll, scrollUp, scrollDown, select, moveSelection, selectedItem } = useSelection({ items, maxRows });
-  const [menuHoverEnabled, setMenuHoverEnabled] = import_react.useState(false);
-  const onAction = import_react.useCallback((index) => {
+  const [menuHoverEnabled, setMenuHoverEnabled] = import_react2.useState(false);
+  const onAction = import_react2.useCallback((index) => {
     const item = index !== undefined ? items.at(index) : selectedItem;
     if (!item) {
       return;
@@ -2775,17 +2779,17 @@ var useMenu = function({ items, maxRows, onSelect, onBack, active }) {
     }
     onSelect(item);
   }, [items, moveSelection, selectedItem, setMenuHoverEnabled]);
-  const onUp = import_react.useCallback(() => {
+  const onUp = import_react2.useCallback(() => {
     setMenuHoverEnabled(false);
     moveSelection(-1);
   }, [setMenuHoverEnabled, moveSelection]);
-  const onDown = import_react.useCallback(() => {
+  const onDown = import_react2.useCallback(() => {
     setMenuHoverEnabled(false);
     moveSelection(1);
   }, [setMenuHoverEnabled, moveSelection]);
   const { lockState } = useControls({
     active,
-    listener: import_react.useMemo(() => ({
+    listener: import_react2.useMemo(() => ({
       onAction,
       onUp,
       onDown,
@@ -2800,7 +2804,7 @@ var useMenu = function({ items, maxRows, onSelect, onBack, active }) {
     scrollDown,
     disabled: lockState === LockStatus.LOCKED,
     menuHoverEnabled,
-    enableMenuHover: import_react.useCallback(!menuHoverEnabled ? () => setMenuHoverEnabled(true) : () => {
+    enableMenuHover: import_react2.useCallback(!menuHoverEnabled ? () => setMenuHoverEnabled(true) : () => {
     }, [menuHoverEnabled]),
     onMenuAction: onAction,
     onUp,
@@ -2808,8 +2812,8 @@ var useMenu = function({ items, maxRows, onSelect, onBack, active }) {
   };
 };
 var useInitLayoutContext = function() {
-  const layoutModels = import_react10.useMemo(() => ({}), []);
-  const getLayout = import_react10.useCallback((layout) => {
+  const layoutModels = import_react11.useMemo(() => ({}), []);
+  const getLayout = import_react11.useCallback((layout) => {
     if (typeof layout === "string") {
       return layoutModels[layout];
     }
@@ -2818,8 +2822,8 @@ var useInitLayoutContext = function() {
     }
     return layout;
   }, [layoutModels]);
-  const uniqueLayout = import_react10.useMemo(() => new x2, []);
-  const context = import_react10.useMemo(() => ({
+  const uniqueLayout = import_react11.useMemo(() => new x2, []);
+  const context = import_react11.useMemo(() => ({
     getLayout,
     uniqueLayout
   }), [getLayout, uniqueLayout]);
@@ -2836,8 +2840,8 @@ var usePopupLayout = function({ layout }) {
   const bottom = DEFAULT_VERTICAL_PADDING;
   const width = layoutModel.size?.[0] || undefined;
   const height = layoutModel.size?.[1] || undefined;
-  const [visible, setVisible] = import_react8.useState(true);
-  import_react8.useEffect(() => {
+  const [visible, setVisible] = import_react9.useState(true);
+  import_react9.useEffect(() => {
     const uid = typeof layout === "string" ? layout : layout.name;
     if (uid) {
       return uniqueLayout.registerLayout(uid, setVisible);
@@ -2851,10 +2855,11 @@ var Popup2 = function({
   style,
   disabled,
   removed,
-  onBack
+  onBack,
+  fit
 }) {
-  const [h, setH] = import_react7.useState(0);
-  import_react7.useEffect(() => {
+  const [h, setH] = import_react8.useState(0);
+  import_react8.useEffect(() => {
     requestAnimationFrame(() => setH(100));
   }, [setH]);
   const { top, left, right, bottom, width, height, visible } = usePopupLayout({
@@ -2891,7 +2896,7 @@ var Popup2 = function({
             ...POPUP_CSS,
             marginTop: `${removed ? height ? `${height}px` : "80%" : "0px"}`,
             width: "100%",
-            height: `${removed ? 0 : h}%`,
+            height: removed ? 0 : fit ? undefined : `${h}%`,
             overflow: "hidden",
             opacity: removed ? 0 : 1,
             transition: "height .2s, margin-top .2s, opacity .2s",
@@ -2901,8 +2906,7 @@ var Popup2 = function({
             className: "double-border",
             style: {
               ...DOUBLE_BORDER_CSS,
-              height: `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
-              pointerEvents: disabled ? "none" : undefined,
+              height: fit ? undefined : `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
               borderColor: disabled ? "silver" : "white"
             },
             children: removed ? undefined : children
@@ -2913,8 +2917,8 @@ var Popup2 = function({
   }, undefined, true, undefined, this);
 };
 var useRemove = function() {
-  const [removed, setRemoved] = import_react11.useState(false);
-  const remove = import_react11.useCallback((onClose) => {
+  const [removed, setRemoved] = import_react12.useState(false);
+  const remove = import_react12.useCallback((onClose) => {
     setRemoved(true);
     const timeout = setTimeout(() => {
       setRemoved(false);
@@ -2950,44 +2954,196 @@ var Picture = function({ picture, removed }) {
     }, undefined, false, undefined, this)
   }, undefined, false, undefined, this);
 };
+var useActiveFocus = function() {
+  const [active, setActive] = import_react15.useState(true);
+  const { popupControl } = useControlContext();
+  import_react15.useEffect(() => {
+    return popupControl.registerActive(setActive);
+  }, [popupControl, setActive]);
+  return { active };
+};
+var Prompt = function({ prompt, onClose }) {
+  const [text, setText] = import_react14.useState("");
+  const [inputFocus, setInputFocus] = import_react14.useState(false);
+  const { active } = useActiveFocus();
+  const { removed, remove } = useRemove();
+  const { lockState, popupControl } = useControls({
+    active,
+    listener: import_react14.useMemo(() => ({
+      onBack() {
+        remove(onClose);
+      }
+    }), [remove, onClose])
+  });
+  import_react14.useEffect(() => {
+    if (inputFocus) {
+      popupControl.deactivate();
+      return () => popupControl.activate();
+    }
+  }, [popupControl, inputFocus]);
+  const inputRef = import_react14.useRef(null);
+  import_react14.useEffect(() => {
+    const input = inputRef.current;
+    if (input) {
+      const onFocus = () => {
+        setInputFocus(true);
+        window.getSelection()?.selectAllChildren(input);
+      };
+      const onBlur = () => {
+        setInputFocus(false);
+      };
+      input.addEventListener("focus", onFocus);
+      input.addEventListener("blur", onBlur);
+    }
+  }, [inputRef.current, setInputFocus]);
+  const alphabet = import_react14.useMemo(() => {
+    return "abcdefghijklmnopqrstuvwxyz._-#0123456789".split("");
+  }, []);
+  return jsx_dev_runtime5.jsxDEV(jsx_dev_runtime5.Fragment, {
+    children: jsx_dev_runtime5.jsxDEV(Popup2, {
+      layout: prompt.layout ?? {},
+      style: prompt.style,
+      removed,
+      fit: true,
+      children: [
+        jsx_dev_runtime5.jsxDEV("div", {
+          style: {
+            margin: 5
+          },
+          children: prompt.label
+        }, undefined, false, undefined, this),
+        jsx_dev_runtime5.jsxDEV("div", {
+          style: {
+            padding: 5
+          },
+          children: jsx_dev_runtime5.jsxDEV("div", {
+            ref: inputRef,
+            autoCorrect: "off",
+            autoCapitalize: "off",
+            spellCheck: "false",
+            style: {
+              color: "white",
+              backgroundColor: "black",
+              fontSize: 20,
+              border: "2px solid white",
+              borderRadius: "5px",
+              padding: 10,
+              cursor: "text"
+            },
+            onKeyDown: (e) => {
+              if (e.code === "Enter") {
+                e.currentTarget.blur();
+              }
+            },
+            contentEditable: true,
+            onInput: (e) => setText(e.currentTarget.textContent ?? "")
+          }, undefined, false, undefined, this)
+        }, undefined, false, undefined, this),
+        jsx_dev_runtime5.jsxDEV("div", {
+          children: [
+            jsx_dev_runtime5.jsxDEV("div", {
+              style: {
+                margin: 5,
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto auto auto auto auto auto auto"
+              },
+              children: alphabet.map((letter, index) => jsx_dev_runtime5.jsxDEV("div", {
+                style: {
+                  outline: "1px solid DimGray",
+                  textAlign: "center",
+                  padding: 3
+                },
+                children: letter
+              }, index, false, undefined, this))
+            }, undefined, false, undefined, this),
+            jsx_dev_runtime5.jsxDEV("div", {
+              style: {
+                margin: 5,
+                display: "flex",
+                gap: 10
+              },
+              children: [
+                jsx_dev_runtime5.jsxDEV("div", {
+                  style: {
+                    padding: "0px 5px",
+                    outline: "1px solid DimGray"
+                  },
+                  children: "\uD83C\uDF10"
+                }, undefined, false, undefined, this),
+                jsx_dev_runtime5.jsxDEV("div", {
+                  style: {
+                    padding: "0px 5px",
+                    outline: "1px solid DimGray"
+                  },
+                  children: "Aa"
+                }, undefined, false, undefined, this),
+                jsx_dev_runtime5.jsxDEV("div", {
+                  style: {
+                    padding: "0px 5px",
+                    outline: "1px solid DimGray",
+                    flexGrow: 1,
+                    textAlign: "center"
+                  },
+                  children: "space"
+                }, undefined, false, undefined, this),
+                jsx_dev_runtime5.jsxDEV("div", {
+                  style: {
+                    padding: "0px 20px",
+                    outline: "1px solid DimGray"
+                  },
+                  children: "Confirm"
+                }, undefined, false, undefined, this)
+              ]
+            }, undefined, true, undefined, this)
+          ]
+        }, undefined, true, undefined, this)
+      ]
+    }, undefined, true, undefined, this)
+  }, undefined, false, undefined, this);
+};
 var Container = function({
   pictures,
   dialog,
   menu,
+  prompt,
   onSelect = async () => {
   },
   onClose = async () => {
   },
   removed
 }) {
-  const [index, setIndex] = import_react12.useState(0);
-  const onNext = import_react12.useCallback(async () => {
+  const [index, setIndex] = import_react13.useState(0);
+  const onNext = import_react13.useCallback(async () => {
     setIndex((index2) => index2 + 1);
   }, [setIndex]);
-  const elems = import_react12.useMemo(() => {
+  const elems = import_react13.useMemo(() => {
     return [
-      dialog ? jsx_dev_runtime5.jsxDEV(Dialog, {
+      dialog ? jsx_dev_runtime6.jsxDEV(Dialog, {
         dialog,
         onSelect,
         onClose: onNext
       }, undefined, false, undefined, this) : undefined,
-      menu ? jsx_dev_runtime5.jsxDEV(Menu2, {
+      menu ? jsx_dev_runtime6.jsxDEV(Menu2, {
         menu,
         onSelect,
         onClose: onNext
+      }, undefined, false, undefined, this) : undefined,
+      prompt ? jsx_dev_runtime6.jsxDEV(Prompt, {
+        prompt,
+        onClose: onNext
       }, undefined, false, undefined, this) : undefined
     ].filter((e) => !!e);
-  }, [menu, dialog, onSelect, onNext]);
-  import_react12.useEffect(() => {
+  }, [menu, dialog, prompt, onSelect, onNext]);
+  import_react13.useEffect(() => {
     if (elems.length && index >= elems.length) {
       setIndex(0);
       onClose();
     }
   }, [index, setIndex, elems, onClose]);
-  return jsx_dev_runtime5.jsxDEV(jsx_dev_runtime5.Fragment, {
+  return jsx_dev_runtime6.jsxDEV(jsx_dev_runtime6.Fragment, {
     children: [
       elems[index],
-      pictures?.map((picture, index2) => jsx_dev_runtime5.jsxDEV(Picture, {
+      pictures?.map((picture, index2) => jsx_dev_runtime6.jsxDEV(Picture, {
         removed,
         picture
       }, index2, false, undefined, this))
@@ -2995,8 +3151,8 @@ var Container = function({
   }, undefined, true, undefined, this);
 };
 var useEditControlContext = function() {
-  const [editing, setEditing] = import_react15.useState(false);
-  const context = import_react15.useMemo(() => ({
+  const [editing, setEditing] = import_react18.useState(false);
+  const context = import_react18.useMemo(() => ({
     editing,
     toggleEditing: () => {
       setEditing((editing2) => !editing2);
@@ -3006,7 +3162,7 @@ var useEditControlContext = function() {
 };
 var EditToggle = function() {
   const { editing, toggleEditing } = useEditContext();
-  return jsx_dev_runtime6.jsxDEV("button", {
+  return jsx_dev_runtime7.jsxDEV("button", {
     style: {
       position: "absolute",
       top: 0,
@@ -3022,8 +3178,8 @@ var EditToggle = function() {
 };
 var useEditMenu = function({ menu, active }) {
   const { editing } = useEditContext();
-  const [editCount, setEditCount] = import_react13.useState(0);
-  const addItem = import_react13.useCallback(() => {
+  const [editCount, setEditCount] = import_react16.useState(0);
+  const addItem = import_react16.useCallback(() => {
     const items2 = [];
     x(menu.items, (item) => {
       items2.push(item);
@@ -3034,7 +3190,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onAddSubmenu = import_react13.useCallback((index) => {
+  const onAddSubmenu = import_react16.useCallback((index) => {
     const items2 = [];
     x(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -3044,7 +3200,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onRemoveSubmenu = import_react13.useCallback((index) => {
+  const onRemoveSubmenu = import_react16.useCallback((index) => {
     const items2 = [];
     x(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -3054,7 +3210,29 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onToggleBack = import_react13.useCallback((index) => {
+  const onAddDialog = import_react16.useCallback((index) => {
+    const items2 = [];
+    x(menu.items, (item2) => items2.push(item2));
+    const item = items2[index];
+    const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
+    itemModel.dialog = itemModel.dialog ?? {
+      messages: []
+    };
+    items2[index] = itemModel;
+    menu.items = items2;
+    setEditCount((count) => count + 1);
+  }, [menu, setEditCount, editCount]);
+  const onRemoveDialog = import_react16.useCallback((index) => {
+    const items2 = [];
+    x(menu.items, (item2) => items2.push(item2));
+    const item = items2[index];
+    const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
+    delete itemModel.dialog;
+    items2[index] = itemModel;
+    menu.items = items2;
+    setEditCount((count) => count + 1);
+  }, [menu, setEditCount, editCount]);
+  const onToggleBack = import_react16.useCallback((index) => {
     const items2 = [];
     x(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -3068,7 +3246,21 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const items = import_react13.useMemo(() => {
+  const onToggleHideOnSelect = import_react16.useCallback((index) => {
+    const items2 = [];
+    x(menu.items, (item2) => items2.push(item2));
+    const item = items2[index];
+    const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
+    if (itemModel.hideOnSelect) {
+      delete itemModel.hideOnSelect;
+    } else {
+      itemModel.hideOnSelect = true;
+    }
+    items2[index] = itemModel;
+    menu.items = items2;
+    setEditCount((count) => count + 1);
+  }, [menu, setEditCount, editCount]);
+  const items = import_react16.useMemo(() => {
     if (!editing || !active) {
       return menu.items;
     }
@@ -3088,7 +3280,6 @@ var useEditMenu = function({ menu, active }) {
         },
         builtIn: true,
         items: [
-          { label: "edit max rows", builtIn: true },
           { label: "edit pictures", builtIn: true },
           { label: "exit", builtIn: true, back: true }
         ]
@@ -3096,7 +3287,7 @@ var useEditMenu = function({ menu, active }) {
     ];
     return items2.concat(editMenu);
   }, [menu, editing, active, editCount, addItem]);
-  const visibleItems = import_react13.useMemo(() => {
+  const visibleItems = import_react16.useMemo(() => {
     const visibleItems2 = [];
     x(items, (item) => {
       const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
@@ -3108,36 +3299,30 @@ var useEditMenu = function({ menu, active }) {
   }, [items]);
   return {
     ...menu,
-    maxRows: menu.maxRows ?? menu.items?.length.valueOf(),
     items: visibleItems,
     editable: editing,
     onAddSubmenu,
     onRemoveSubmenu,
-    onToggleBack
+    onAddDialog,
+    onRemoveDialog,
+    onToggleBack,
+    onToggleHideOnSelect
   };
 };
-var useActiveFocus = function() {
-  const [active, setActive] = import_react16.useState(true);
-  const { popupControl } = useControlContext();
-  import_react16.useEffect(() => {
-    return popupControl.registerActive(setActive);
-  }, [popupControl, setActive]);
-  return { active };
-};
-var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack }) {
+var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect }) {
   const itemModel = typeof item === "string" ? { label: item } : item;
   const rowSelected = selectedItem === item;
-  const [editMenuOn, setEditMenuOn] = import_react17.useState(false);
-  const editMenu = import_react17.useMemo(() => ({
+  const [editMenuOn, setEditMenuOn] = import_react19.useState(false);
+  const editMenu = import_react19.useMemo(() => ({
     builtIn: true,
     layout: {
       position: [50, 200],
-      size: [300, 200]
+      size: [400, 250]
     },
     items: [
       {
         builtIn: true,
-        label: "rename"
+        label: "edit text"
       },
       {
         builtIn: true,
@@ -3155,8 +3340,27 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
       },
       {
         builtIn: true,
-        label: "toggle back (" + (itemModel?.back ? "ON" : "OFF") + ")",
+        label: "create dialog",
+        action: () => onAddSubmenu?.(index),
+        back: true,
+        hidden: !!itemModel?.dialog
+      },
+      {
+        builtIn: true,
+        label: "remove dialog",
+        action: () => onRemoveSubmenu?.(index),
+        back: true,
+        hidden: !itemModel?.dialog
+      },
+      {
+        builtIn: true,
+        label: "back (" + (itemModel?.back ? "ON" : "OFF") + ")",
         action: () => onToggleBack?.(index)
+      },
+      {
+        builtIn: true,
+        label: "hide on select (" + (itemModel?.hideOnSelect ? "ON" : "OFF") + ")",
+        action: () => onToggleHideOnSelect?.(index)
       },
       {
         builtIn: true,
@@ -3164,8 +3368,8 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
         back: true
       }
     ]
-  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, index]);
-  import_react17.useEffect(() => {
+  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, index]);
+  import_react19.useEffect(() => {
     if (editable && active && rowSelected && !itemModel?.builtIn) {
       const listener = (e) => {
         if (e.code === "KeyE") {
@@ -3176,8 +3380,8 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
       return () => document.removeEventListener("keydown", listener);
     }
   }, [setEditMenuOn, editable, active, rowSelected, itemModel]);
-  return jsx_dev_runtime8.jsxDEV(jsx_dev_runtime8.Fragment, {
-    children: jsx_dev_runtime8.jsxDEV("div", {
+  return jsx_dev_runtime9.jsxDEV(jsx_dev_runtime9.Fragment, {
+    children: jsx_dev_runtime9.jsxDEV("div", {
       style: {
         color: rowSelected ? itemModel?.builtIn ? "#0000ee" : "black" : disabled ? "silver" : "white",
         backgroundColor: !rowSelected ? itemModel?.builtIn ? "#0000ee" : "black" : disabled ? "silver" : "white",
@@ -3186,36 +3390,80 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
       },
       onMouseMove,
       onMouseOver,
-      onClick,
+      onClick: editable && !itemModel?.builtIn ? () => setEditMenuOn(true) : onClick,
       children: [
-        jsx_dev_runtime8.jsxDEV("div", {
-          style: {
-            flex: 1
-          },
+        jsx_dev_runtime9.jsxDEV("div", {
+          style: { flex: 1 },
           children: itemModel?.label
         }, undefined, false, undefined, this),
-        editable && active && rowSelected && !itemModel?.builtIn && jsx_dev_runtime8.jsxDEV("div", {
+        editable && active && rowSelected && !itemModel?.builtIn && jsx_dev_runtime9.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "blue"
           },
           children: "E"
         }, undefined, false, undefined, this),
-        editable && !itemModel?.builtIn && itemModel?.submenu && jsx_dev_runtime8.jsxDEV("div", {
+        editable && !itemModel?.builtIn && itemModel?.hideOnSelect && jsx_dev_runtime9.jsxDEV("div", {
+          style: {
+            ...ICON_STYLE,
+            backgroundColor: "silver"
+          },
+          children: "H"
+        }, undefined, false, undefined, this),
+        editable && !itemModel?.builtIn && itemModel?.submenu && jsx_dev_runtime9.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "green"
           },
-          children: "S"
+          children: jsx_dev_runtime9.jsxDEV("svg", {
+            xmlns: "http://www.w3.org/2000/svg",
+            style: {
+              height: 30,
+              width: 30
+            },
+            children: [
+              jsx_dev_runtime9.jsxDEV("line", {
+                x1: "10",
+                y1: "10",
+                x2: "20",
+                y2: "10",
+                stroke: "white",
+                strokeWidth: "2"
+              }, undefined, false, undefined, this),
+              jsx_dev_runtime9.jsxDEV("line", {
+                x1: "10",
+                y1: "14",
+                x2: "20",
+                y2: "14",
+                stroke: "white",
+                strokeWidth: "2"
+              }, undefined, false, undefined, this),
+              jsx_dev_runtime9.jsxDEV("line", {
+                x1: "10",
+                y1: "18",
+                x2: "20",
+                y2: "18",
+                stroke: "white",
+                strokeWidth: "2"
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this)
         }, undefined, false, undefined, this),
-        editable && !itemModel?.builtIn && itemModel?.back && jsx_dev_runtime8.jsxDEV("div", {
+        editable && !itemModel?.builtIn && itemModel?.dialog && jsx_dev_runtime9.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "orange"
           },
+          children: "D"
+        }, undefined, false, undefined, this),
+        editable && !itemModel?.builtIn && itemModel?.back && jsx_dev_runtime9.jsxDEV("div", {
+          style: {
+            ...ICON_STYLE,
+            backgroundColor: "red"
+          },
           children: "B"
         }, undefined, false, undefined, this),
-        jsx_dev_runtime8.jsxDEV(Container, {
+        jsx_dev_runtime9.jsxDEV(Container, {
           menu: editMenuOn ? editMenu : undefined,
           onClose: () => setEditMenuOn(false)
         }, undefined, false, undefined, this)
@@ -3223,28 +3471,47 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
     }, undefined, true, undefined, this)
   }, undefined, false, undefined, this);
 };
+var useMaxRows = function({ size }) {
+  const [maxRows, setMaxRows] = import_react20.useState(size);
+  const menuRef = import_react20.useRef(null);
+  import_react20.useEffect(() => {
+    if (!menuRef.current)
+      return;
+    const resizeObserver = new ResizeObserver((entries) => {
+      const height = entries[0].contentRect.height;
+      const rows = Math.floor(height / 30);
+      if (rows) {
+        setMaxRows(rows);
+      }
+    });
+    resizeObserver.observe(menuRef.current);
+    return () => resizeObserver.disconnect();
+  }, [setMaxRows, menuRef.current]);
+  return { maxRows, menuRef };
+};
 var Menu2 = function({
   menu,
   onSelect,
   onClose
 }) {
   const { removed, remove } = useRemove();
-  const [sub, setSub] = import_react6.useState({});
-  const [postClose, setPostClose] = import_react6.useState();
-  const [hidden, setHidden] = import_react6.useState(false);
-  const onBack = import_react6.useCallback(() => {
+  const [sub, setSub] = import_react7.useState({});
+  const [postClose, setPostClose] = import_react7.useState();
+  const [hidden, setHidden] = import_react7.useState(false);
+  const onBack = import_react7.useCallback(() => {
     remove(onClose);
   }, [remove, onClose]);
   const { active } = useActiveFocus();
-  const { items = [], maxRows, style, layout, editable, onAddSubmenu, onRemoveSubmenu, onToggleBack } = useEditMenu({ menu, active });
-  const executeMenuItem = import_react6.useCallback((item) => {
+  const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect } = useEditMenu({ menu, active });
+  const { maxRows, menuRef } = useMaxRows({ size: items.length.valueOf() });
+  const executeMenuItem = import_react7.useCallback((item) => {
     if (typeof item === "object") {
       if (item.hideOnSelect) {
         setHidden(true);
       }
-      if (item.dialog || item.submenu) {
-        const { dialog, submenu, ...rest } = item;
-        setSub({ dialog, menu: submenu });
+      if (item.dialog || item.submenu || item.prompt) {
+        const { dialog, submenu, prompt, ...rest } = item;
+        setSub({ dialog, menu: submenu, prompt });
         setPostClose(rest);
       } else {
         setPostClose(undefined);
@@ -3259,23 +3526,24 @@ var Menu2 = function({
     }
   }, [onSelect, setSub, onBack, setPostClose, setHidden]);
   const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, menuHoverEnabled, enableMenuHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack, active });
-  const onCloseSub = import_react6.useCallback(async () => {
+  const onCloseSub = import_react7.useCallback(async () => {
     setSub({});
     if (postClose) {
       executeMenuItem(postClose);
     }
     setHidden(false);
   }, [setSub, executeMenuItem, setHidden, postClose]);
-  return jsx_dev_runtime9.jsxDEV(jsx_dev_runtime9.Fragment, {
+  const clickable = import_react.useMemo(() => !disabled && menuHoverEnabled, [disabled, menuHoverEnabled]);
+  return jsx_dev_runtime10.jsxDEV(jsx_dev_runtime10.Fragment, {
     children: [
-      jsx_dev_runtime9.jsxDEV(Popup2, {
+      jsx_dev_runtime10.jsxDEV(Popup2, {
         layout: layout ?? {},
         style,
         disabled,
         removed: removed || hidden,
         onBack: menu.disableBack ? undefined : onBack,
         children: [
-          jsx_dev_runtime9.jsxDEV("svg", {
+          jsx_dev_runtime10.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -3286,41 +3554,47 @@ var Menu2 = function({
               left: `calc(50% - 100px)`
             },
             onClick: () => scrollUp(),
-            children: jsx_dev_runtime9.jsxDEV("polygon", {
+            children: jsx_dev_runtime10.jsxDEV("polygon", {
               points: "100,10 110,20 90,20",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime9.jsxDEV("div", {
+          jsx_dev_runtime10.jsxDEV("div", {
             style: {
               paddingTop: 10,
-              cursor: menuHoverEnabled ? "inherit" : "auto"
+              cursor: clickable ? "inherit" : "auto"
             },
-            children: jsx_dev_runtime9.jsxDEV("div", {
+            children: jsx_dev_runtime10.jsxDEV("div", {
+              ref: menuRef,
               style: { height: `calc(100% - 27px)`, overflow: "hidden" },
-              children: jsx_dev_runtime9.jsxDEV("div", {
+              children: jsx_dev_runtime10.jsxDEV("div", {
                 style: { marginTop: scroll * -31, transition: "margin-top .2s" },
-                children: z(items, (item, index) => jsx_dev_runtime9.jsxDEV(MenuRow, {
+                children: z(items, (item, index) => jsx_dev_runtime10.jsxDEV(MenuRow, {
                   index,
                   item,
                   selectedItem,
                   onAddSubmenu,
                   onRemoveSubmenu,
+                  onAddDialog,
+                  onRemoveDialog,
                   onToggleBack,
+                  onToggleHideOnSelect,
                   disabled,
                   onMouseMove: () => {
-                    enableMenuHover();
-                    select(index);
+                    if (!disabled) {
+                      enableMenuHover();
+                      select(index);
+                    }
                   },
                   active,
                   editable,
-                  onMouseOver: menuHoverEnabled ? () => select(index) : undefined,
-                  onClick: menuHoverEnabled ? () => onMenuAction(index) : undefined
+                  onMouseOver: clickable ? () => select(index) : undefined,
+                  onClick: clickable ? () => onMenuAction(index) : undefined
                 }, index, false, undefined, this))
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime9.jsxDEV("svg", {
+          jsx_dev_runtime10.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -3331,16 +3605,17 @@ var Menu2 = function({
               left: `calc(50% - 100px)`
             },
             onClick: () => scrollDown(),
-            children: jsx_dev_runtime9.jsxDEV("polygon", {
+            children: jsx_dev_runtime10.jsxDEV("polygon", {
               points: "100,20 110,10 90,10",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this)
         ]
       }, undefined, true, undefined, this),
-      jsx_dev_runtime9.jsxDEV(Container, {
+      jsx_dev_runtime10.jsxDEV(Container, {
         menu: sub.menu,
         dialog: sub.dialog,
+        prompt: sub.prompt,
         pictures: menu.pictures,
         onSelect,
         onClose: onCloseSub,
@@ -3351,11 +3626,11 @@ var Menu2 = function({
 };
 var BasicPopup = function(props) {
   const onSelect = props.onSelect ?? ((item) => console.log(item));
-  return jsx_dev_runtime10.jsxDEV(LayoutContextProvider, {
-    children: jsx_dev_runtime10.jsxDEV(ControlContextProvider, {
+  return jsx_dev_runtime11.jsxDEV(LayoutContextProvider, {
+    children: jsx_dev_runtime11.jsxDEV(ControlContextProvider, {
       popupControl: props.popupControl,
-      children: jsx_dev_runtime10.jsxDEV(EditContextProvider2, {
-        children: jsx_dev_runtime10.jsxDEV(Container, {
+      children: jsx_dev_runtime11.jsxDEV(EditContextProvider2, {
+        children: jsx_dev_runtime11.jsxDEV(Container, {
           ...props,
           onSelect
         }, undefined, false, undefined, this)
@@ -3367,6 +3642,7 @@ var openMenu = function({
   pictures,
   menu,
   dialog,
+  prompt,
   onSelect,
   root = document.body,
   popupControl = new PopupControl
@@ -3380,10 +3656,11 @@ var openMenu = function({
   rootElem.style.overflow = "hidden";
   const reactRoot = client.default.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
-  const html = jsx_dev_runtime11.jsxDEV(BasicPopup, {
+  const html = jsx_dev_runtime12.jsxDEV(BasicPopup, {
     pictures,
     dialog,
     menu,
+    prompt,
     onSelect,
     detach,
     popupControl
@@ -3393,53 +3670,55 @@ var openMenu = function({
   return { popupControl, detach };
 };
 var useDialogState = function() {
-  const [index, setIndex] = import_react19.useState(0);
+  const [index, setIndex] = import_react22.useState(0);
   return {
     index,
     setIndex,
-    next: import_react19.useCallback(() => setIndex((index2) => index2 + 1), [setIndex])
+    next: import_react22.useCallback(() => setIndex((index2) => index2 + 1), [setIndex])
   };
 };
 var Dialog = function({ dialog, onSelect, onClose }) {
   const { next, index } = useDialogState();
-  const [menu, setMenu] = import_react18.useState();
+  const [menu, setMenu] = import_react21.useState();
+  const [prompt, setPrompt] = import_react21.useState();
   const { active } = useActiveFocus();
   const { editing } = useEditContext();
   const { lockState, popupControl } = useControls({
     active,
-    listener: import_react18.useMemo(() => ({
+    listener: import_react21.useMemo(() => ({
       onAction: next,
       onBack: next
     }), [next])
   });
-  const message = import_react18.useMemo(() => {
+  const message = import_react21.useMemo(() => {
     const message2 = dialog.messages.at(index);
     return typeof message2 == "string" ? { text: message2 } : message2;
   }, [index]);
-  import_react18.useEffect(() => {
-    if (message?.menu) {
+  import_react21.useEffect(() => {
+    if (message?.menu || message?.prompt) {
       setMenu(message?.menu);
+      setPrompt(message?.prompt);
     }
-  }, [message, setMenu]);
+  }, [message, setMenu, setPrompt]);
   const { removed, remove } = useRemove();
-  import_react18.useEffect(() => {
+  import_react21.useEffect(() => {
     if (index >= dialog.messages.length.valueOf()) {
       remove(onClose);
     }
   }, [dialog, index, remove, onClose]);
-  const onCloseMenu = import_react18.useCallback(async () => {
+  const onCloseMenu = import_react21.useCallback(async () => {
     setMenu(undefined);
     next();
   }, [setMenu, next]);
-  return jsx_dev_runtime12.jsxDEV(jsx_dev_runtime12.Fragment, {
+  return jsx_dev_runtime13.jsxDEV(jsx_dev_runtime13.Fragment, {
     children: [
-      jsx_dev_runtime12.jsxDEV(Popup2, {
+      jsx_dev_runtime13.jsxDEV(Popup2, {
         layout: dialog.layout ?? {},
         style: dialog.style,
         disabled: lockState === LockStatus.LOCKED,
         removed,
         onBack: dialog.disableBack ? undefined : next,
-        children: jsx_dev_runtime12.jsxDEV("div", {
+        children: jsx_dev_runtime13.jsxDEV("div", {
           style: {
             width: "100%",
             height: "100%",
@@ -3447,14 +3726,14 @@ var Dialog = function({ dialog, onSelect, onClose }) {
           },
           onClick: () => popupControl.onAction(),
           children: [
-            jsx_dev_runtime12.jsxDEV("div", {
+            jsx_dev_runtime13.jsxDEV("div", {
               style: { flex: 1 },
-              children: jsx_dev_runtime12.jsxDEV("progressive-text", {
+              children: jsx_dev_runtime13.jsxDEV("progressive-text", {
                 period: "30",
                 children: message?.text
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this),
-            editing && active && jsx_dev_runtime12.jsxDEV("div", {
+            editing && active && jsx_dev_runtime13.jsxDEV("div", {
               style: {
                 textAlign: "center",
                 backgroundColor: "blue",
@@ -3468,20 +3747,21 @@ var Dialog = function({ dialog, onSelect, onClose }) {
           ]
         }, undefined, true, undefined, this)
       }, undefined, false, undefined, this),
-      jsx_dev_runtime12.jsxDEV(Container, {
+      jsx_dev_runtime13.jsxDEV(Container, {
         pictures: dialog.pictures,
         menu,
+        prompt,
         onSelect,
         onClose: onCloseMenu,
         removed
       }, undefined, false, undefined, this),
-      jsx_dev_runtime12.jsxDEV(Container, {
+      jsx_dev_runtime13.jsxDEV(Container, {
         pictures: message?.pictures
       }, undefined, false, undefined, this)
     ]
   }, undefined, true, undefined, this);
 };
-var jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime14 = __toESM(require_jsx_dev_runtime(), 1);
 var __create2 = Object.create;
 var __defProp2 = Object.defineProperty;
 var __getProtoOf2 = Object.getPrototypeOf;
@@ -3957,7 +4237,7 @@ var require_react_dom_development = __commonJS2((exports) => {
       if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
         __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error);
       }
-      var ReactSharedInternals = React4.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+      var ReactSharedInternals = React5.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
       var suppressWarning = false;
       function setSuppressWarning(newSuppressWarning) {
         {
@@ -4006,7 +4286,7 @@ var require_react_dom_development = __commonJS2((exports) => {
       var HostPortal = 4;
       var HostComponent = 5;
       var HostText = 6;
-      var Fragment62 = 7;
+      var Fragment72 = 7;
       var Mode = 8;
       var ContextConsumer = 9;
       var ContextProvider = 10;
@@ -4963,7 +5243,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             return "DehydratedFragment";
           case ForwardRef:
             return getWrappedName$1(type, type.render, "ForwardRef");
-          case Fragment62:
+          case Fragment72:
             return "Fragment";
           case HostComponent:
             return type;
@@ -5358,7 +5638,7 @@ var require_react_dom_development = __commonJS2((exports) => {
         {
           if (props.value == null) {
             if (typeof props.children === "object" && props.children !== null) {
-              React4.Children.forEach(props.children, function(child) {
+              React5.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -13484,7 +13764,7 @@ var require_react_dom_development = __commonJS2((exports) => {
         }
       }
       var fakeInternalInstance = {};
-      var emptyRefsObject = new React4.Component().refs;
+      var emptyRefsObject = new React5.Component().refs;
       var didWarnAboutStateAssignmentForComponent;
       var didWarnAboutUninitializedState;
       var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -14293,7 +14573,7 @@ var require_react_dom_development = __commonJS2((exports) => {
           }
         }
         function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-          if (current2 === null || current2.tag !== Fragment62) {
+          if (current2 === null || current2.tag !== Fragment72) {
             var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
             created.return = returnFiber;
             return created;
@@ -14695,7 +14975,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             if (child.key === key) {
               var elementType = element.type;
               if (elementType === REACT_FRAGMENT_TYPE) {
-                if (child.tag === Fragment62) {
+                if (child.tag === Fragment72) {
                   deleteRemainingChildren(returnFiber, child.sibling);
                   var existing = useFiber(child, element.props.children);
                   existing.return = returnFiber;
@@ -18736,7 +19016,7 @@ var require_react_dom_development = __commonJS2((exports) => {
             var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
             return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
           }
-          case Fragment62:
+          case Fragment72:
             return updateFragment(current2, workInProgress2, renderLanes2);
           case Mode:
             return updateMode(current2, workInProgress2, renderLanes2);
@@ -19003,7 +19283,7 @@ var require_react_dom_development = __commonJS2((exports) => {
           case SimpleMemoComponent:
           case FunctionComponent:
           case ForwardRef:
-          case Fragment62:
+          case Fragment72:
           case Mode:
           case Profiler:
           case ContextConsumer:
@@ -23213,7 +23493,7 @@ var require_react_dom_development = __commonJS2((exports) => {
         return fiber;
       }
       function createFiberFromFragment(elements, mode, lanes, key) {
-        var fiber = createFiber(Fragment62, elements, key, mode);
+        var fiber = createFiber(Fragment72, elements, key, mode);
         fiber.lanes = lanes;
         return fiber;
       }
@@ -24337,6 +24617,19 @@ var CONTROL_TAG = "control";
 class PopupControl {
   #listeners = new Set;
   #uniqueControls = new x2;
+  #activateListeners = new Set;
+  activate() {
+    this.#activateListeners.forEach((listener) => listener.activate?.());
+  }
+  deactivate() {
+    this.#activateListeners.forEach((listener) => listener.deactivate?.());
+  }
+  addActivateListener(listener) {
+    this.#activateListeners.add(listener);
+  }
+  removeActivateListener(listener) {
+    this.#activateListeners.delete(listener);
+  }
   registerActive(setActive) {
     return this.#uniqueControls.registerLayout(CONTROL_TAG, setActive);
   }
@@ -24380,7 +24673,7 @@ class PopupControl {
 var DEFAULT_CONTROL_CONTEXT = {
   popupControl: new PopupControl
 };
-var Context = import_react4.default.createContext(DEFAULT_CONTROL_CONTEXT);
+var Context = import_react5.default.createContext(DEFAULT_CONTROL_CONTEXT);
 var ControlContextProvider = ({ children, popupControl }) => {
   const context = useInitControlContext({ popupControl });
   return jsx_dev_runtime.jsxDEV(Context.Provider, {
@@ -24389,7 +24682,7 @@ var ControlContextProvider = ({ children, popupControl }) => {
   }, undefined, false, undefined, null);
 };
 var useControlContext = () => {
-  const context = import_react4.useContext(Context);
+  const context = import_react5.useContext(Context);
   if (!context) {
     throw new Error("useControlContext must be used within a Provider");
   }
@@ -24404,7 +24697,7 @@ var DEFAULT_GAME_CONTEXT = {
   getLayout: (layout) => typeof layout === "object" ? layout : {},
   uniqueLayout: new x2
 };
-var Context2 = import_react9.default.createContext(DEFAULT_GAME_CONTEXT);
+var Context2 = import_react10.default.createContext(DEFAULT_GAME_CONTEXT);
 var LayoutContextProvider = ({ children }) => {
   const context = useInitLayoutContext();
   return jsx_dev_runtime2.jsxDEV(Context2.Provider, {
@@ -24413,7 +24706,7 @@ var LayoutContextProvider = ({ children }) => {
   }, undefined, false, undefined, null);
 };
 var useLayoutContext = () => {
-  const context = import_react9.useContext(Context2);
+  const context = import_react10.useContext(Context2);
   if (!context) {
     throw new Error("useDialogContext must be used within a Provider");
   }
@@ -24449,19 +24742,19 @@ var DEFAULT_EDIT_CONTEXT = {
   toggleEditing() {
   }
 };
-var Context3 = import_react14.default.createContext(DEFAULT_EDIT_CONTEXT);
+var Context3 = import_react17.default.createContext(DEFAULT_EDIT_CONTEXT);
 var EditContextProvider2 = ({ children }) => {
   const context = useEditControlContext();
-  return jsx_dev_runtime7.jsxDEV(Context3.Provider, {
+  return jsx_dev_runtime8.jsxDEV(Context3.Provider, {
     value: context,
     children: [
-      jsx_dev_runtime7.jsxDEV(EditToggle, {}, undefined, false, undefined, null),
+      jsx_dev_runtime8.jsxDEV(EditToggle, {}, undefined, false, undefined, null),
       children
     ]
   }, undefined, true, undefined, null);
 };
 var useEditContext = () => {
-  const context = import_react14.useContext(Context3);
+  const context = import_react17.useContext(Context3);
   if (!context) {
     throw new Error("useEditContext must be used within a Provider");
   }
@@ -24480,12 +24773,14 @@ var ICON_STYLE = {
 var client = __toESM2(require_client(), 1);
 
 class KeyboardControl {
+  onKeyUp;
+  onKeyDown;
   constructor(popupControl) {
     let isKeyDown = false;
-    document.addEventListener("keyup", (e) => {
+    this.onKeyUp = () => {
       isKeyDown = false;
-    });
-    document.addEventListener("keydown", (e) => {
+    };
+    this.onKeyDown = (e) => {
       if (isKeyDown) {
         return;
       }
@@ -24507,7 +24802,21 @@ class KeyboardControl {
           break;
       }
       e.preventDefault();
-    });
+    };
+    this.activate();
+    popupControl.addActivateListener(this);
+  }
+  activate() {
+    console.log("Activate keyboard control");
+    document.removeEventListener("keyup", this.onKeyUp);
+    document.removeEventListener("keydown", this.onKeyDown);
+    document.addEventListener("keyup", this.onKeyUp);
+    document.addEventListener("keydown", this.onKeyDown);
+  }
+  deactivate() {
+    console.log("Deactivate keyboard control");
+    document.removeEventListener("keyup", this.onKeyUp);
+    document.removeEventListener("keydown", this.onKeyDown);
   }
 }
 
@@ -24622,7 +24931,6 @@ function showMenu() {
                 }
               ]
             }],
-            maxRows: 3,
             layout: {
               position: [150, 100],
               size: [200, 150]
@@ -24738,6 +25046,16 @@ function showMenu() {
             messages: [
               "menu hidden"
             ]
+          }
+        },
+        {
+          label: "prompt",
+          prompt: {
+            layout: {
+              position: [150, 100],
+              size: [600, 300]
+            },
+            label: "What is your name?"
           }
         }
       ]

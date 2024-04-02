@@ -11,6 +11,7 @@ import { LockStatus, useControls } from '../controls/useControls';
 import { Popup } from '../common/popup/Popup';
 import { useActiveFocus } from '@/common/popup/useActiveFocus';
 import { useEditContext } from '@/context/edit/EditContextProvider';
+import { PromptModel } from '@/prompt/model/PromptModel';
 
 export interface Props {
   dialog: DialogModel;
@@ -21,6 +22,7 @@ export interface Props {
 export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
   const { next, index } = useDialogState();
   const [menu, setMenu] = useState<MenuModel>();
+  const [prompt, setPrompt] = useState<PromptModel>();
   const { active } = useActiveFocus();
   const { editing } = useEditContext();
 
@@ -38,10 +40,11 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
   }, [index]);
 
   useEffect(() => {
-    if (message?.menu) {
+    if (message?.menu || message?.prompt) {
       setMenu(message?.menu);
+      setPrompt(message?.prompt);
     }
-  }, [message, setMenu]);
+  }, [message, setMenu, setPrompt]);
 
   const { removed, remove } = useRemove();
 
@@ -86,7 +89,7 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
             </div>}
         </div>
       </Popup>
-      <Container pictures={dialog.pictures} menu={menu}
+      <Container pictures={dialog.pictures} menu={menu} prompt={prompt}
         onSelect={onSelect}
         onClose={onCloseMenu}
         removed={removed}></Container>

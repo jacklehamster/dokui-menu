@@ -5,11 +5,14 @@ import { MenuItem } from "../menu/model/MenuItemModel";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PictureModel } from "../picture/model/PictureModel";
 import { Picture } from "../picture/Picture";
+import { PromptModel } from "@/prompt/model/PromptModel";
+import { Prompt } from "@/prompt/Prompt";
 
 export interface Props {
   pictures?: PictureModel[];
   dialog?: DialogModel;
   menu?: MenuModel;
+  prompt?: PromptModel;
   onSelect?(item: MenuItem): void;
   onClose?(): void;
   removed?: boolean;
@@ -19,6 +22,7 @@ export function Container({
   pictures,
   dialog,
   menu,
+  prompt,
   onSelect = async() => {},
   onClose = async () => {},
   removed,
@@ -32,8 +36,9 @@ export function Container({
     return [
       dialog ? <Dialog dialog={dialog} onSelect={onSelect} onClose={onNext} /> : undefined,
       menu ? <Menu menu={menu} onSelect={onSelect} onClose={onNext} /> : undefined,
+      prompt ? <Prompt prompt={prompt} onClose={onNext} /> : undefined,
     ].filter((e): e is JSX.Element => !!e);
-  }, [menu, dialog, onSelect, onNext]);
+  }, [menu, dialog, prompt, onSelect, onNext]);
 
   useEffect(() => {
     if (elems.length && index >= elems.length) {

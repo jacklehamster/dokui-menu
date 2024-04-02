@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { map } from 'abstract-list';
 import { useMenu } from './useMenu';
 import { MenuItem } from './model/MenuItemModel';
@@ -11,6 +11,8 @@ import { Container } from '../container/Container';
 import { useEditMenu } from '../context/edit/useEditMenu';
 import { useActiveFocus } from '../common/popup/useActiveFocus';
 import { MenuRow } from './MenuRow';
+import { useMaxRows } from './useMaxRows';
+import { PromptModel } from '@/prompt/model/PromptModel';
 
 export interface Props {
   menu: MenuModel;
@@ -26,7 +28,7 @@ export function Menu({
 
   const { removed, remove } = useRemove();
 
-  const [sub, setSub] = useState<{ menu?: MenuModel; dialog?: DialogModel }>({});
+  const [sub, setSub] = useState<{ menu?: MenuModel; dialog?: DialogModel; prompt?: PromptModel }>({});
   const [postClose, setPostClose] = useState<MenuItem>();
   const [hidden, setHidden] = useState(false);
  
@@ -35,16 +37,18 @@ export function Menu({
   }, [remove, onClose]);
 
   const { active } = useActiveFocus();
-  const { items = [], maxRows, style, layout, editable, onAddSubmenu, onRemoveSubmenu, onToggleBack } = useEditMenu({menu, active});
+  const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect } = useEditMenu({menu, active});
+
+  const { maxRows, menuRef } = useMaxRows({ size: items.length.valueOf() });
 
   const executeMenuItem = useCallback((item: MenuItem) => {
     if (typeof(item) === "object") {
       if (item.hideOnSelect) {
         setHidden(true);
       }
-      if (item.dialog || item.submenu) {
-        const { dialog, submenu, ...rest } = item;
-        setSub({ dialog, menu: submenu });
+      if (item.dialog || item.submenu || item.prompt) {
+        const { dialog, submenu, prompt, ...rest } = item;
+        setSub({ dialog, menu: submenu, prompt });
         setPostClose(rest);
       } else {
         setPostClose(undefined);
@@ -69,6 +73,8 @@ export function Menu({
     setHidden(false);
   }, [setSub, executeMenuItem, setHidden, postClose]);
 
+  const clickable = useMemo(() => !disabled && menuHoverEnabled, [disabled, menuHoverEnabled])
+
   return (
     <>
       <Popup
@@ -90,23 +96,28 @@ export function Menu({
         </svg>
         <div style={{ 
           paddingTop: 10,
-          cursor: menuHoverEnabled ? "inherit" : "auto",
+          cursor: clickable ? "inherit" : "auto",
         }}>
-          <div style={{ height: `calc(100% - 27px)`, overflow: "hidden" }}>
+          <div ref={menuRef} style={{ height: `calc(100% - 27px)`, overflow: "hidden" }}>
             <div style={{ marginTop: scroll * -31, transition: "margin-top .2s" }}>
               {map(items, (item, index) => <MenuRow key={index} index={index} item={item} selectedItem={selectedItem}
                   onAddSubmenu={onAddSubmenu}
                   onRemoveSubmenu={onRemoveSubmenu}
+                  onAddDialog={onAddDialog}
+                  onRemoveDialog={onRemoveDialog}
                   onToggleBack={onToggleBack}
+                  onToggleHideOnSelect={onToggleHideOnSelect}
                   disabled={disabled}
                   onMouseMove={() => {
-                    enableMenuHover();
-                    select(index);
+                    if (!disabled) {
+                      enableMenuHover();
+                      select(index);  
+                    }
                   }}
                   active={active}
                   editable={editable}
-                  onMouseOver={menuHoverEnabled ? () => select(index) : undefined}
-                  onClick={menuHoverEnabled ? () => onMenuAction(index) : undefined}
+                  onMouseOver={clickable ? () => select(index) : undefined}
+                  onClick={clickable ? () => onMenuAction(index) : undefined}
                 ></MenuRow>
               )}
             </div>
@@ -123,7 +134,7 @@ export function Menu({
           <polygon points="100,20 110,10 90,10" style={{ fill: "white" }}/>
         </svg>
       </Popup>
-      <Container menu={sub.menu} dialog={sub.dialog} pictures={menu.pictures}
+      <Container menu={sub.menu} dialog={sub.dialog} prompt={sub.prompt} pictures={menu.pictures}
         onSelect={onSelect}
         onClose={onCloseSub}
         removed={removed}

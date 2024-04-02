@@ -63,7 +63,6 @@ export function showMenu() {
               ],
             }],
         
-            maxRows: 3,
             layout: {
               position: [150, 100],
               size: [200, 150],
@@ -177,7 +176,17 @@ export function showMenu() {
               "menu hidden",
             ],
           },
-        }
+        },
+        {
+          label: "prompt",
+          prompt: {
+            layout: {
+              position: [150, 100],
+              size: [600, 300],
+            },
+            label: "What is your name?",
+          },
+        },
       ],
     },
     onSelect(item) {

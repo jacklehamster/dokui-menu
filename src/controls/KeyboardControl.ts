@@ -1,12 +1,16 @@
 import { PopupControl } from "./PopupControl";
+import { Active } from "dok-types";
 
-export class KeyboardControl {
+export class KeyboardControl implements Active {
+  private onKeyUp: () => void;
+  private onKeyDown: (e: KeyboardEvent) => void;
+
   constructor(popupControl: PopupControl) {
     let isKeyDown = false;
-    document.addEventListener("keyup", e => {
+    this.onKeyUp = () => {
       isKeyDown = false;
-    });
-    document.addEventListener("keydown", e => {
+    };
+    this.onKeyDown = (e: KeyboardEvent) => {
       if (isKeyDown) {
         return;
       }
@@ -28,6 +32,22 @@ export class KeyboardControl {
           break;
       }
       e.preventDefault();
-    });
+    };
+    this.activate();
+    popupControl.addActivateListener(this);
+  }
+
+  activate(): void {
+    console.log("Activate keyboard control");
+    document.removeEventListener("keyup", this.onKeyUp);
+    document.removeEventListener("keydown", this.onKeyDown);
+    document.addEventListener("keyup", this.onKeyUp);
+    document.addEventListener("keydown", this.onKeyDown);
+  }
+
+  deactivate(): void {
+    console.log("Deactivate keyboard control");
+    document.removeEventListener("keyup", this.onKeyUp);
+    document.removeEventListener("keydown", this.onKeyDown);
   }
 }

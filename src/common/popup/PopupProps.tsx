@@ -9,4 +9,5 @@ export interface PopupProps {
   removed?: boolean;
   children: React.ReactNode;
   onBack?(): void;
+  fit?: boolean;
 }

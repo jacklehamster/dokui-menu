@@ -13,7 +13,10 @@ interface Result extends MenuModel {
   editable: boolean;
   onAddSubmenu(index: number): void
   onRemoveSubmenu(index: number): void;
+  onAddDialog(index: number): void
+  onRemoveDialog(index: number): void;
   onToggleBack(index: number): void;
+  onToggleHideOnSelect(index: number): void;
 }
 
 export function useEditMenu({ menu, active }: Props): Result {
@@ -53,6 +56,30 @@ export function useEditMenu({ menu, active }: Props): Result {
     setEditCount(count => count + 1);
   }, [menu, setEditCount, editCount]);
 
+  const onAddDialog = useCallback((index: number) => {
+    const items: (MenuItem|undefined)[] = [];
+    forEach(menu.items, item => items.push(item));
+    const item = items[index];
+    const itemModel: MenuItemModel = !item ? {label: "untitled"} : (typeof(item) === "string" ? { label: item } : item);
+    itemModel.dialog = itemModel.dialog ?? {
+      messages: [],
+    };
+    items[index] = itemModel;
+    menu.items = items;
+    setEditCount(count => count + 1);
+  }, [menu, setEditCount, editCount]);
+
+  const onRemoveDialog = useCallback((index: number) => {
+    const items: (MenuItem|undefined)[] = [];
+    forEach(menu.items, item => items.push(item));
+    const item = items[index];
+    const itemModel: MenuItemModel = !item ? {label: "untitled"} : (typeof(item) === "string" ? { label: item } : item);
+    delete itemModel.dialog;
+    items[index] = itemModel;
+    menu.items = items;
+    setEditCount(count => count + 1);
+  }, [menu, setEditCount, editCount]);
+
   const onToggleBack = useCallback((index: number) => {
     const items: (MenuItem|undefined)[] = [];
     forEach(menu.items, item => items.push(item));
@@ -62,6 +89,21 @@ export function useEditMenu({ menu, active }: Props): Result {
       delete itemModel.back;
     } else {
       itemModel.back = true;
+    }
+    items[index] = itemModel;
+    menu.items = items;
+    setEditCount(count => count + 1);
+  }, [menu, setEditCount, editCount]);
+
+  const onToggleHideOnSelect = useCallback((index: number) => {
+    const items: (MenuItem|undefined)[] = [];
+    forEach(menu.items, item => items.push(item));
+    const item = items[index];
+    const itemModel: MenuItemModel = !item ? {label: "untitled"} : (typeof(item) === "string" ? { label: item } : item);
+    if (itemModel.hideOnSelect) {
+      delete itemModel.hideOnSelect;
+    } else {
+      itemModel.hideOnSelect = true;
     }
     items[index] = itemModel;
     menu.items = items;
@@ -86,7 +128,6 @@ export function useEditMenu({ menu, active }: Props): Result {
         },
         builtIn: true,
         items: [
-          { label: "edit max rows", builtIn: true },
           { label: "edit pictures", builtIn: true },
           { label: "exit", builtIn: true, back: true },
         ],
@@ -108,11 +149,13 @@ export function useEditMenu({ menu, active }: Props): Result {
 
   return {
     ...menu,
-    maxRows: menu.maxRows ?? menu.items?.length.valueOf(),
     items: visibleItems,
     editable: editing,
     onAddSubmenu,
     onRemoveSubmenu,
+    onAddDialog,
+    onRemoveDialog,
     onToggleBack,
+    onToggleHideOnSelect,
   };
 }

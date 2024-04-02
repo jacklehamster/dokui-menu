@@ -1,11 +1,29 @@
 import { UniqueLayoutWithCallback } from "unique-layout";
 import { PopupControlListener } from "./PopupControlListener";
+import { Active } from "dok-types";
 
 const CONTROL_TAG = "control";
 
-export class PopupControl implements PopupControlListener {
+export class PopupControl implements PopupControlListener, Active {
   #listeners = new Set<PopupControlListener>();
   #uniqueControls = new UniqueLayoutWithCallback();
+  #activateListeners = new Set<Active>();
+
+  activate(): void {
+    this.#activateListeners.forEach(listener => listener.activate?.());
+  }
+
+  deactivate(): void {
+    this.#activateListeners.forEach(listener => listener.deactivate?.());
+  }
+
+  addActivateListener(listener: Active): void {
+    this.#activateListeners.add(listener);
+  }
+
+  removeActivateListener(listener: Active): void {
+    this.#activateListeners.delete(listener);
+  }
 
   registerActive(setActive: (active: boolean) => void): () => void {
     return this.#uniqueControls.registerLayout(CONTROL_TAG, setActive);

@@ -6,11 +6,13 @@ import { MenuItem } from './model/MenuItemModel';
 import { BasicPopup } from './BasicPopup';
 import { DialogModel } from '../dialog/model/DialogModel';
 import { PictureModel } from '../picture/model/PictureModel';
+import { PromptModel } from '@/prompt/model/PromptModel';
 
 interface Props {
   pictures?: PictureModel[];
   menu?: MenuModel,
   dialog?: DialogModel,
+  prompt?: PromptModel,
   onSelect(item: MenuItem): void,
   root?: HTMLElement;
   popupControl?: PopupControl;
@@ -20,6 +22,7 @@ export function openMenu({
   pictures,
   menu,
   dialog,
+  prompt,
   onSelect,
   root = document.body,
   popupControl = new PopupControl(),
@@ -34,7 +37,7 @@ export function openMenu({
   const reactRoot = ReactDOM.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
 
-  const html = <BasicPopup pictures={pictures} dialog={dialog} menu={menu} onSelect={onSelect} detach={detach} popupControl={popupControl} />;
+  const html = <BasicPopup pictures={pictures} dialog={dialog} menu={menu} prompt={prompt} onSelect={onSelect} detach={detach} popupControl={popupControl} />;
   reactRoot.render(html);
   root.appendChild(rootElem); 
   return { popupControl, detach };
