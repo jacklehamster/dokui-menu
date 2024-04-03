@@ -19,6 +19,7 @@ interface Props {
   randomList?: List<string>;
   inputFocus: boolean;
   canCapitalize?: boolean;
+  focus(end?: boolean): void;
 }
 
 const COLUMNS = 10;
@@ -39,6 +40,7 @@ export function usePromptControl({
   randomList,
   inputFocus,
   canCapitalize,
+  focus,
 }: Props) {
   const { active } = useActiveFocus();
   const { removed, remove } = useRemove();
@@ -101,10 +103,7 @@ export function usePromptControl({
           deleteLetter();
           break;
         case ActionButton.OK:
-          if (text) {
-            onConfirm(text);
-            closePrompt();
-          }
+          confirmText();
           break;
       }
     }
@@ -134,7 +133,6 @@ export function usePromptControl({
             break;
           }
         }
-        console.log(actionBar.length, i);
         return [Math.min(actionBar.length - 1, i + 1), pos[1]];
       }
       return [Math.min(pos[0] + 1, COLUMNS - 1), pos[1]];
@@ -158,9 +156,9 @@ export function usePromptControl({
       onDown,
       onBack: closePrompt,
       onAction,
+      onStart: confirmText,
     }), [onLeft, onRight, onUp, onDown, closePrompt, onAction]),
   });
-
 
   useKeyDown({
     enabled: useMemo(() => canCapitalize && !inputFocus, [canCapitalize, inputFocus]),
@@ -174,6 +172,12 @@ export function usePromptControl({
     callback: useCallback(() => popupControl.onAction(), [popupControl]),
   });
 
+  useKeyDown({
+    enabled: !inputFocus,
+    key: ["Backspace", "Tab"],
+    callback: () => focus(true),
+  });
+
   const { enableMouseHover, mouseHoverEnabled } = useMouseHover({ active });
 
   return {
@@ -183,7 +187,6 @@ export function usePromptControl({
     mouseHoverEnabled,
     position,
     setPosition,
-    onSpace,
     actionButtonSelected: position[1] < 0 ? ActionButton.RANDOM : position[1] !== 4 ? undefined : actionBar[position[0]],
   }
 }

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Popup } from '../common/popup/Popup';
 import { PromptModel } from './model/PromptModel';
 import { Label } from './components/Label';
@@ -24,7 +24,7 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
   const { alphabet, setCapitalize } = useAlphabet({ languageModel: currentLanguageModel });
   const { addLetter, deleteLetter, randomizeText, text, setText } = useTextInput({ defaultText: prompt.defaultText, randomList: prompt.randomText });
   const { inputFocus, inputRef, focus } = useInputFocus({ text });
-  const { disabled, removed, enableMouseHover, mouseHoverEnabled, position, setPosition, onSpace, actionButtonSelected } = usePromptControl({
+  const { disabled, removed, enableMouseHover, mouseHoverEnabled, position, setPosition, actionButtonSelected, } = usePromptControl({
     alphabet,
     text,
     onClose,
@@ -37,7 +37,10 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
     randomList: prompt.randomText,
     inputFocus,
     canCapitalize: currentLanguageModel.capitalize,
+    focus,
   });
+
+  const clickable = useMemo(() => !disabled && mouseHoverEnabled, [disabled, mouseHoverEnabled]);
 
   return (
     <>
@@ -61,7 +64,7 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                 padding: 10,
                 cursor: "text",
               }}
-              onClick={focus}>
+              onClick={() => focus()}>
             <div ref={inputRef} contentEditable
               style={{ width: "100%", display: "inline" }}
               onKeyDown={(e) => {
@@ -87,12 +90,16 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
             onMouseOver={() => {
               setPosition([COLUMNS - 1, -1]);
             }}
+            onMouseDown={() => {
+              setPosition([COLUMNS - 1, -1]);
+            }}
            /> : undefined}
         </div>
         <div style={{
           pointerEvents: inputFocus ? "none" : undefined,
           opacity: inputFocus ? .3 : 1,
-          transition: "opacity .3s"
+          transition: "opacity .3s",
+          cursor: clickable ? "inherit" : "auto",
         }} onMouseMove={() => {
           if (!disabled) {
             enableMouseHover();
@@ -112,6 +119,11 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                       setPosition([index % COLUMNS, Math.floor(index / COLUMNS)]);
                     }
                   }}
+                  onMouseDown={() => {
+                    if (mouseHoverEnabled) {
+                      setPosition([index % COLUMNS, Math.floor(index / COLUMNS)]);
+                    }
+                  }}
                 />
               })}
             </div>
@@ -124,11 +136,21 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                     setPosition([0, 4]);
                   }
                 }}
+                onMouseDown={() => {
+                  if (mouseHoverEnabled) {
+                    setPosition([0, 4]);
+                  }
+                }}
               />}
               {currentLanguageModel.capitalize && <Button selected={!inputFocus && actionButtonSelected===ActionButton.CAP} 
                 padding="0px 5px"
                 text="Aa"
                 onMouseOver={() => {
+                  if (mouseHoverEnabled) {
+                    setPosition([1, 4]);
+                  }
+                }}
+                onMouseDown={() => {
                   if (mouseHoverEnabled) {
                     setPosition([1, 4]);
                   }
@@ -143,6 +165,11 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                     setPosition([5, 4]);
                   }
                 }}
+                onMouseDown={() => {
+                  if (mouseHoverEnabled) {
+                    setPosition([5, 4]);
+                  }
+                }}
               />
               <Button selected={!inputFocus && actionButtonSelected===ActionButton.DEL} 
                 padding="0px 10px"
@@ -153,12 +180,22 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                     setPosition([COLUMNS - 2, 4]);
                   }
                 }}
+                onMouseDown={() => {
+                  if (mouseHoverEnabled && text?.length) {
+                    setPosition([COLUMNS - 2, 4]);
+                  }
+                }}
               />
               <Button selected={!inputFocus && actionButtonSelected===ActionButton.OK} 
                 padding="0px 20px"
                 text="ok"
                 disabled={!text?.length}
                 onMouseOver={() => {
+                  if (mouseHoverEnabled && text?.length) {
+                    setPosition([COLUMNS - 1, 4]);
+                  }
+                }}
+                onMouseDown={() => {
                   if (mouseHoverEnabled && text?.length) {
                     setPosition([COLUMNS - 1, 4]);
                   }

@@ -2807,8 +2807,7 @@ var useMouseHover = function({ active }) {
 };
 var useMenu = function({ items, maxRows, onSelect, onBack, active }) {
   const { scroll, scrollUp, scrollDown, select, moveSelection, selectedItem } = useSelection({ items, maxRows });
-  const onAction = import_react2.useCallback((index) => {
-    const item = index !== undefined ? items.at(index) : selectedItem;
+  const onItemAction = import_react2.useCallback((item) => {
     if (!item) {
       return;
     }
@@ -2816,20 +2815,33 @@ var useMenu = function({ items, maxRows, onSelect, onBack, active }) {
       item.action();
     }
     onSelect(item);
-  }, [items, moveSelection, selectedItem]);
+  }, [onSelect]);
+  const onMenuAction = import_react2.useCallback((index) => {
+    onItemAction(items.at(index));
+  }, [items, onItemAction]);
+  const onAction = import_react2.useCallback(() => {
+    onItemAction(selectedItem);
+  }, [onItemAction, selectedItem]);
   const onUp = import_react2.useCallback(() => {
     moveSelection(-1);
   }, [moveSelection]);
   const onDown = import_react2.useCallback(() => {
     moveSelection(1);
   }, [moveSelection]);
+  const onRight = import_react2.useCallback(() => {
+    if (typeof selectedItem === "object" && selectedItem.submenu) {
+      onItemAction(selectedItem);
+    }
+  }, [onItemAction, selectedItem]);
   const { lockState } = useControls({
     active,
     listener: import_react2.useMemo(() => ({
       onAction,
+      onStart: onAction,
       onUp,
       onDown,
-      onBack
+      onBack,
+      onRight
     }), [moveSelection, onAction, onBack, onUp, onDown])
   });
   const { enableMouseHover, mouseHoverEnabled } = useMouseHover({ active });
@@ -2842,7 +2854,7 @@ var useMenu = function({ items, maxRows, onSelect, onBack, active }) {
     disabled: lockState === LockStatus.LOCKED,
     enableMouseHover,
     mouseHoverEnabled,
-    onMenuAction: onAction,
+    onMenuAction,
     onUp,
     onDown
   };
@@ -2996,7 +3008,7 @@ var Label = function({ label }) {
     children: label
   }, undefined, false, undefined, this);
 };
-var Button = function({ stretch, selected, hideOutline, emoji, text, padding, margin, disabled, onMouseOver }) {
+var Button = function({ stretch, selected, hideOutline, emoji, text, padding, margin, disabled, onMouseOver, onMouseDown }) {
   return jsx_dev_runtime6.jsxDEV("div", {
     style: {
       padding,
@@ -3009,6 +3021,7 @@ var Button = function({ stretch, selected, hideOutline, emoji, text, padding, ma
       flexGrow: stretch ? 1 : undefined
     },
     onMouseOver,
+    onMouseDown,
     children: [
       jsx_dev_runtime6.jsxDEV("span", {
         style: {
@@ -3053,15 +3066,13 @@ var EditToggle = function() {
   }, undefined, false, undefined, this);
 };
 var BasicPopup = function(props) {
-  const onSelect = props.onSelect ?? ((item) => console.log(item));
   return jsx_dev_runtime9.jsxDEV(LayoutContextProvider, {
     children: jsx_dev_runtime9.jsxDEV(ControlContextProvider, {
       popupControl: props.popupControl,
       children: jsx_dev_runtime9.jsxDEV(EditContextProvider2, {
+        editor: props.editor,
         children: jsx_dev_runtime9.jsxDEV(Container2, {
-          ...props,
-          onSelect,
-          onClose: props.onClose
+          ...props
         }, undefined, false, undefined, this)
       }, undefined, false, undefined, this)
     }, undefined, false, undefined, this)
@@ -3072,9 +3083,11 @@ var openMenu = function({
   menu,
   dialog,
   prompt: prompt2,
-  onSelect,
+  onSelect = (item) => console.log("SELECT", item),
+  onPrompt = (text) => console.log("PROMPT", text),
   root = document.body,
-  popupControl = new PopupControl
+  popupControl = new PopupControl,
+  editor
 }) {
   const rootElem = document.createElement("div");
   rootElem.style.position = "absolute";
@@ -3091,9 +3104,11 @@ var openMenu = function({
     menu,
     prompt: prompt2,
     onSelect,
+    onPrompt,
     detach,
     popupControl,
-    onClose: async () => setTimeout(() => detach(), 10)
+    onClose: async () => setTimeout(() => detach(), 10),
+    editor
   }, undefined, false, undefined, this);
   reactRoot.render(html);
   root.appendChild(rootElem);
@@ -3112,6 +3127,7 @@ var useLanguageModel = function({ languages }) {
   const chooseLanguage = import_react16.useCallback(() => {
     openMenu({
       menu: {
+        builtIn: true,
         layout: {
           position: [150, 50],
           size: [200, 200]
@@ -3129,7 +3145,6 @@ var useLanguageModel = function({ languages }) {
       },
       popupControl,
       onSelect(item) {
-        console.log(item);
         setLang(item.index);
       }
     });
@@ -3213,9 +3228,18 @@ var useInputFocus = function({ text }) {
       input.textContent = text ?? null;
     }
   }, [text, inputRef.current]);
-  const focus = import_react21.useCallback(() => {
-    inputRef.current?.focus();
-  }, [inputRef.current]);
+  const setEndOfContenteditable = import_react21.useCallback((elem) => {
+    window.getSelection()?.selectAllChildren(elem);
+    window.getSelection()?.collapseToEnd();
+  }, []);
+  const focus = import_react21.useCallback((end) => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+      if (end) {
+        setEndOfContenteditable(inputRef.current);
+      }
+    }
+  }, [inputRef.current, setEndOfContenteditable]);
   return { inputRef, inputFocus, focus };
 };
 var useActiveFocus = function() {
@@ -3251,7 +3275,8 @@ var usePromptControl = function({
   text,
   randomList,
   inputFocus,
-  canCapitalize
+  canCapitalize,
+  focus
 }) {
   const { active } = useActiveFocus();
   const { removed, remove } = useRemove();
@@ -3308,10 +3333,7 @@ var usePromptControl = function({
           deleteLetter();
           break;
         case ActionButton.OK:
-          if (text) {
-            onConfirm(text);
-            closePrompt();
-          }
+          confirmText();
           break;
       }
     }
@@ -3339,7 +3361,6 @@ var usePromptControl = function({
             break;
           }
         }
-        console.log(actionBar.length, i);
         return [Math.min(actionBar.length - 1, i + 1), pos[1]];
       }
       return [Math.min(pos[0] + 1, COLUMNS - 1), pos[1]];
@@ -3359,7 +3380,8 @@ var usePromptControl = function({
       onUp,
       onDown,
       onBack: closePrompt,
-      onAction
+      onAction,
+      onStart: confirmText
     }), [onLeft, onRight, onUp, onDown, closePrompt, onAction])
   });
   useKeyDown({
@@ -3372,6 +3394,11 @@ var usePromptControl = function({
     key: ["Enter"],
     callback: import_react24.useCallback(() => popupControl.onAction(), [popupControl])
   });
+  useKeyDown({
+    enabled: !inputFocus,
+    key: ["Backspace", "Tab"],
+    callback: () => focus(true)
+  });
   const { enableMouseHover, mouseHoverEnabled } = useMouseHover({ active });
   return {
     disabled: lockState === LockStatus.LOCKED,
@@ -3380,7 +3407,6 @@ var usePromptControl = function({
     mouseHoverEnabled,
     position,
     setPosition,
-    onSpace,
     actionButtonSelected: position[1] < 0 ? ActionButton.RANDOM : position[1] !== 4 ? undefined : actionBar[position[0]]
   };
 };
@@ -3913,7 +3939,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
   const { alphabet, setCapitalize } = useAlphabet({ languageModel: currentLanguageModel });
   const { addLetter, deleteLetter, randomizeText, text, setText } = useTextInput({ defaultText: prompt2.defaultText, randomList: prompt2.randomText });
   const { inputFocus, inputRef, focus } = useInputFocus({ text });
-  const { disabled, removed, enableMouseHover, mouseHoverEnabled, position: position2, setPosition, onSpace, actionButtonSelected } = usePromptControl({
+  const { disabled, removed, enableMouseHover, mouseHoverEnabled, position: position2, setPosition, actionButtonSelected } = usePromptControl({
     alphabet,
     text,
     onClose,
@@ -3925,8 +3951,10 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
     onConfirm: prompt2.input ?? onConfirm,
     randomList: prompt2.randomText,
     inputFocus,
-    canCapitalize: currentLanguageModel.capitalize
+    canCapitalize: currentLanguageModel.capitalize,
+    focus
   });
+  const clickable = import_react15.useMemo(() => !disabled && mouseHoverEnabled, [disabled, mouseHoverEnabled]);
   return jsx_dev_runtime11.jsxDEV(jsx_dev_runtime11.Fragment, {
     children: jsx_dev_runtime11.jsxDEV(Popup2, {
       layout: prompt2.layout ?? {},
@@ -3955,7 +3983,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                 padding: 10,
                 cursor: "text"
               },
-              onClick: focus,
+              onClick: () => focus(),
               children: [
                 jsx_dev_runtime11.jsxDEV("div", {
                   ref: inputRef,
@@ -3990,6 +4018,9 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
               disabled: inputFocus,
               onMouseOver: () => {
                 setPosition([COLUMNS2 - 1, -1]);
+              },
+              onMouseDown: () => {
+                setPosition([COLUMNS2 - 1, -1]);
               }
             }, undefined, false, undefined, this) : undefined
           ]
@@ -3998,7 +4029,8 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
           style: {
             pointerEvents: inputFocus ? "none" : undefined,
             opacity: inputFocus ? 0.3 : 1,
-            transition: "opacity .3s"
+            transition: "opacity .3s",
+            cursor: clickable ? "inherit" : "auto"
           },
           onMouseMove: () => {
             if (!disabled) {
@@ -4022,6 +4054,11 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                       if (mouseHoverEnabled) {
                         setPosition([index % COLUMNS2, Math.floor(index / COLUMNS2)]);
                       }
+                    },
+                    onMouseDown: () => {
+                      if (mouseHoverEnabled) {
+                        setPosition([index % COLUMNS2, Math.floor(index / COLUMNS2)]);
+                      }
                     }
                   }, index, false, undefined, this);
                 })
@@ -4037,6 +4074,11 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                       if (mouseHoverEnabled) {
                         setPosition([0, 4]);
                       }
+                    },
+                    onMouseDown: () => {
+                      if (mouseHoverEnabled) {
+                        setPosition([0, 4]);
+                      }
                     }
                   }, undefined, false, undefined, this),
                   currentLanguageModel.capitalize && jsx_dev_runtime11.jsxDEV(Button, {
@@ -4044,6 +4086,11 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                     padding: "0px 5px",
                     text: "Aa",
                     onMouseOver: () => {
+                      if (mouseHoverEnabled) {
+                        setPosition([1, 4]);
+                      }
+                    },
+                    onMouseDown: () => {
                       if (mouseHoverEnabled) {
                         setPosition([1, 4]);
                       }
@@ -4058,6 +4105,11 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                       if (mouseHoverEnabled) {
                         setPosition([5, 4]);
                       }
+                    },
+                    onMouseDown: () => {
+                      if (mouseHoverEnabled) {
+                        setPosition([5, 4]);
+                      }
                     }
                   }, undefined, false, undefined, this),
                   jsx_dev_runtime11.jsxDEV(Button, {
@@ -4069,6 +4121,11 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                       if (mouseHoverEnabled && text?.length) {
                         setPosition([COLUMNS2 - 2, 4]);
                       }
+                    },
+                    onMouseDown: () => {
+                      if (mouseHoverEnabled && text?.length) {
+                        setPosition([COLUMNS2 - 2, 4]);
+                      }
                     }
                   }, undefined, false, undefined, this),
                   jsx_dev_runtime11.jsxDEV(Button, {
@@ -4077,6 +4134,11 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                     text: "ok",
                     disabled: !text?.length,
                     onMouseOver: () => {
+                      if (mouseHoverEnabled && text?.length) {
+                        setPosition([COLUMNS2 - 1, 4]);
+                      }
+                    },
+                    onMouseDown: () => {
                       if (mouseHoverEnabled && text?.length) {
                         setPosition([COLUMNS2 - 1, 4]);
                       }
@@ -4100,6 +4162,8 @@ var Container2 = function({
   },
   onClose = async () => {
   },
+  onPrompt = async () => {
+  },
   removed
 }) {
   const [index, setIndex] = import_react14.useState(0);
@@ -4116,11 +4180,12 @@ var Container2 = function({
       menu ? jsx_dev_runtime12.jsxDEV(Menu2, {
         menu,
         onSelect,
+        onPrompt,
         onClose: onNext
       }, undefined, false, undefined, this) : undefined,
       prompt2 ? jsx_dev_runtime12.jsxDEV(Prompt, {
         prompt: prompt2,
-        onConfirm: onSelect,
+        onConfirm: onPrompt,
         onClose: onNext
       }, undefined, false, undefined, this) : undefined
     ].filter((e) => !!e);
@@ -4225,6 +4290,17 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
+  const onEditLabel = import_react26.useCallback((index, text) => {
+    const items2 = [];
+    A(menu.items, (item2) => items2.push(item2));
+    const item = items2[index];
+    const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
+    console.log(itemModel);
+    itemModel.label = text;
+    items2[index] = itemModel;
+    menu.items = items2;
+    setEditCount((count) => count + 1);
+  }, []);
   const items = import_react26.useMemo(() => {
     if (!editing || !active) {
       return menu.items;
@@ -4271,13 +4347,16 @@ var useEditMenu = function({ menu, active }) {
     onAddDialog,
     onRemoveDialog,
     onToggleBack,
-    onToggleHideOnSelect
+    onToggleHideOnSelect,
+    onEditLabel
   };
 };
-var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect }) {
+var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, builtIn }) {
   const itemModel = typeof item === "string" ? { label: item } : item;
   const rowSelected = selectedItem === item;
   const [editMenuOn, setEditMenuOn] = import_react27.useState(false);
+  const { popupControl } = useControlContext();
+  const builtInItem = import_react27.useMemo(() => builtIn ?? itemModel?.builtIn, [itemModel, builtIn]);
   const editMenu = import_react27.useMemo(() => ({
     builtIn: true,
     layout: {
@@ -4286,56 +4365,61 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
     },
     items: [
       {
-        builtIn: true,
-        label: "edit text"
+        label: "edit label",
+        action: () => {
+          openMenu({
+            prompt: {
+              label: "Enter a new label",
+              defaultText: itemModel?.label,
+              languages: ["english", "korean"]
+            },
+            onPrompt(text) {
+              onEditLabel?.(index, text);
+            },
+            popupControl
+          });
+        }
       },
       {
-        builtIn: true,
         label: "create submenu",
         action: () => onAddSubmenu?.(index),
         back: true,
         hidden: !!itemModel?.submenu
       },
       {
-        builtIn: true,
         label: "remove submenu",
         action: () => onRemoveSubmenu?.(index),
         back: true,
         hidden: !itemModel?.submenu
       },
       {
-        builtIn: true,
         label: "create dialog",
         action: () => onAddSubmenu?.(index),
         back: true,
         hidden: !!itemModel?.dialog
       },
       {
-        builtIn: true,
         label: "remove dialog",
         action: () => onRemoveSubmenu?.(index),
         back: true,
         hidden: !itemModel?.dialog
       },
       {
-        builtIn: true,
         label: "back (" + (itemModel?.back ? "ON" : "OFF") + ")",
         action: () => onToggleBack?.(index)
       },
       {
-        builtIn: true,
         label: "hide on select (" + (itemModel?.hideOnSelect ? "ON" : "OFF") + ")",
         action: () => onToggleHideOnSelect?.(index)
       },
       {
-        builtIn: true,
         label: "exit",
         back: true
       }
     ]
-  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, index]);
+  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, index, popupControl]);
   useKeyDown({
-    enabled: import_react27.useMemo(() => editable && active && rowSelected && !itemModel?.builtIn, [editable, active, rowSelected, itemModel]),
+    enabled: import_react27.useMemo(() => editable && active && rowSelected && !builtInItem, [editable, active, rowSelected, itemModel, builtInItem]),
     key: "KeyE",
     callback: import_react27.useCallback(() => {
       setEditMenuOn((value) => !value);
@@ -4344,14 +4428,14 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
   return jsx_dev_runtime13.jsxDEV(jsx_dev_runtime13.Fragment, {
     children: jsx_dev_runtime13.jsxDEV("div", {
       style: {
-        color: rowSelected ? itemModel?.builtIn ? "#0000ee" : "black" : disabled ? "silver" : "white",
-        backgroundColor: !rowSelected ? itemModel?.builtIn ? "#0000ee" : "black" : disabled ? "silver" : "white",
+        color: rowSelected ? builtInItem ? "#0000ee" : "black" : disabled ? "silver" : "white",
+        backgroundColor: !rowSelected ? builtInItem ? "#0000ee" : "black" : disabled ? "silver" : "white",
         transition: "color .05s, background-color .05s",
         display: "flex"
       },
       onMouseMove,
       onMouseOver,
-      onClick: editable && !itemModel?.builtIn ? () => setEditMenuOn(true) : onClick,
+      onClick: editable && !builtInItem ? () => setEditMenuOn(true) : onClick,
       children: [
         jsx_dev_runtime13.jsxDEV("div", {
           style: { flex: 1 },
@@ -4364,24 +4448,20 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
             }, undefined, true, undefined, this),
             jsx_dev_runtime13.jsxDEV("span", {
               children: itemModel?.label
+            }, undefined, false, undefined, this),
+            (itemModel?.showTriangle || itemModel?.showTriangle === undefined && itemModel?.submenu) && jsx_dev_runtime13.jsxDEV("span", {
+              children: " \u23F5"
             }, undefined, false, undefined, this)
           ]
         }, undefined, true, undefined, this),
-        editable && active && rowSelected && !itemModel?.builtIn && jsx_dev_runtime13.jsxDEV("div", {
+        editable && active && rowSelected && !builtInItem && jsx_dev_runtime13.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "blue"
           },
           children: "E"
         }, undefined, false, undefined, this),
-        editable && !itemModel?.builtIn && itemModel?.hideOnSelect && jsx_dev_runtime13.jsxDEV("div", {
-          style: {
-            ...ICON_STYLE,
-            backgroundColor: "silver"
-          },
-          children: "H"
-        }, undefined, false, undefined, this),
-        editable && !itemModel?.builtIn && itemModel?.submenu && jsx_dev_runtime13.jsxDEV("div", {
+        editable && !builtInItem && itemModel?.submenu && jsx_dev_runtime13.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "green"
@@ -4420,14 +4500,14 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
             ]
           }, undefined, true, undefined, this)
         }, undefined, false, undefined, this),
-        editable && !itemModel?.builtIn && itemModel?.dialog && jsx_dev_runtime13.jsxDEV("div", {
+        editable && !builtInItem && itemModel?.dialog && jsx_dev_runtime13.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "orange"
           },
           children: "D"
         }, undefined, false, undefined, this),
-        editable && !itemModel?.builtIn && itemModel?.back && jsx_dev_runtime13.jsxDEV("div", {
+        editable && !builtInItem && itemModel?.back && jsx_dev_runtime13.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "red"
@@ -4463,15 +4543,20 @@ var useMaxRows = function({ size }) {
 var Menu2 = function({
   menu,
   onSelect,
+  onPrompt,
   onClose
 }) {
   const { removed, remove } = useRemove();
   const [sub, setSub] = import_react8.useState({});
   const [postClose, setPostClose] = import_react8.useState();
   const [hidden, setHidden] = import_react8.useState(false);
-  const onBack = import_react8.useCallback(() => remove(onClose), [remove, onClose]);
+  const onBack = import_react8.useCallback(() => {
+    if (!menu.disableBack) {
+      remove(onClose);
+    }
+  }, [remove, onClose, menu]);
   const { active } = useActiveFocus();
-  const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect } = useEditMenu({ menu, active });
+  const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect, onEditLabel } = useEditMenu({ menu, active });
   const { maxRows, menuRef } = useMaxRows({ size: items.length.valueOf() });
   const executeMenuItem = import_react8.useCallback((item) => {
     if (typeof item === "object") {
@@ -4510,7 +4595,7 @@ var Menu2 = function({
         style,
         disabled,
         removed: removed || hidden,
-        onBack: menu.disableBack ? undefined : onBack,
+        onBack,
         children: [
           jsx_dev_runtime14.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
@@ -4548,6 +4633,7 @@ var Menu2 = function({
                   onRemoveDialog,
                   onToggleBack,
                   onToggleHideOnSelect,
+                  onEditLabel,
                   disabled,
                   onMouseMove: () => {
                     if (!disabled) {
@@ -4558,7 +4644,8 @@ var Menu2 = function({
                   active,
                   editable,
                   onMouseOver: clickable ? () => select(index) : undefined,
-                  onClick: clickable ? () => onMenuAction(index) : undefined
+                  onClick: clickable ? () => onMenuAction(index) : undefined,
+                  builtIn: menu.builtIn
                 }, index, false, undefined, this))
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this)
@@ -4588,6 +4675,7 @@ var Menu2 = function({
         pictures: menu.pictures,
         onSelect,
         onClose: onCloseSub,
+        onPrompt,
         removed
       }, undefined, false, undefined, this)
     ]
@@ -4685,7 +4773,6 @@ var Dialog = function({ dialog, onSelect, onClose }) {
     ]
   }, undefined, true, undefined, this);
 };
-var jsx_dev_runtime16 = __toESM(require_jsx_dev_runtime(), 1);
 var __create2 = Object.create;
 var __defProp2 = Object.defineProperty;
 var __getProtoOf2 = Object.getPrototypeOf;
@@ -26248,12 +26335,24 @@ class PopupControl {
       listener.onBack?.();
     }
   }
+  onStart() {
+    for (const listener of this.#listeners) {
+      listener.onStart?.();
+    }
+  }
   addListener(listener) {
     this.#listeners.add(listener);
   }
   removeListener(listener) {
     this.#listeners.delete(listener);
   }
+  static DOWN = (control) => control.onDown();
+  static UP = (control) => control.onUp();
+  static LEFT = (control) => control.onLeft();
+  static RIGHT = (control) => control.onRight();
+  static ACTION = (control) => control.onAction();
+  static BACK = (control) => control.onBack();
+  static START = (control) => control.onStart();
 }
 var DEFAULT_CONTROL_CONTEXT = {
   popupControl: new PopupControl
@@ -26329,12 +26428,12 @@ var DEFAULT_EDIT_CONTEXT = {
   }
 };
 var Context3 = import_react17.default.createContext(DEFAULT_EDIT_CONTEXT);
-var EditContextProvider2 = ({ children }) => {
+var EditContextProvider2 = ({ children, editor }) => {
   const context = useEditControlContext();
   return jsx_dev_runtime8.jsxDEV(Context3.Provider, {
     value: context,
     children: [
-      jsx_dev_runtime8.jsxDEV(EditToggle, {}, undefined, false, undefined, null),
+      editor && jsx_dev_runtime8.jsxDEV(EditToggle, {}, undefined, false, undefined, null),
       children
     ]
   }, undefined, true, undefined, null);
@@ -27154,9 +27253,23 @@ var ICON_STYLE = {
 };
 
 class KeyboardControl {
+  keyMapping;
   onKeyUp;
   onKeyDown;
-  constructor(popupControl) {
+  constructor(popupControl, keyMapping = {
+    KeyS: PopupControl.DOWN,
+    ArrowDown: PopupControl.DOWN,
+    KeyW: PopupControl.UP,
+    ArrowUp: PopupControl.UP,
+    KeyA: PopupControl.LEFT,
+    ArrowLeft: PopupControl.LEFT,
+    KeyD: PopupControl.RIGHT,
+    ArrowRight: PopupControl.RIGHT,
+    Space: PopupControl.ACTION,
+    Escape: PopupControl.BACK,
+    Enter: PopupControl.START
+  }) {
+    this.keyMapping = keyMapping;
     let isKeyDown = false;
     this.onKeyUp = () => {
       isKeyDown = false;
@@ -27166,31 +27279,11 @@ class KeyboardControl {
         return;
       }
       isKeyDown = true;
-      switch (e.code) {
-        case "KeyS":
-        case "ArrowDown":
-          popupControl.onDown();
-          break;
-        case "KeyW":
-        case "ArrowUp":
-          popupControl.onUp();
-          break;
-        case "KeyA":
-        case "ArrowLeft":
-          popupControl.onLeft();
-          break;
-        case "KeyD":
-        case "ArrowRight":
-          popupControl.onRight();
-          break;
-        case "Space":
-          popupControl.onAction();
-          break;
-        case "Escape":
-          popupControl.onBack();
-          break;
+      const action = keyMapping[e.code];
+      if (action) {
+        action(popupControl);
+        e.preventDefault();
       }
-      e.preventDefault();
     };
     this.activate();
     popupControl.addActivateListener(this);
@@ -27262,11 +27355,11 @@ class ProgressiveText extends HTMLElement {
   }
 }
 customElements.define("progressive-text", ProgressiveText);
-var client2 = __toESM2(require_client(), 1);
 
 // src/index.tsx
 function showMenu() {
   const { popupControl } = openMenu({
+    editor: true,
     dialog: {
       messages: [
         {
@@ -27431,7 +27524,7 @@ function showMenu() {
               size: [300, 200]
             },
             messages: [
-              "menu hidden"
+              "parent popup hidden"
             ]
           }
         },
@@ -27457,11 +27550,12 @@ function showMenu() {
         {
           label: "simpler prompt",
           prompt: {}
+        },
+        {
+          label: "show triangle without submenu",
+          showTriangle: true
         }
       ]
-    },
-    onSelect(item) {
-      console.log(item);
     }
   });
   return { keyboard: new KeyboardControl(popupControl) };

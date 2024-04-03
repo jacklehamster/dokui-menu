@@ -2,7 +2,7 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import { KeyboardControl, openDialog } from "dokui-menu";
+import { KeyboardControl } from "dokui-menu";
 import { openMenu } from "dokui-menu"
 
 const sampleSrc = "https://cdn.britannica.com/59/182359-050-C6F38CA3/Scarlett-Johansson-Natasha-Romanoff-Avengers-Age-of.jpg";
@@ -11,6 +11,7 @@ const byeSrc = "https://images.vexels.com/media/users/3/272491/isolated/preview/
 
 export function showMenu() {
   const { popupControl } = openMenu({
+    editor: true,
     dialog: {
       messages: [
         {
@@ -173,7 +174,7 @@ export function showMenu() {
               size: [300, 200],
             },
             messages: [
-              "menu hidden",
+              "parent popup hidden",
             ],
           },
         },
@@ -201,10 +202,11 @@ export function showMenu() {
           prompt: {
           },
         },
+        {
+          label: "show triangle without submenu",
+          showTriangle: true,
+        },
       ],
-    },
-    onSelect(item) {
-      console.log(item);
     },
   });
   return { keyboard: new KeyboardControl(popupControl) };

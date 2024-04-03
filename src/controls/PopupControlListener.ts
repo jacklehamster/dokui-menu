@@ -5,4 +5,5 @@ export interface PopupControlListener {
   onRight?(): void;
   onAction?(): void;
   onBack?(): void;
+  onStart?(): void;
 }

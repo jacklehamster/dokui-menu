@@ -65,6 +65,12 @@ export class PopupControl implements PopupControlListener, Active {
     }
   }
 
+  onStart(): void {
+    for (const listener of this.#listeners) {
+      listener.onStart?.();
+    }
+  }
+
   addListener(listener: PopupControlListener): void {
     this.#listeners.add(listener);
   }
@@ -72,4 +78,12 @@ export class PopupControl implements PopupControlListener, Active {
   removeListener(listener: PopupControlListener): void {
     this.#listeners.delete(listener);
   }
+
+  static DOWN = (control: PopupControl) => control.onDown();
+  static UP = (control: PopupControl) => control.onUp();
+  static LEFT = (control: PopupControl) => control.onLeft();
+  static RIGHT = (control: PopupControl) => control.onRight();
+  static ACTION = (control: PopupControl) => control.onAction();
+  static BACK = (control: PopupControl) => control.onBack();
+  static START = (control: PopupControl) => control.onStart();
 }

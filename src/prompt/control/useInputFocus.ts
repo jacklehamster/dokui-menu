@@ -41,9 +41,21 @@ export function useInputFocus({ text }: Props) {
     }
   }, [text, inputRef.current]);
 
-  const focus = useCallback(() => {
-    inputRef.current?.focus();
-  }, [inputRef.current]);
+  const setEndOfContenteditable = useCallback((elem: HTMLDivElement) => {
+    window.getSelection()?.selectAllChildren(elem);
+    window.getSelection()?.collapseToEnd();
+
+  }, [])
+
+
+  const focus = useCallback((end?: boolean) => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+      if (end) {
+        setEndOfContenteditable(inputRef.current);
+      }
+    }
+  }, [inputRef.current, setEndOfContenteditable]);
 
   return { inputRef, inputFocus, focus };
 }

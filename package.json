@@ -67,6 +67,7 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@etsoo/shared": "^1.2.36",
     "abstract-list": "^1.0.15",
     "hangul-js": "^0.2.6",
     "react-contenteditable": "^3.3.7",

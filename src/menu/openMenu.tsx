@@ -13,9 +13,11 @@ interface Props<I extends MenuItem = MenuItem> {
   menu?: MenuModel,
   dialog?: DialogModel,
   prompt?: PromptModel,
-  onSelect(item: I): void,
+  onSelect?(item: I): void,
+  onPrompt?(text: string): void;
   root?: HTMLElement;
   popupControl?: PopupControl;
+  editor?: boolean;
 }
 
 export function openMenu<I extends MenuItem = MenuItem>({
@@ -23,9 +25,11 @@ export function openMenu<I extends MenuItem = MenuItem>({
   menu,
   dialog,
   prompt,
-  onSelect,
+  onSelect = item => console.log("SELECT", item),
+  onPrompt = text => console.log("PROMPT", text),
   root = document.body,
   popupControl = new PopupControl(),
+  editor,
 }: Props<I>) {
   const rootElem = document.createElement('div');
   rootElem.style.position = "absolute";
@@ -37,8 +41,13 @@ export function openMenu<I extends MenuItem = MenuItem>({
   const reactRoot = ReactDOM.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
 
-  const html = <BasicPopup pictures={pictures} dialog={dialog} menu={menu} prompt={prompt} onSelect={onSelect} detach={detach} popupControl={popupControl}
+  const html = <BasicPopup pictures={pictures} dialog={dialog} menu={menu} prompt={prompt}
+    onSelect={onSelect}
+    onPrompt={onPrompt}
+    detach={detach}
+    popupControl={popupControl}
     onClose={async () => setTimeout(() => detach(), 10)}
+    editor={editor}
   />;
   reactRoot.render(html);
   root.appendChild(rootElem); 

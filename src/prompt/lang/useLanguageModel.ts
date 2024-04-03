@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Language, LanguageModel } from "../model/LanguagesModel";
-import { openMenu } from "@/menu/openMenu";
-import { MenuItem } from "@/menu/model/MenuItemModel";
+import { openMenu } from "../../menu/openMenu";
+import { MenuItem } from "../../menu/model/MenuItemModel";
 import { useControlContext } from "@/context/controls/ControlContextProvider";
 
 interface Props {
@@ -41,6 +41,7 @@ export function useLanguageModel({ languages }: Props) {
   const chooseLanguage = useCallback(() => {
     openMenu<MenuItem & { index: number }>({
       menu: {
+        builtIn: true,
         layout: {
           position: [150, 50],
           size: [200, 200],
@@ -58,7 +59,6 @@ export function useLanguageModel({ languages }: Props) {
       },
       popupControl,
       onSelect(item) {
-        console.log(item);
         setLang(item.index);
       }
     });

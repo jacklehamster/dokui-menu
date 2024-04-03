@@ -1,4 +1,4 @@
-import { useEditContext } from "@/context/edit/EditContextProvider";
+import { useEditContext } from "../../context/edit/EditContextProvider";
 
 export function EditToggle() {
   const {editing, toggleEditing} = useEditContext();

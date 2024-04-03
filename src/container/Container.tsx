@@ -15,6 +15,7 @@ export interface Props {
   prompt?: PromptModel;
   onSelect?(item: MenuItem): void;
   onClose?(): void;
+  onPrompt?(text: string): void;
   removed?: boolean;
 }
 
@@ -25,6 +26,7 @@ export function Container({
   prompt,
   onSelect = async() => {},
   onClose = async () => {},
+  onPrompt = async() => {},
   removed,
 }: Props) {
   const [index, setIndex] = useState(0);
@@ -35,8 +37,8 @@ export function Container({
   const elems = useMemo(() => {
     return [
       dialog ? <Dialog dialog={dialog} onSelect={onSelect} onClose={onNext} /> : undefined,
-      menu ? <Menu menu={menu} onSelect={onSelect} onClose={onNext} /> : undefined,
-      prompt ? <Prompt prompt={prompt} onConfirm={onSelect} onClose={onNext} /> : undefined,
+      menu ? <Menu menu={menu} onSelect={onSelect} onPrompt={onPrompt} onClose={onNext} /> : undefined,
+      prompt ? <Prompt prompt={prompt} onConfirm={onPrompt} onClose={onNext} /> : undefined,
     ].filter((e): e is JSX.Element => !!e);
   }, [menu, dialog, prompt, onSelect, onNext]);
 

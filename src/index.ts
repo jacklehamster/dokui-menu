@@ -15,7 +15,6 @@ import { Popup } from "./common/popup/Popup";
 import { useControls } from "./controls/useControls";
 import { LockStatus } from "./controls/useControls";
 import { Dialog } from "./dialog/Dialog";
-import { openDialog } from "./dialog/openDialog";
 
 export {
   Menu, openMenu,
@@ -26,6 +25,6 @@ export {
   Popup, useControls as useControlsLock,
   LockStatus,
 
-  Dialog, openDialog,
+  Dialog,
 };
 export type { Layout, MenuModel, MenuItemModel, Style, LayoutModel, PopupModel }

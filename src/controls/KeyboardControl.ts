@@ -1,11 +1,28 @@
+import { Keyboard } from "@etsoo/shared";
 import { PopupControl } from "./PopupControl";
 import { Active } from "dok-types";
+
+type KeyMapping = {
+  [key in Keyboard.Codes | string]?: (control: PopupControl) => void;
+};
 
 export class KeyboardControl implements Active {
   private onKeyUp: () => void;
   private onKeyDown: (e: KeyboardEvent) => void;
 
-  constructor(popupControl: PopupControl) {
+  constructor(popupControl: PopupControl, private keyMapping: KeyMapping = {
+    KeyS: PopupControl.DOWN,
+    ArrowDown: PopupControl.DOWN,
+    KeyW: PopupControl.UP,
+    ArrowUp: PopupControl.UP,
+    KeyA: PopupControl.LEFT,
+    ArrowLeft: PopupControl.LEFT,
+    KeyD: PopupControl.RIGHT,
+    ArrowRight: PopupControl.RIGHT,
+    Space: PopupControl.ACTION,
+    Escape: PopupControl.BACK,
+    Enter: PopupControl.START,
+  }) {
     let isKeyDown = false;
     this.onKeyUp = () => {
       isKeyDown = false;
@@ -15,31 +32,11 @@ export class KeyboardControl implements Active {
         return;
       }
       isKeyDown = true;
-      switch (e.code) {
-        case "KeyS":
-        case "ArrowDown":
-          popupControl.onDown();
-          break;
-        case "KeyW":
-        case "ArrowUp":
-          popupControl.onUp();
-          break;
-        case "KeyA":
-        case "ArrowLeft":
-          popupControl.onLeft();
-          break;
-        case "KeyD":
-        case "ArrowRight":
-          popupControl.onRight();
-          break;
-        case "Space":
-          popupControl.onAction();
-          break;
-        case "Escape":
-          popupControl.onBack();
-          break;
+      const action = keyMapping[e.code];
+      if (action) {
+        action(popupControl);
+        e.preventDefault();
       }
-      e.preventDefault();
     };
     this.activate();
     popupControl.addActivateListener(this);

@@ -17,12 +17,14 @@ import { PromptModel } from '@/prompt/model/PromptModel';
 export interface Props {
   menu: MenuModel;
   onSelect(item: MenuItem): void;
+  onPrompt(text: string): void;
   onClose(): Promise<void>;
 }
 
 export function Menu({
     menu,
     onSelect,
+    onPrompt,
     onClose,
   }: Props): JSX.Element {
 
@@ -32,10 +34,14 @@ export function Menu({
   const [postClose, setPostClose] = useState<MenuItem>();
   const [hidden, setHidden] = useState(false);
  
-  const onBack = useCallback(() => remove(onClose), [remove, onClose]);
+  const onBack = useCallback(() => {
+    if (!menu.disableBack) {
+      remove(onClose);
+    }
+  }, [remove, onClose, menu]);
 
   const { active } = useActiveFocus();
-  const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect } = useEditMenu({menu, active});
+  const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect, onEditLabel } = useEditMenu({menu, active});
 
   const { maxRows, menuRef } = useMaxRows({ size: items.length.valueOf() });
 
@@ -80,7 +86,7 @@ export function Menu({
         style={style}
         disabled={disabled}
         removed={removed || hidden}
-        onBack={menu.disableBack ? undefined : onBack}
+        onBack={onBack}
       >
         <svg xmlns="http://www.w3.org/2000/svg" style={{
             position: "absolute",
@@ -105,6 +111,7 @@ export function Menu({
                   onRemoveDialog={onRemoveDialog}
                   onToggleBack={onToggleBack}
                   onToggleHideOnSelect={onToggleHideOnSelect}
+                  onEditLabel={onEditLabel}
                   disabled={disabled}
                   onMouseMove={() => {
                     if (!disabled) {
@@ -116,7 +123,8 @@ export function Menu({
                   editable={editable}
                   onMouseOver={clickable ? () => select(index) : undefined}
                   onClick={clickable ? () => onMenuAction(index) : undefined}
-                ></MenuRow>
+                  builtIn={menu.builtIn}
+                 />
               )}
             </div>
           </div>
@@ -135,6 +143,7 @@ export function Menu({
       <Container menu={sub.menu} dialog={sub.dialog} prompt={sub.prompt} pictures={menu.pictures}
         onSelect={onSelect}
         onClose={onCloseSub}
+        onPrompt={onPrompt}
         removed={removed}
       />
     </>);

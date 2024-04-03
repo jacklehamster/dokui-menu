@@ -17,6 +17,7 @@ interface Result extends MenuModel {
   onRemoveDialog(index: number): void;
   onToggleBack(index: number): void;
   onToggleHideOnSelect(index: number): void;
+  onEditLabel(index: number, text: string): void;
 }
 
 export function useEditMenu({ menu, active }: Props): Result {
@@ -110,6 +111,18 @@ export function useEditMenu({ menu, active }: Props): Result {
     setEditCount(count => count + 1);
   }, [menu, setEditCount, editCount]);
 
+  const onEditLabel = useCallback((index: number, text: string) => {
+    const items: (MenuItem|undefined)[] = [];
+    forEach(menu.items, item => items.push(item));
+    const item = items[index];
+    const itemModel: MenuItemModel = !item ? {label: "untitled"} : (typeof(item) === "string" ? { label: item } : item);
+    console.log(itemModel);
+    itemModel.label = text;
+    items[index] = itemModel;
+    menu.items = items;
+    setEditCount(count => count + 1);
+  }, []);
+
   const items = useMemo(() => {
     if (!editing || !active) {
       return menu.items;
@@ -157,5 +170,6 @@ export function useEditMenu({ menu, active }: Props): Result {
     onRemoveDialog,
     onToggleBack,
     onToggleHideOnSelect,
+    onEditLabel,
   };
 }

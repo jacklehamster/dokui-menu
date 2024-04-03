@@ -14,6 +14,7 @@ export interface MenuItemModel {
   hidden?: boolean;
   action?: () => void;
   selected?: boolean;
+  showTriangle?: boolean;
 }
 
 export type MenuItem = MenuItemModel | string;

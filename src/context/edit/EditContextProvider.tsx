@@ -5,13 +5,14 @@ import { EditToggle } from '@/context/edit/EditToggle';
 
 interface Props {
   children: ReactNode;
+  editor?: boolean;
 }
 
 const Context = React.createContext<EditContextType>(DEFAULT_EDIT_CONTEXT);
-const EditContextProvider: React.FC<Props> = ({ children }: Props) => {
+const EditContextProvider: React.FC<Props> = ({ children, editor }: Props) => {
   const context = useEditControlContext();
   return <Context.Provider value={context}>
-    <EditToggle />
+    {editor && <EditToggle />}
     {children}
   </Context.Provider>;
 };
