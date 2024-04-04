@@ -1,5 +1,5 @@
 import { Container } from "../container/Container";
-import { MenuItem } from "./model/MenuItemModel";
+import { MenuItem, MenuItemModel } from "./model/MenuItemModel";
 import { MenuModel } from "./model/MenuModel";
 import { useCallback, useMemo, useState } from "react";
 import { useKeyDown } from "../controls/useKeyDown";
@@ -33,11 +33,12 @@ interface Props {
   onRemoveDialog?(index: number): void;
   onToggleBack?(index: number): void;
   onToggleHideOnSelect?(index: number): void;
+  deleteMenuItem?(index: number): void;
   onEditLabel?(index: number, text: string): void;
   builtIn?: boolean;
 }
 
-export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, builtIn }: Props) {
+export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, builtIn, deleteMenuItem }: Props) {
   const itemModel = typeof(item) === "string" ? {label: item} : item;
   const rowSelected = selectedItem === item;
   const [editMenuOn, setEditMenuOn] = useState(false);
@@ -48,7 +49,7 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
     builtIn: true,
     layout: {
       position: [50, 200],
-      size: [400, 250],
+      size: [400, 300],
     },
     items: [
       {
@@ -99,11 +100,48 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
         action: () => onToggleHideOnSelect?.(index),
       },
       {
+        label: "delete menu item",
+        back: true,
+        action: () => {
+          const label = itemModel?.label;
+          openMenu<MenuItemModel>({
+            dialog: {
+              layout: {
+                position: [150, 50],
+                size: [400, 200],
+              },
+              messages: [
+                {
+                  text: `Do you really want ot delete "${label}"?`,
+                  menu: {
+                    builtIn: true,
+                    layout: {
+                      position: [150, 270],
+                      size: [200, 200],
+                    },
+                    items: [
+                      { label: `Yes`, back: true },
+                      { label: "Cancel", back: true, selected: true }
+                    ],
+                  },      
+                }],
+            },
+            popupControl,
+            onSelect(item) {
+              console.log(item);
+              if (item.label === "Yes") {
+                deleteMenuItem?.(index);
+              }
+            }
+          });      
+        }
+      },
+      {
         label: "exit",
         back: true,
       },
     ],
-  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, index, popupControl]);
+  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, deleteMenuItem, index, popupControl]);
 
   useKeyDown({
     enabled: useMemo(() => editable && active && rowSelected && !builtInItem, [editable, active, rowSelected, itemModel, builtInItem]),
@@ -159,7 +197,7 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
         }}>
           B
         </div>}
-        <Container menu={editMenuOn ? editMenu : undefined} onClose={() => setEditMenuOn(false)} />
+        {editMenuOn && <Container menu={editMenu} onClose={() => setEditMenuOn(false)} />}
     </div>
   </>);
 }

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Popup } from '..';
 import { PictureModel } from './model/PictureModel';
 
@@ -7,6 +8,7 @@ export interface Props {
 }
 
 export function Picture({ picture, removed }: Props): JSX.Element {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   return (
     <>
       <Popup
@@ -15,9 +17,10 @@ export function Picture({ picture, removed }: Props): JSX.Element {
         removed={removed}
       >
         <div style={{
-          padding: 10,
           width: "100%",
           height: "100%",
+          pointerEvents: "none",
+          overflow: "hidden",
         }}>
           {picture.images.map((image, index) => <div key={index} style={{
             backgroundImage: `url("${image.src}")`,
@@ -25,8 +28,8 @@ export function Picture({ picture, removed }: Props): JSX.Element {
             width: "100%",
             height: "100%",
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",        
-
+            backgroundPosition: "center",
+            marginTop: `-${index * 100}%`,
           }} />)}
         </div>
       </Popup>

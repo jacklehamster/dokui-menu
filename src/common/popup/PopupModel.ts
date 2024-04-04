@@ -5,4 +5,5 @@ export interface PopupModel {
   layout?: Layout;
   style?: Style;
   disableBack?: boolean;
+  builtIn?: boolean;
 }

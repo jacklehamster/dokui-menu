@@ -18,6 +18,7 @@ interface Result extends MenuModel {
   onToggleBack(index: number): void;
   onToggleHideOnSelect(index: number): void;
   onEditLabel(index: number, text: string): void;
+  deleteMenuItem(index: number): void;
 }
 
 export function useEditMenu({ menu, active }: Props): Result {
@@ -116,9 +117,19 @@ export function useEditMenu({ menu, active }: Props): Result {
     forEach(menu.items, item => items.push(item));
     const item = items[index];
     const itemModel: MenuItemModel = !item ? {label: "untitled"} : (typeof(item) === "string" ? { label: item } : item);
-    console.log(itemModel);
     itemModel.label = text;
     items[index] = itemModel;
+    menu.items = items;
+    setEditCount(count => count + 1);
+  }, []);
+
+  const deleteMenuItem = useCallback((index: number) => {
+    const items: (MenuItem|undefined)[] = [];
+    forEach(menu.items, (item, idx) => {
+      if (index !== idx) {
+        items.push(item);
+      }
+    });
     menu.items = items;
     setEditCount(count => count + 1);
   }, []);
@@ -129,11 +140,6 @@ export function useEditMenu({ menu, active }: Props): Result {
     }
     const items = map(menu.items ?? [], item => item);
     const editMenu: (MenuItem|undefined)[] = menu.builtIn ? [] : [
-      { label: "new item", builtIn: true,
-        action() {
-            addItem();
-        },
-      },
       { label: "edit menu", builtIn: true, submenu: {
         layout: {
           position: [300,300],
@@ -141,6 +147,10 @@ export function useEditMenu({ menu, active }: Props): Result {
         },
         builtIn: true,
         items: [
+          {
+            label: "new item", builtIn: true,
+            action: addItem,
+          },  
           { label: "edit pictures", builtIn: true },
           { label: "exit", builtIn: true, back: true },
         ],
@@ -171,5 +181,6 @@ export function useEditMenu({ menu, active }: Props): Result {
     onToggleBack,
     onToggleHideOnSelect,
     onEditLabel,
+    deleteMenuItem,
   };
 }

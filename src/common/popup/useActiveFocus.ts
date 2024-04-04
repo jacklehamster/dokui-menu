@@ -1,13 +1,19 @@
 import { useControlContext } from "@/context/controls/ControlContextProvider";
 import { useEffect, useState } from "react";
 
-export function useActiveFocus() {
-  const [active, setActive] = useState(true);
+interface Props {
+  disabled?: boolean;
+}
+
+export function useActiveFocus({ disabled }: Props = {}) {
+  const [active, setActive] = useState(!disabled);
   const { popupControl } = useControlContext();
 
   useEffect(() => {
-    return popupControl.registerActive(setActive);
-  }, [popupControl, setActive]);
+    if (!disabled) {
+      return popupControl.registerActive(setActive);
+    }
+  }, [popupControl, setActive, disabled]);
 
   return { active };
 }

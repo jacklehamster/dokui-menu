@@ -41,7 +41,7 @@ export function Menu({
   }, [remove, onClose, menu]);
 
   const { active } = useActiveFocus();
-  const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect, onEditLabel } = useEditMenu({menu, active});
+  const { items = [], style, layout, editable, onAddSubmenu, onRemoveSubmenu, onAddDialog, onRemoveDialog, onToggleBack, onToggleHideOnSelect, onEditLabel, deleteMenuItem } = useEditMenu({menu, active});
 
   const { maxRows, menuRef } = useMaxRows({ size: items.length.valueOf() });
 
@@ -112,6 +112,7 @@ export function Menu({
                   onToggleBack={onToggleBack}
                   onToggleHideOnSelect={onToggleHideOnSelect}
                   onEditLabel={onEditLabel}
+                  deleteMenuItem={deleteMenuItem}
                   disabled={disabled}
                   onMouseMove={() => {
                     if (!disabled) {

@@ -9,9 +9,14 @@ import { Container } from '../container/Container';
 import { MenuModel } from '../menu/model/MenuModel';
 import { LockStatus, useControls } from '../controls/useControls';
 import { Popup } from '../common/popup/Popup';
-import { useActiveFocus } from '@/common/popup/useActiveFocus';
-import { useEditContext } from '@/context/edit/EditContextProvider';
-import { PromptModel } from '@/prompt/model/PromptModel';
+import { useActiveFocus } from '../common/popup/useActiveFocus';
+import { useEditContext } from '../context/edit/EditContextProvider';
+import { PromptModel } from '../prompt/model/PromptModel';
+import { useKeyDown } from '../controls/useKeyDown';
+import { useEditDialog } from '../context/edit/useEditDialog';
+import { openMenu } from '..';
+import { map } from 'abstract-list';
+import { PictureModel } from '@/picture/model/PictureModel';
 
 export interface Props {
   dialog: DialogModel;
@@ -34,10 +39,12 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
     }), [next]),
   });
 
+  const { editable, editMessage, messages } = useEditDialog({ dialog, active });
+
   const message = useMemo<MessageModel | undefined>(() => {
-    const message = dialog.messages.at(index);
+    const message = messages.at(index);
     return typeof(message) == "string" ? { text: message} : message;
-  }, [index]);
+  }, [index, messages]);
 
   useEffect(() => {
     if (message?.menu || message?.prompt) {
@@ -49,15 +56,52 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
   const { removed, remove } = useRemove();
 
   useEffect(() => {
-    if (index >= dialog.messages.length.valueOf()) {
+    if (index >= messages.length.valueOf()) {
       remove(onClose);
     }
-  }, [dialog, index, remove, onClose])
+  }, [messages, index, remove, onClose])
 
   const onCloseMenu = useCallback(async () => {
     setMenu(undefined);
     next();
   }, [setMenu, next]);
+
+  const [editDialogOn, setEditDialogOn] = useState(false);
+  useKeyDown({
+    enabled: useMemo(() => editable && active && !dialog.builtIn, [active, dialog]),
+    key: "KeyE",
+    callback: useCallback(() => {
+      setEditDialogOn(value => !value);
+    }, [setEditDialogOn]),
+  });
+
+  const editMenu = useMemo<MenuModel>(() => ({
+    builtIn: true,
+    layout: {
+      position: [50, 200],
+      size: [400, 300],
+    },
+    items: [
+      {
+        label: "edit text",
+        back: true,
+        action: () => {
+          openMenu({ 
+            prompt: {
+              label: "Enter a new text",
+              defaultText: message?.text,
+              languages: ["english", "korean"],
+            }, onPrompt(text) {
+              editMessage?.(index, text);
+            },
+            popupControl,
+          });
+        },
+      },
+    ],
+  }), [message, index, popupControl, editMessage]);
+
+  const pictures = useMemo(() => [...map(dialog.pictures ?? [], p => p), ...map(message?.pictures ?? [], p => p)].filter((p): p is PictureModel => !!p), [dialog, message]);
 
   return (
     <>
@@ -89,11 +133,11 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
             </div>}
         </div>
       </Popup>
-      <Container pictures={dialog.pictures} menu={menu} prompt={prompt}
+      <Container pictures={pictures} menu={menu} prompt={prompt}
         onSelect={onSelect}
         onClose={onCloseMenu}
         removed={removed}></Container>
-      <Container pictures={message?.pictures} />
+      {editDialogOn && <Container menu={editMenu} onClose={() => setEditDialogOn(false)} />}
     </>
   );
 }

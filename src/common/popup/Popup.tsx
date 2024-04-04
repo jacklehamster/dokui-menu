@@ -88,6 +88,7 @@ export function Popup({
             ...DOUBLE_BORDER_CSS,
             height: fit ? undefined : `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
             borderColor: disabled ? "silver" : "white",
+            overflow: "hidden",
           }}
         >
           {removed ? undefined : children}

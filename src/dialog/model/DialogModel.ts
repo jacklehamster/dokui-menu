@@ -4,6 +4,6 @@ import { Message } from "./MessageModel";
 import { PictureModel } from "../../picture/model/PictureModel";
 
 export interface DialogModel extends PopupModel {
-  pictures?: PictureModel[];
+  pictures?: List<PictureModel> | PictureModel[];
   messages: List<Message> | Message[];
 }

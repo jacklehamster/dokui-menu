@@ -1,6 +1,7 @@
 import { DialogModel } from "../../dialog/model/DialogModel";
 import { MenuModel } from "./MenuModel";
 import { PromptModel } from "../../prompt/model/PromptModel";
+import { PictureModel } from "@/picture/model/PictureModel";
 
 export interface MenuItemModel {
   emoji?: string;
@@ -15,6 +16,10 @@ export interface MenuItemModel {
   action?: () => void;
   selected?: boolean;
   showTriangle?: boolean;
+  onHover?: {
+    dialog?: DialogModel;
+    pictures: PictureModel[];
+  }
 }
 
 export type MenuItem = MenuItemModel | string;

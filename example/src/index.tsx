@@ -8,6 +8,7 @@ import { openMenu } from "dokui-menu"
 const sampleSrc = "https://cdn.britannica.com/59/182359-050-C6F38CA3/Scarlett-Johansson-Natasha-Romanoff-Avengers-Age-of.jpg";
 const pikaSrc = "https://media.tenor.com/rbx3ph5SLRUAAAAi/pikachu-pokemon.gif";
 const byeSrc = "https://images.vexels.com/media/users/3/272491/isolated/preview/d6d58dbb207e59b46ab9e797b32ae014-bye-word-glossy-sign.png";
+const landscapeSrc = "https://www.adorama.com/alc/wp-content/uploads/2018/11/landscape-photography-tips-yosemite-valley-feature.jpg";
 
 export function showMenu() {
   const { popupControl } = openMenu({
@@ -22,7 +23,7 @@ export function showMenu() {
               size: [200, 200],
               positionFromRight: true,
             },
-            images: [{ src: pikaSrc }],
+            images: [{ src: landscapeSrc }, { src: pikaSrc }],
           }],    
         },
         "there!",
