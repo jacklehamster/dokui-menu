@@ -5,6 +5,8 @@ import { useCallback, useMemo, useState } from "react";
 import { useKeyDown } from "../controls/useKeyDown";
 import { openMenu } from "./openMenu";
 import { useControlContext } from "@/context/controls/ControlContextProvider";
+import { promptText } from "@/prompt/promptText";
+import { Images } from "@/picture/Images";
 
 const ICON_STYLE: React.CSSProperties = {
   textAlign: "center",
@@ -45,112 +47,121 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
   const { popupControl } = useControlContext();
   const builtInItem = useMemo(() => builtIn ?? itemModel?.builtIn, [itemModel, builtIn]);
 
+  const promptDeleteItem = useCallback(async () => {
+    const label = itemModel?.label;
+    openMenu<MenuItemModel>({
+      dialog: {
+        layout: {
+          position: [150, 50],
+          size: [400, 200],
+        },
+        messages: [
+          {
+            text: `Do you really want ot delete "${label}"?`,
+            menu: {
+              builtIn: true,
+              layout: {
+                position: [150, 270],
+                size: [200, 200],
+              },
+              items: [
+                { label: `Yes`, back: true },
+                { label: "Cancel", back: true, selected: true }
+              ],
+            },      
+          }],
+      },
+      popupControl,
+      onSelect(item) {
+        if (item.label === "Yes") {
+          deleteMenuItem?.(index);
+        }
+      }
+    });      
+  }, [itemModel, popupControl, deleteMenuItem]);
+
   const editMenu = useMemo<MenuModel>(() => ({
     builtIn: true,
     layout: {
-      position: [50, 200],
+      position: [450, 200],
       size: [400, 300],
+      positionFromRight: true,
     },
     items: [
       {
         label: "edit label",
-        action: () => {
-          openMenu({ 
-            prompt: {
-              label: "Enter a new label",
-              defaultText: itemModel?.label,
-              languages: ["english", "korean"],
-            }, onPrompt(text) {
-              onEditLabel?.(index, text);
-            },
+        action: async () => {
+          const newLabel = await promptText({
+            label: "Enter a new label",
+            defaultText: itemModel?.label,
             popupControl,
           });
+          if (newLabel) {
+            onEditLabel?.(index, newLabel);
+          }
         },
       },
       {
         label: "create submenu",
-        action: () => onAddSubmenu?.(index),
+        action: async () => onAddSubmenu?.(index),
         back: true,
         hidden: !!itemModel?.submenu,
       },
       {
         label: "remove submenu",
-        action: () => onRemoveSubmenu?.(index),
+        action: async () => onRemoveSubmenu?.(index),
         back: true,
         hidden: !itemModel?.submenu,
       },
       {
         label: "create dialog",
-        action: () => onAddSubmenu?.(index),
+        action: async () => onAddSubmenu?.(index),
         back: true,
         hidden: !!itemModel?.dialog,
       },
       {
         label: "remove dialog",
-        action: () => onRemoveSubmenu?.(index),
+        action: async () => onRemoveSubmenu?.(index),
         back: true,
         hidden: !itemModel?.dialog,
       },
       {
         label: "back (" + (itemModel?.back ? "ON" : "OFF") + ")",
-        action: () => onToggleBack?.(index),
+        action: async () => onToggleBack?.(index),
       },
       {
         label: "hide on select (" + (itemModel?.hideOnSelect ? "ON" : "OFF") + ")",
-        action: () => onToggleHideOnSelect?.(index),
+        action: async () => onToggleHideOnSelect?.(index),
       },
       {
         label: "delete menu item",
         back: true,
-        action: () => {
-          const label = itemModel?.label;
-          openMenu<MenuItemModel>({
-            dialog: {
-              layout: {
-                position: [150, 50],
-                size: [400, 200],
-              },
-              messages: [
-                {
-                  text: `Do you really want ot delete "${label}"?`,
-                  menu: {
-                    builtIn: true,
-                    layout: {
-                      position: [150, 270],
-                      size: [200, 200],
-                    },
-                    items: [
-                      { label: `Yes`, back: true },
-                      { label: "Cancel", back: true, selected: true }
-                    ],
-                  },      
-                }],
-            },
-            popupControl,
-            onSelect(item) {
-              console.log(item);
-              if (item.label === "Yes") {
-                deleteMenuItem?.(index);
-              }
-            }
-          });      
-        }
+        action: promptDeleteItem,
       },
       {
         label: "exit",
         back: true,
       },
     ],
-  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, deleteMenuItem, index, popupControl]);
+  }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, promptDeleteItem, index, popupControl]);
 
   useKeyDown({
     enabled: useMemo(() => editable && active && rowSelected && !builtInItem, [editable, active, rowSelected, itemModel, builtInItem]),
     key: "KeyE",
     callback: useCallback(() => {
-      setEditMenuOn(value => !value);
-    }, [setEditMenuOn]),
+      openMenu({
+        menu: editMenu,
+        popupControl,
+      });
+    }, [editMenu, popupControl]),
   });
-  
+
+  useKeyDown({
+    enabled: useMemo(() => editable && active && rowSelected && !builtInItem, [editable, active, rowSelected, itemModel, builtInItem]),
+    key: "Backspace",
+    callback: promptDeleteItem,
+  });
+
   return (<>
     <div style={{
         color: rowSelected ? (builtInItem ? "#0000ee" : 'black') : disabled ? 'silver' : 'white',
@@ -161,10 +172,11 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
       onMouseMove={onMouseMove}
       onMouseOver={onMouseOver}
       onClick={editable && !builtInItem ? () => setEditMenuOn(true) :  onClick}>
-        <div style={{ flex: 1 }}>
-          {itemModel?.emoji && <span>{itemModel?.emoji}&nbsp;</span>}
+        <div style={{ flex: 1, display: "flex", padding: "0 10px" }}>
+          {itemModel?.icon && <div style={{ width: 30 }}><Images images={itemModel.icon} /></div>}
+          {itemModel?.emoji && <span style={{ height: 30 }}>{itemModel?.emoji}&nbsp;</span>}
           <span>{itemModel?.label}</span>
-          {(itemModel?.showTriangle || (itemModel?.showTriangle === undefined && itemModel?.submenu)) && <span> ⏵</span>}
+          {(itemModel?.showTriangle || (itemModel?.showTriangle === undefined && itemModel?.submenu)) && <span style={{ height: 30 }}>&nbsp;⏵</span>}
         </div>
         {editable && active && rowSelected && !builtInItem && <div style={{
           ...ICON_STYLE,
@@ -198,6 +210,7 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
           B
         </div>}
         {editMenuOn && <Container menu={editMenu} onClose={() => setEditMenuOn(false)} />}
+        { rowSelected && itemModel?.onHover && <Container dialog={itemModel.onHover.dialog} pictures={itemModel.onHover.pictures} focusLess />}
     </div>
   </>);
 }

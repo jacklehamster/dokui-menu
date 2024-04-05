@@ -2,8 +2,10 @@ import { DialogModel } from "../../dialog/model/DialogModel";
 import { MenuModel } from "./MenuModel";
 import { PromptModel } from "../../prompt/model/PromptModel";
 import { PictureModel } from "@/picture/model/PictureModel";
+import { Image } from "@/picture/model/ImageModel";
 
 export interface MenuItemModel {
+  icon?: Image | Image[];
   emoji?: string;
   label: string;
   submenu?: MenuModel;
@@ -13,7 +15,7 @@ export interface MenuItemModel {
   hideOnSelect?: boolean;
   builtIn?: boolean;
   hidden?: boolean;
-  action?: () => void;
+  action?: () => Promise<void>;
   selected?: boolean;
   showTriangle?: boolean;
   onHover?: {

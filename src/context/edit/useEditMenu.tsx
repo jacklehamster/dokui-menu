@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { MenuModel } from "../../menu/model/MenuModel";
 import { useEditContext } from "./EditContextProvider";
-import { forEach, map } from "abstract-list";
+import { find, forEach, map } from "abstract-list";
 import { MenuItem, MenuItemModel } from "@/menu/model/MenuItemModel";
 
 interface Props {
@@ -24,13 +24,19 @@ interface Result extends MenuModel {
 export function useEditMenu({ menu, active }: Props): Result {
   const { editing } = useEditContext();
   const [editCount, setEditCount] = useState(0);
-  const addItem = useCallback(() => {
+  const addItem = useCallback(async () => {
     const items = [];
+    let i: number;
+    for (i = 1; find(menu.items, item => {
+      const label = typeof(item) === "string" ? item : item.label;
+      return label === "untitled " + i;
+    }) >= 0; i++) {
+    }
     forEach(menu.items, item => {
       items.push(item);
     });
     items.push({
-      label: `untitled ${editCount + 1}`,
+      label: `untitled ${i}`,
     });
     menu.items = items;
     setEditCount(count => count + 1);

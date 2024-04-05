@@ -51,156 +51,158 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
         disabled={disabled}
         fit
       >
-        <Label label={prompt.label} />
-        <div style={{ padding: 5, display: "flex" }}>
-          <div autoCorrect='off' autoCapitalize='off' spellCheck='false'
-              style={{
-                flex: 1,
-                color: "white",
-                backgroundColor: "black",
-                fontSize: 20,
-                border: "2px solid white",
-                borderRadius: "5px",
-                padding: 10,
-                cursor: "text",
+        <div style={{ padding: 5 }}>
+          <Label label={prompt.label} />
+          <div style={{ padding: 5, display: "flex" }}>
+            <div autoCorrect='off' autoCapitalize='off' spellCheck='false'
+                style={{
+                  flex: 1,
+                  color: "white",
+                  backgroundColor: "black",
+                  fontSize: 20,
+                  border: "2px solid white",
+                  borderRadius: "5px",
+                  padding: 10,
+                  cursor: "text",
+                }}
+                onClick={() => focus()}>
+              <div ref={inputRef} contentEditable
+                style={{ width: "100%", display: "inline" }}
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    e.preventDefault();
+                  }
+                }}
+                onKeyUp={({ code, currentTarget }) => {
+                  if (code === "Escape") {
+                    currentTarget.blur();
+                  } else if (code === "Enter") {
+                    currentTarget.blur();
+                    setPosition([COLUMNS - 1, 4]);
+                  }
+                }}
+                onInput={({ currentTarget }) => setText(currentTarget.textContent ?? undefined)} 
+              />
+              {!inputFocus && <Blink>&nbsp;&nbsp;</Blink>}
+            </div>
+            {prompt.randomText ? <Button hideOutline selected={!inputFocus && actionButtonSelected===ActionButton.RANDOM}
+              padding={5} margin={5} emoji='🎲'
+              disabled={inputFocus}
+              onMouseOver={() => {
+                setPosition([COLUMNS - 1, -1]);
               }}
-              onClick={() => focus()}>
-            <div ref={inputRef} contentEditable
-              style={{ width: "100%", display: "inline" }}
-              onKeyDown={(e) => {
-                if (e.code === "Enter") {
-                  e.preventDefault();
-                }
+              onMouseDown={() => {
+                setPosition([COLUMNS - 1, -1]);
               }}
-              onKeyUp={({ code, currentTarget }) => {
-                if (code === "Escape") {
-                  currentTarget.blur();
-                } else if (code === "Enter") {
-                  currentTarget.blur();
-                  setPosition([COLUMNS - 1, 4]);
-                }
-              }}
-              onInput={({ currentTarget }) => setText(currentTarget.textContent ?? undefined)} 
-            />
-            {!inputFocus && <Blink>&nbsp;&nbsp;</Blink>}
+            /> : undefined}
           </div>
-          {prompt.randomText ? <Button hideOutline selected={!inputFocus && actionButtonSelected===ActionButton.RANDOM}
-            padding={5} margin={5} emoji='🎲'
-            disabled={inputFocus}
-            onMouseOver={() => {
-              setPosition([COLUMNS - 1, -1]);
-            }}
-            onMouseDown={() => {
-              setPosition([COLUMNS - 1, -1]);
-            }}
-           /> : undefined}
-        </div>
-        <div style={{
-          pointerEvents: inputFocus ? "none" : undefined,
-          opacity: inputFocus ? .3 : 1,
-          transition: "opacity .3s",
-          cursor: clickable ? "inherit" : "auto",
-        }} onMouseMove={() => {
-          if (!disabled) {
-            enableMouseHover();
-          }
-        }}>
-          <div>
-            <div style={{
-              margin: 5, display: "grid",
-              gridTemplateColumns: GRID_TEMPLATE_COLUMN,
-            }}>
-              {alphabet.map((letter, index) => {
-                return <Button key={index} selected={!inputFocus && Math.floor(index / COLUMNS) === position[1] && index % COLUMNS === position[0]} 
-                  padding={3}
-                  text={letter}
+          <div style={{
+            pointerEvents: inputFocus ? "none" : undefined,
+            opacity: inputFocus ? .3 : 1,
+            transition: "opacity .3s",
+            cursor: clickable ? "inherit" : "auto",
+          }} onMouseMove={() => {
+            if (!disabled) {
+              enableMouseHover();
+            }
+          }}>
+            <div>
+              <div style={{
+                margin: 5, display: "grid",
+                gridTemplateColumns: GRID_TEMPLATE_COLUMN,
+              }}>
+                {alphabet.map((letter, index) => {
+                  return <Button key={index} selected={!inputFocus && Math.floor(index / COLUMNS) === position[1] && index % COLUMNS === position[0]} 
+                    padding={3}
+                    text={letter}
+                    onMouseOver={() => {
+                      if (mouseHoverEnabled) {
+                        setPosition([index % COLUMNS, Math.floor(index / COLUMNS)]);
+                      }
+                    }}
+                    onMouseDown={() => {
+                      if (mouseHoverEnabled) {
+                        setPosition([index % COLUMNS, Math.floor(index / COLUMNS)]);
+                      }
+                    }}
+                  />
+                })}
+              </div>
+              <div style={{ margin: 5, display: "flex", gap: 10 }}>
+                {prompt.languages && <Button selected={!inputFocus && actionButtonSelected===ActionButton.LANG} 
+                  padding="0px 5px"
+                  emoji='🌐'
                   onMouseOver={() => {
                     if (mouseHoverEnabled) {
-                      setPosition([index % COLUMNS, Math.floor(index / COLUMNS)]);
+                      setPosition([0, 4]);
                     }
                   }}
                   onMouseDown={() => {
                     if (mouseHoverEnabled) {
-                      setPosition([index % COLUMNS, Math.floor(index / COLUMNS)]);
+                      setPosition([0, 4]);
+                    }
+                  }}
+                />}
+                {currentLanguageModel.capitalize && <Button selected={!inputFocus && actionButtonSelected===ActionButton.CAP} 
+                  padding="0px 5px"
+                  text="Aa"
+                  onMouseOver={() => {
+                    if (mouseHoverEnabled) {
+                      setPosition([1, 4]);
+                    }
+                  }}
+                  onMouseDown={() => {
+                    if (mouseHoverEnabled) {
+                      setPosition([1, 4]);
+                    }
+                  }}
+                />}
+                <Button selected={!inputFocus && actionButtonSelected===ActionButton.SPACE} 
+                  padding="0px 10px"
+                  stretch
+                  text="space"
+                  onMouseOver={() => {
+                    if (mouseHoverEnabled) {
+                      setPosition([5, 4]);
+                    }
+                  }}
+                  onMouseDown={() => {
+                    if (mouseHoverEnabled) {
+                      setPosition([5, 4]);
                     }
                   }}
                 />
-              })}
-            </div>
-            <div style={{ margin: 5, display: "flex", gap: 10 }}>
-              {prompt.languages && <Button selected={!inputFocus && actionButtonSelected===ActionButton.LANG} 
-                padding="0px 5px"
-                emoji='🌐'
-                onMouseOver={() => {
-                  if (mouseHoverEnabled) {
-                    setPosition([0, 4]);
-                  }
-                }}
-                onMouseDown={() => {
-                  if (mouseHoverEnabled) {
-                    setPosition([0, 4]);
-                  }
-                }}
-              />}
-              {currentLanguageModel.capitalize && <Button selected={!inputFocus && actionButtonSelected===ActionButton.CAP} 
-                padding="0px 5px"
-                text="Aa"
-                onMouseOver={() => {
-                  if (mouseHoverEnabled) {
-                    setPosition([1, 4]);
-                  }
-                }}
-                onMouseDown={() => {
-                  if (mouseHoverEnabled) {
-                    setPosition([1, 4]);
-                  }
-                }}
-              />}
-              <Button selected={!inputFocus && actionButtonSelected===ActionButton.SPACE} 
-                padding="0px 10px"
-                stretch
-                text="space"
-                onMouseOver={() => {
-                  if (mouseHoverEnabled) {
-                    setPosition([5, 4]);
-                  }
-                }}
-                onMouseDown={() => {
-                  if (mouseHoverEnabled) {
-                    setPosition([5, 4]);
-                  }
-                }}
-              />
-              <Button selected={!inputFocus && actionButtonSelected===ActionButton.DEL} 
-                padding="0px 10px"
-                text="del"
-                disabled={!text?.length}
-                onMouseOver={() => {
-                  if (mouseHoverEnabled && text?.length) {
-                    setPosition([COLUMNS - 2, 4]);
-                  }
-                }}
-                onMouseDown={() => {
-                  if (mouseHoverEnabled && text?.length) {
-                    setPosition([COLUMNS - 2, 4]);
-                  }
-                }}
-              />
-              <Button selected={!inputFocus && actionButtonSelected===ActionButton.OK} 
-                padding="0px 20px"
-                text="ok"
-                disabled={!text?.length}
-                onMouseOver={() => {
-                  if (mouseHoverEnabled && text?.length) {
-                    setPosition([COLUMNS - 1, 4]);
-                  }
-                }}
-                onMouseDown={() => {
-                  if (mouseHoverEnabled && text?.length) {
-                    setPosition([COLUMNS - 1, 4]);
-                  }
-                }}
-              />
+                <Button selected={!inputFocus && actionButtonSelected===ActionButton.DEL} 
+                  padding="0px 10px"
+                  text="del"
+                  disabled={!text?.length}
+                  onMouseOver={() => {
+                    if (mouseHoverEnabled && text?.length) {
+                      setPosition([COLUMNS - 2, 4]);
+                    }
+                  }}
+                  onMouseDown={() => {
+                    if (mouseHoverEnabled && text?.length) {
+                      setPosition([COLUMNS - 2, 4]);
+                    }
+                  }}
+                />
+                <Button selected={!inputFocus && actionButtonSelected===ActionButton.OK} 
+                  padding="0px 20px"
+                  text="ok"
+                  disabled={!text?.length}
+                  onMouseOver={() => {
+                    if (mouseHoverEnabled && text?.length) {
+                      setPosition([COLUMNS - 1, 4]);
+                    }
+                  }}
+                  onMouseDown={() => {
+                    if (mouseHoverEnabled && text?.length) {
+                      setPosition([COLUMNS - 1, 4]);
+                    }
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

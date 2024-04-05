@@ -91,7 +91,7 @@ export function Menu({
         <svg xmlns="http://www.w3.org/2000/svg" style={{
             position: "absolute",
             height: 20,
-            marginTop: -15,
+            marginTop: -8,
             width: 200,
             display: scroll > 0 ? "" : "none",
             left: `calc(50% - 100px)`,

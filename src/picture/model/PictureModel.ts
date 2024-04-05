@@ -1,6 +1,6 @@
 import { PopupModel } from "../../common/popup/PopupModel";
-import { ImageModel } from "./ImageModel";
+import { Image } from "./ImageModel";
 
 export interface PictureModel extends PopupModel {
-  images: ImageModel[];
+  images: Image[];
 }

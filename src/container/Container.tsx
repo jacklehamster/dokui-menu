@@ -17,6 +17,7 @@ export interface Props {
   onClose?(): void;
   onPrompt?(text: string): void;
   removed?: boolean;
+  focusLess?: boolean;
 }
 
 export function Container({
@@ -28,6 +29,7 @@ export function Container({
   onClose = async () => {},
   onPrompt = async() => {},
   removed,
+  focusLess,
 }: Props) {
   const [index, setIndex] = useState(0);
   const onNext = useCallback(async () => {
@@ -36,7 +38,7 @@ export function Container({
 
   const elems = useMemo(() => {
     return [
-      dialog ? <Dialog dialog={dialog} onSelect={onSelect} onClose={onNext} /> : undefined,
+      dialog ? <Dialog dialog={dialog} onSelect={onSelect} onClose={onNext} focusLess={focusLess} /> : undefined,
       menu ? <Menu menu={menu} onSelect={onSelect} onPrompt={onPrompt} onClose={onNext} /> : undefined,
       prompt ? <Prompt prompt={prompt} onConfirm={onPrompt} onClose={onNext} /> : undefined,
     ].filter((e): e is JSX.Element => !!e);

@@ -23,7 +23,10 @@ export function showMenu() {
               size: [200, 200],
               positionFromRight: true,
             },
-            images: [{ src: landscapeSrc }, { src: pikaSrc }],
+            images: [{
+              src: landscapeSrc,
+              size: "cover",
+            }, { src: pikaSrc }],
           }],    
         },
         "there!",
@@ -47,8 +50,30 @@ export function showMenu() {
       },
       items: [
         "first",
-        "second",
         {
+          icon: pikaSrc,
+          label: "second",
+          onHover: {
+            pictures: [{
+              layout: {
+                position: [350,100],
+                size: [200, 200],
+                positionFromRight: true,
+              },
+              images: [{ src: pikaSrc }],
+            }],
+            dialog: {
+              layout: {
+                position: [350,300],
+                size: [200, 50],
+                positionFromRight: true,
+              },
+              messages: ["Pika!"],
+            },
+          },
+        },
+        {
+          emoji: "3️⃣",
           label: "third",
           submenu: {
             pictures: [{

@@ -15,6 +15,7 @@ interface Props<I extends MenuItem = MenuItem> {
   prompt?: PromptModel,
   onSelect?(item: I): void,
   onPrompt?(text: string): void;
+  onClose?(): void;
   root?: HTMLElement;
   popupControl?: PopupControl;
   editor?: boolean;
@@ -27,6 +28,7 @@ export function openMenu<I extends MenuItem = MenuItem>({
   prompt,
   onSelect = item => console.log("SELECT", item),
   onPrompt = text => console.log("PROMPT", text),
+  onClose = () => console.log("CLOSE"),
   root = document.body,
   popupControl = new PopupControl(),
   editor,
@@ -46,7 +48,10 @@ export function openMenu<I extends MenuItem = MenuItem>({
     onPrompt={onPrompt}
     detach={detach}
     popupControl={popupControl}
-    onClose={async () => setTimeout(() => detach(), 10)}
+    onClose={async () => setTimeout(() => {
+      detach();
+      onClose();
+    }, 10)}
     editor={editor}
   />;
   reactRoot.render(html);

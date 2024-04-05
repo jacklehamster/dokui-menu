@@ -10,4 +10,6 @@ export interface PopupProps {
   children: React.ReactNode;
   onBack?(): void;
   fit?: boolean;
+  zIndex?: number;
+  clickThrough?: boolean;
 }

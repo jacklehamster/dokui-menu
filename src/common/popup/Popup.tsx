@@ -27,13 +27,12 @@ const DOUBLE_BORDER_CSS: CSSProperties = {
   borderRadius: 10,
   outline: '3px solid black',
   color: 'white',
-  padding: 10,
   cursor: 'pointer',
   transition: 'border-color .3s',
   userSelect: 'none',
 };
 
-const DOUBLE_BORDER_HEIGHT_OFFSET = 27;
+const DOUBLE_BORDER_HEIGHT_OFFSET = 5;
 const DEFAULT_FONT_SIZE = 24;
 
 export function Popup({
@@ -44,6 +43,8 @@ export function Popup({
   removed,
   onBack,
   fit,
+  zIndex,
+  clickThrough,
 }: PopupProps): JSX.Element {
   const [h, setH] = useState(0);
   useEffect(() => {
@@ -52,49 +53,52 @@ export function Popup({
 
   const { top, left, right, bottom, width, height, visible } = usePopupLayout({
     layout,
-  });  
+  });
 
   return (
-    <>
-    {onBack ? <div style={{
-      position: "absolute",
-      left: 0,
-      top: 0,
-      width: "100%",
-      height: "100%",
-      cursor: "pointer",
-    }} onClick={onBack} /> : undefined}
     <div style={{
-        ...OVERLAP,
-        left, top, right, bottom, width, height,
-        fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
-        display: visible ? "" : "none",
-      }}>
-      <div className="pop-up"
-      style={{
-          ...POPUP_CSS,
-          marginTop: `${removed ? height ? `${height}px` : "80%" : "0px"}`,
-          width: '100%',
-          height: removed ? 0 : fit ? undefined : `${h}%`,
-          overflow: 'hidden',
-          opacity: removed ? 0 : 1,
-          transition: 'height .2s, margin-top .2s, opacity .2s',
-          outlineColor: disabled ? "whitesmoke" : "white",
-        }}
-      >
-        <div
-          className="double-border"
-          style={{
-            ...DOUBLE_BORDER_CSS,
-            height: fit ? undefined : `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
-            borderColor: disabled ? "silver" : "white",
-            overflow: "hidden",
+      position: "fixed", left: 0, top: 0, width: "100vw", height: "100vh", zIndex,
+      pointerEvents: clickThrough ? "none" : undefined,
+    }}>
+      {onBack ? <div style={{
+        position: "absolute",
+        left: 0,
+        top: 0,
+        width: "100%",
+        height: "100%",
+        cursor: "pointer",
+      }} onClick={onBack} /> : undefined}
+      <div style={{
+          ...OVERLAP,
+          left, top, right, bottom, width, height,
+          fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
+          display: visible ? "" : "none",
+        }}>
+        <div className="pop-up"
+        style={{
+            ...POPUP_CSS,
+            marginTop: `${removed ? height ? `${height}px` : "80%" : "0px"}`,
+            width: '100%',
+            height: removed ? 0 : fit ? undefined : `${h}%`,
+            overflow: 'hidden',
+            opacity: removed ? 0 : 1,
+            transition: 'height .2s, margin-top .2s, opacity .2s',
+            outlineColor: disabled ? "whitesmoke" : "white",
           }}
         >
-          {removed ? undefined : children}
+          <div
+            className="double-border"
+            style={{
+              ...DOUBLE_BORDER_CSS,
+              height: fit ? undefined : `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
+              borderColor: disabled ? "silver" : "white",
+              overflow: "hidden",
+            }}
+          >
+            {removed ? undefined : children}
+          </div>
         </div>
       </div>
     </div>
-    </>
   );
 }

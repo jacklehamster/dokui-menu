@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Popup } from '..';
 import { PictureModel } from './model/PictureModel';
+import { Images } from './Images';
 
 export interface Props {
   picture: PictureModel;
@@ -15,6 +16,7 @@ export function Picture({ picture, removed }: Props): JSX.Element {
         layout={picture.layout ?? {}}
         style={picture.style}
         removed={removed}
+        clickThrough
       >
         <div style={{
           width: "100%",
@@ -22,15 +24,7 @@ export function Picture({ picture, removed }: Props): JSX.Element {
           pointerEvents: "none",
           overflow: "hidden",
         }}>
-          {picture.images.map((image, index) => <div key={index} style={{
-            backgroundImage: `url("${image.src}")`,
-            backgroundSize: "contain",
-            width: "100%",
-            height: "100%",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            marginTop: `-${index * 100}%`,
-          }} />)}
+          <Images images={picture.images} />
         </div>
       </Popup>
     </>

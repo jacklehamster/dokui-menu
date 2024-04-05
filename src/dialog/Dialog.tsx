@@ -17,18 +17,20 @@ import { useEditDialog } from '../context/edit/useEditDialog';
 import { openMenu } from '..';
 import { map } from 'abstract-list';
 import { PictureModel } from '@/picture/model/PictureModel';
+import { promptText } from '@/prompt/promptText';
 
 export interface Props {
   dialog: DialogModel;
   onSelect(item: MenuItem): void
   onClose(): void;
+  focusLess?: boolean;
 }
 
-export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
+export function Dialog({ dialog, onSelect, onClose, focusLess }: Props): JSX.Element {
   const { next, index } = useDialogState();
   const [menu, setMenu] = useState<MenuModel>();
   const [prompt, setPrompt] = useState<PromptModel>();
-  const { active } = useActiveFocus();
+  const { active } = useActiveFocus({ disabled: focusLess });
   const { editing } = useEditContext();
 
   const { lockState, popupControl } = useControls({
@@ -59,7 +61,7 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
     if (index >= messages.length.valueOf()) {
       remove(onClose);
     }
-  }, [messages, index, remove, onClose])
+  }, [messages, index, remove, onClose]);
 
   const onCloseMenu = useCallback(async () => {
     setMenu(undefined);
@@ -85,19 +87,18 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
       {
         label: "edit text",
         back: true,
-        action: () => {
-          openMenu({ 
-            prompt: {
-              label: "Enter a new text",
-              defaultText: message?.text,
-              languages: ["english", "korean"],
-            }, onPrompt(text) {
-              editMessage?.(index, text);
-            },
+        action: async () => {
+          const newText = await promptText({
+            label: "Enter a new text",
+            defaultText: message?.text,
             popupControl,
           });
+          if (newText) {
+            editMessage?.(index, newText);
+          }
         },
       },
+      { label: "exit", builtIn: true, back: true },      
     ],
   }), [message, index, popupControl, editMessage]);
 
@@ -116,6 +117,7 @@ export function Dialog({ dialog, onSelect, onClose }: Props): JSX.Element {
           width: "100%",
           height: "100%",
           display: "flex",
+          padding: 10,
         }}
         onClick={() => popupControl.onAction()}>
           <div style={{ flex: 1 }}>
