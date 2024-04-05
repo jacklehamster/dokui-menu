@@ -14,7 +14,6 @@ import { useEditContext } from '../context/edit/EditContextProvider';
 import { PromptModel } from '../prompt/model/PromptModel';
 import { useKeyDown } from '../controls/useKeyDown';
 import { useEditDialog } from '../context/edit/useEditDialog';
-import { openMenu } from '..';
 import { map } from 'abstract-list';
 import { PictureModel } from '@/picture/model/PictureModel';
 import { promptText } from '@/prompt/promptText';
@@ -112,6 +111,8 @@ export function Dialog({ dialog, onSelect, onClose, focusLess }: Props): JSX.Ele
         disabled={lockState === LockStatus.LOCKED}
         removed={removed}
         onBack={dialog.disableBack ? undefined : next}
+        clickThrough={focusLess}
+        leaveBorderUnchanged
       >
         <div style={{
           width: "100%",

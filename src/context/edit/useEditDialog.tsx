@@ -28,8 +28,11 @@ export function useEditDialog({ dialog, active }: Props): Result {
     setEditCount(count => count + 1);
   }, [dialog]);
 
+  const messages = useMemo(() => map(dialog.messages, m => m), [dialog, editCount]);
+
   return {
     ...dialog,
+    messages,
     editable: editing,
     editMessage,
   };

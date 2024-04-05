@@ -18,7 +18,7 @@ const POPUP_CSS: CSSProperties = {
   backgroundColor: 'black',
   borderRadius: 12,
   padding: 3,
-  boxShadow: '10px 10px 0px #000000cc',
+  boxShadow: '10px 5px 0px #000000cc',
   transition: 'outline-color .3s',
 };
 
@@ -45,6 +45,7 @@ export function Popup({
   fit,
   zIndex,
   clickThrough,
+  leaveBorderUnchanged,
 }: PopupProps): JSX.Element {
   const [h, setH] = useState(0);
   useEffect(() => {
@@ -83,7 +84,7 @@ export function Popup({
             overflow: 'hidden',
             opacity: removed ? 0 : 1,
             transition: 'height .2s, margin-top .2s, opacity .2s',
-            outlineColor: disabled ? "whitesmoke" : "white",
+            outlineColor: !leaveBorderUnchanged && disabled ? "whitesmoke" : "white",
           }}
         >
           <div
@@ -91,7 +92,7 @@ export function Popup({
             style={{
               ...DOUBLE_BORDER_CSS,
               height: fit ? undefined : `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
-              borderColor: disabled ? "silver" : "white",
+              borderColor: !leaveBorderUnchanged && disabled ? "silver" : "white",
               overflow: "hidden",
             }}
           >

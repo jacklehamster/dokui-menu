@@ -2910,7 +2910,8 @@ var Popup2 = function({
   onBack,
   fit,
   zIndex,
-  clickThrough
+  clickThrough,
+  leaveBorderUnchanged
 }) {
   const [h, setH] = import_react9.useState(0);
   import_react9.useEffect(() => {
@@ -2963,14 +2964,14 @@ var Popup2 = function({
             overflow: "hidden",
             opacity: removed ? 0 : 1,
             transition: "height .2s, margin-top .2s, opacity .2s",
-            outlineColor: disabled ? "whitesmoke" : "white"
+            outlineColor: !leaveBorderUnchanged && disabled ? "whitesmoke" : "white"
           },
           children: jsx_dev_runtime3.jsxDEV("div", {
             className: "double-border",
             style: {
               ...DOUBLE_BORDER_CSS,
               height: fit ? undefined : `calc(100% - ${DOUBLE_BORDER_HEIGHT_OFFSET}px)`,
-              borderColor: disabled ? "silver" : "white",
+              borderColor: !leaveBorderUnchanged && disabled ? "silver" : "white",
               overflow: "hidden"
             },
             children: removed ? undefined : children
@@ -3040,7 +3041,7 @@ var Label = function({ label }) {
     children: label
   }, undefined, false, undefined, this);
 };
-var Button = function({ stretch, selected, hideOutline, emoji, text, padding, margin, disabled, onMouseOver, onMouseDown }) {
+var Button = function({ stretch, selected, hideOutline, emoji, text, padding, margin, disabled, onMouseOver, onMouseDown, onClick }) {
   return jsx_dev_runtime7.jsxDEV("div", {
     style: {
       padding,
@@ -3054,6 +3055,7 @@ var Button = function({ stretch, selected, hideOutline, emoji, text, padding, ma
     },
     onMouseOver,
     onMouseDown,
+    onClick,
     children: [
       jsx_dev_runtime7.jsxDEV("span", {
         style: {
@@ -3445,7 +3447,8 @@ var usePromptControl = function({
     mouseHoverEnabled,
     position,
     setPosition,
-    actionButtonSelected: position[1] < 0 ? ActionButton.RANDOM : position[1] !== 4 ? undefined : actionBar[position[0]]
+    actionButtonSelected: position[1] < 0 ? ActionButton.RANDOM : position[1] !== 4 ? undefined : actionBar[position[0]],
+    onAction
   };
 };
 var __spreadArray = function(to, from, pack) {
@@ -3977,7 +3980,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
   const { alphabet, setCapitalize } = useAlphabet({ languageModel: currentLanguageModel });
   const { addLetter, deleteLetter, randomizeText, text, setText } = useTextInput({ defaultText: prompt2.defaultText, randomList: prompt2.randomText });
   const { inputFocus, inputRef, focus } = useInputFocus({ text });
-  const { disabled, removed, enableMouseHover, mouseHoverEnabled, position: position2, setPosition, actionButtonSelected } = usePromptControl({
+  const { disabled, removed, enableMouseHover, mouseHoverEnabled, position: position2, setPosition, actionButtonSelected, onAction } = usePromptControl({
     alphabet,
     text,
     onClose,
@@ -4061,7 +4064,8 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                 },
                 onMouseDown: () => {
                   setPosition([COLUMNS2 - 1, -1]);
-                }
+                },
+                onClick: onAction
               }, undefined, false, undefined, this) : undefined
             ]
           }, undefined, true, undefined, this),
@@ -4099,7 +4103,8 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                         if (mouseHoverEnabled) {
                           setPosition([index % COLUMNS2, Math.floor(index / COLUMNS2)]);
                         }
-                      }
+                      },
+                      onClick: onAction
                     }, index, false, undefined, this);
                   })
                 }, undefined, false, undefined, this),
@@ -4119,7 +4124,8 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                         if (mouseHoverEnabled) {
                           setPosition([0, 4]);
                         }
-                      }
+                      },
+                      onClick: onAction
                     }, undefined, false, undefined, this),
                     currentLanguageModel.capitalize && jsx_dev_runtime12.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.CAP,
@@ -4134,7 +4140,8 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                         if (mouseHoverEnabled) {
                           setPosition([1, 4]);
                         }
-                      }
+                      },
+                      onClick: onAction
                     }, undefined, false, undefined, this),
                     jsx_dev_runtime12.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.SPACE,
@@ -4150,7 +4157,8 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                         if (mouseHoverEnabled) {
                           setPosition([5, 4]);
                         }
-                      }
+                      },
+                      onClick: onAction
                     }, undefined, false, undefined, this),
                     jsx_dev_runtime12.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.DEL,
@@ -4166,7 +4174,8 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                         if (mouseHoverEnabled && text?.length) {
                           setPosition([COLUMNS2 - 2, 4]);
                         }
-                      }
+                      },
+                      onClick: onAction
                     }, undefined, false, undefined, this),
                     jsx_dev_runtime12.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.OK,
@@ -4182,7 +4191,8 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                         if (mouseHoverEnabled && text?.length) {
                           setPosition([COLUMNS2 - 1, 4]);
                         }
-                      }
+                      },
+                      onClick: onAction
                     }, undefined, false, undefined, this)
                   ]
                 }, undefined, true, undefined, this)
@@ -4831,16 +4841,18 @@ var useEditDialog = function({ dialog, active }) {
   const { editing } = useEditContext();
   const [editCount, setEditCount] = import_react33.useState(0);
   const editMessage = import_react33.useCallback((index, text) => {
-    const messages = B(dialog.messages, (m2) => m2).filter((m2) => !!m2);
-    const message = messages[index];
+    const messages2 = B(dialog.messages, (m2) => m2).filter((m2) => !!m2);
+    const message = messages2[index];
     const messageModel = !message ? {} : typeof message === "string" ? { text: message } : message;
     messageModel.text = text;
-    messages[index] = messageModel;
-    dialog.messages = messages;
+    messages2[index] = messageModel;
+    dialog.messages = messages2;
     setEditCount((count) => count + 1);
   }, [dialog]);
+  const messages = import_react33.useMemo(() => B(dialog.messages, (m2) => m2), [dialog, editCount]);
   return {
     ...dialog,
+    messages,
     editable: editing,
     editMessage
   };
@@ -4920,6 +4932,8 @@ var Dialog = function({ dialog, onSelect, onClose, focusLess }) {
         disabled: lockState === LockStatus.LOCKED,
         removed,
         onBack: dialog.disableBack ? undefined : next2,
+        clickThrough: focusLess,
+        leaveBorderUnchanged: true,
         children: jsx_dev_runtime16.jsxDEV("div", {
           style: {
             width: "100%",
@@ -26598,7 +26612,7 @@ var POPUP_CSS = {
   backgroundColor: "black",
   borderRadius: 12,
   padding: 3,
-  boxShadow: "10px 10px 0px #000000cc",
+  boxShadow: "10px 5px 0px #000000cc",
   transition: "outline-color .3s"
 };
 var DOUBLE_BORDER_CSS = {
@@ -27602,7 +27616,7 @@ function showMenu() {
             }],
             dialog: {
               layout: {
-                position: [350, 300],
+                position: [350, 315],
                 size: [200, 50],
                 positionFromRight: true
               },

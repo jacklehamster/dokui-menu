@@ -24,7 +24,7 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
   const { alphabet, setCapitalize } = useAlphabet({ languageModel: currentLanguageModel });
   const { addLetter, deleteLetter, randomizeText, text, setText } = useTextInput({ defaultText: prompt.defaultText, randomList: prompt.randomText });
   const { inputFocus, inputRef, focus } = useInputFocus({ text });
-  const { disabled, removed, enableMouseHover, mouseHoverEnabled, position, setPosition, actionButtonSelected, } = usePromptControl({
+  const { disabled, removed, enableMouseHover, mouseHoverEnabled, position, setPosition, actionButtonSelected, onAction } = usePromptControl({
     alphabet,
     text,
     onClose,
@@ -94,6 +94,7 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
               onMouseDown={() => {
                 setPosition([COLUMNS - 1, -1]);
               }}
+              onClick={onAction}
             /> : undefined}
           </div>
           <div style={{
@@ -125,7 +126,8 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                         setPosition([index % COLUMNS, Math.floor(index / COLUMNS)]);
                       }
                     }}
-                  />
+                    onClick={onAction}
+                    />
                 })}
               </div>
               <div style={{ margin: 5, display: "flex", gap: 10 }}>
@@ -142,7 +144,8 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                       setPosition([0, 4]);
                     }
                   }}
-                />}
+                  onClick={onAction}
+                  />}
                 {currentLanguageModel.capitalize && <Button selected={!inputFocus && actionButtonSelected===ActionButton.CAP} 
                   padding="0px 5px"
                   text="Aa"
@@ -156,7 +159,8 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                       setPosition([1, 4]);
                     }
                   }}
-                />}
+                  onClick={onAction}
+                  />}
                 <Button selected={!inputFocus && actionButtonSelected===ActionButton.SPACE} 
                   padding="0px 10px"
                   stretch
@@ -171,7 +175,8 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                       setPosition([5, 4]);
                     }
                   }}
-                />
+                  onClick={onAction}
+                  />
                 <Button selected={!inputFocus && actionButtonSelected===ActionButton.DEL} 
                   padding="0px 10px"
                   text="del"
@@ -186,7 +191,8 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                       setPosition([COLUMNS - 2, 4]);
                     }
                   }}
-                />
+                  onClick={onAction}
+                  />
                 <Button selected={!inputFocus && actionButtonSelected===ActionButton.OK} 
                   padding="0px 20px"
                   text="ok"
@@ -201,7 +207,8 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                       setPosition([COLUMNS - 1, 4]);
                     }
                   }}
-                />
+                  onClick={onAction}
+                  />
               </div>
             </div>
           </div>

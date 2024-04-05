@@ -64,7 +64,7 @@ export function showMenu() {
             }],
             dialog: {
               layout: {
-                position: [350,300],
+                position: [350,315],
                 size: [200, 50],
                 positionFromRight: true,
               },

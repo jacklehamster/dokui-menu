@@ -188,5 +188,6 @@ export function usePromptControl({
     position,
     setPosition,
     actionButtonSelected: position[1] < 0 ? ActionButton.RANDOM : position[1] !== 4 ? undefined : actionBar[position[0]],
+    onAction,
   }
 }

@@ -8,10 +8,11 @@ interface Props {
   disabled?: boolean;
   onMouseOver?(): void;
   onMouseDown?(): void;
+  onClick?(): void;
   stretch?: boolean;
 }
 
-export function Button({ stretch, selected, hideOutline, emoji, text, padding, margin, disabled, onMouseOver, onMouseDown }: Props) {
+export function Button({ stretch, selected, hideOutline, emoji, text, padding, margin, disabled, onMouseOver, onMouseDown, onClick }: Props) {
   return <div style={{
     padding,
     margin,
@@ -21,7 +22,7 @@ export function Button({ stretch, selected, hideOutline, emoji, text, padding, m
     transition: "opacity .3s",
     textAlign: "center",
     flexGrow: stretch ? 1 : undefined,
-  }} onMouseOver={onMouseOver} onMouseDown={onMouseDown}>
+  }} onMouseOver={onMouseOver} onMouseDown={onMouseDown} onClick={onClick}>
     <span style={{
       color: selected ? "transparent" : "white",
       textShadow: selected ? "0 0 0 black" : undefined,

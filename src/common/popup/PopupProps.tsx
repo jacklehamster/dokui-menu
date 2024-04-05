@@ -12,4 +12,5 @@ export interface PopupProps {
   fit?: boolean;
   zIndex?: number;
   clickThrough?: boolean;
+  leaveBorderUnchanged?: boolean;
 }
