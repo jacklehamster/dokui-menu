@@ -4864,7 +4864,8 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
   const [prompt2, setPrompt] = import_react31.useState();
   const { active } = useActiveFocus({ disabled: focusLess });
   const { editing } = useEditContext();
-  const [textProgressing, setTextProgessing] = import_react31.useState(true);
+  const [textProgressing, setTextProgressing] = import_react31.useState(true);
+  const [subdialog, setSubDialog] = import_react31.useState();
   const { lockState, popupControl } = useControls({
     active,
     listener: import_react31.useMemo(() => ({
@@ -4878,18 +4879,17 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
     return typeof message2 == "string" ? { text: message2 } : message2;
   }, [index, messages]);
   import_react31.useEffect(() => {
-    setTextProgessing(true);
+    setTextProgressing(true);
     const timeout = setTimeout(() => {
-      setTextProgessing(false);
+      setTextProgressing(false);
     }, (message?.text?.length ?? 0) * PERIOD);
     return () => clearTimeout(timeout);
-  }, [setTextProgessing, PERIOD, message]);
+  }, [setTextProgressing, PERIOD, message]);
   import_react31.useEffect(() => {
-    if (message?.menu || message?.prompt) {
-      setMenu(message?.menu);
-      setPrompt(message?.prompt);
-    }
-  }, [message, setMenu, setPrompt]);
+    setSubDialog(message?.subdialog);
+    setMenu(message?.menu);
+    setPrompt(message?.prompt);
+  }, [message, setMenu, setPrompt, setSubDialog]);
   const { removed, remove } = useRemove();
   import_react31.useEffect(() => {
     if (index >= messages.length.valueOf()) {
@@ -4975,6 +4975,8 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
       }, undefined, false, undefined, this),
       jsx_dev_runtime16.jsxDEV(Container2, {
         pictures,
+        dialog: subdialog,
+        focusLess: true,
         menu: !textProgressing ? menu : undefined,
         prompt: !textProgressing ? prompt2 : undefined,
         onSelect,
@@ -27795,6 +27797,39 @@ function showMenu() {
         {
           label: "show triangle without submenu",
           showTriangle: true
+        },
+        {
+          label: "subdialog",
+          dialog: {
+            messages: [
+              "text1",
+              {
+                text: "main dialog",
+                subdialog: {
+                  layout: {
+                    position: [150, 100],
+                    size: [600, 300]
+                  },
+                  messages: [
+                    "subdialog"
+                  ]
+                }
+              },
+              "text2",
+              {
+                text: "main dialog 2",
+                subdialog: {
+                  layout: {
+                    position: [150, 100],
+                    size: [600, 300]
+                  },
+                  messages: [
+                    "subdialog"
+                  ]
+                }
+              }
+            ]
+          }
         }
       ]
     }

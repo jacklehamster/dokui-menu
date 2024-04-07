@@ -5,8 +5,8 @@ import { MenuItem } from "../menu/model/MenuItemModel";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PictureModel } from "../picture/model/PictureModel";
 import { Picture } from "../picture/Picture";
-import { PromptModel } from "@/prompt/model/PromptModel";
-import { Prompt } from "@/prompt/Prompt";
+import { PromptModel } from "../prompt/model/PromptModel";
+import { Prompt } from "../prompt/Prompt";
 
 export interface Props {
   pictures?: PictureModel[];

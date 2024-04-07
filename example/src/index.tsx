@@ -232,6 +232,39 @@ export function showMenu() {
           label: "show triangle without submenu",
           showTriangle: true,
         },
+        {
+          label: "subdialog",
+          dialog: {
+            messages: [
+              "text1",
+              {
+                text: "main dialog",
+                subdialog: {
+                  layout: {
+                    position: [150, 100],
+                    size: [600, 300],
+                  },
+                  messages: [
+                    "subdialog"
+                  ],
+                }
+              },
+              "text2",
+              {
+                text: "main dialog 2",
+                subdialog: {
+                  layout: {
+                    position: [150, 100],
+                    size: [600, 300],
+                  },
+                  messages: [
+                    "subdialog"
+                  ],
+                }
+              },
+            ]
+          }
+        },
       ],
     },
   });

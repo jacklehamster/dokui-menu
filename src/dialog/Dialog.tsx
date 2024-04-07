@@ -15,8 +15,8 @@ import { PromptModel } from '../prompt/model/PromptModel';
 import { useKeyDown } from '../controls/useKeyDown';
 import { useEditDialog } from '../context/edit/useEditDialog';
 import { map } from 'abstract-list';
-import { PictureModel } from '@/picture/model/PictureModel';
-import { promptText } from '@/prompt/promptText';
+import { PictureModel } from '../picture/model/PictureModel';
+import { promptText } from '../prompt/promptText';
 
 export interface Props {
   dialog: DialogModel;
@@ -34,7 +34,8 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   const [prompt, setPrompt] = useState<PromptModel>();
   const { active } = useActiveFocus({ disabled: focusLess });
   const { editing } = useEditContext();
-  const [textProgressing, setTextProgessing] = useState(true);
+  const [textProgressing, setTextProgressing] = useState(true);
+  const [subdialog, setSubDialog] = useState<DialogModel>();
 
   const { lockState, popupControl } = useControls({
     active,
@@ -52,20 +53,18 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   }, [index, messages]);
 
   useEffect(() => {
-    setTextProgessing(true);
+    setTextProgressing(true);
     const timeout = setTimeout(() => {
-      setTextProgessing(false);
+      setTextProgressing(false);
     }, (message?.text?.length ?? 0) * PERIOD);
     return () => clearTimeout(timeout);
-  }, [setTextProgessing, PERIOD, message]);
-
+  }, [setTextProgressing, PERIOD, message]);
 
   useEffect(() => {
-    if (message?.menu || message?.prompt) {
-      setMenu(message?.menu);
-      setPrompt(message?.prompt);
-    }
-  }, [message, setMenu, setPrompt]);
+    setSubDialog(message?.subdialog);
+    setMenu(message?.menu);
+    setPrompt(message?.prompt);
+  }, [message, setMenu, setPrompt, setSubDialog]);
 
   const { removed, remove } = useRemove();
 
@@ -149,7 +148,10 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
             </div>}
         </div>
       </Popup>
-      <Container pictures={pictures} menu={!textProgressing  ? menu : undefined} prompt={!textProgressing ? prompt : undefined}
+      <Container pictures={pictures}
+        dialog={subdialog} focusLess
+        menu={!textProgressing  ? menu : undefined}
+        prompt={!textProgressing ? prompt : undefined}
         onSelect={onSelect}
         onClose={onCloseMenu}
         onPrompt={onPrompt}
