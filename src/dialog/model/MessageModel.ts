@@ -1,12 +1,13 @@
-import { PictureModel } from "@/picture/model/PictureModel";
+import { PictureModel } from "../../picture/model/PictureModel";
 import { MenuModel } from "../../menu/model/MenuModel";
-import { PromptModel } from "@/prompt/model/PromptModel";
+import { PromptModel } from "../../prompt/model/PromptModel";
+import { MenuItem } from "../../menu/model/MenuItemModel";
 
-export interface MessageModel {
+export interface MessageModel<I extends MenuItem = MenuItem> {
   text?: string;
-  menu?: MenuModel;
+  menu?: MenuModel<I>;
   prompt?: PromptModel;
   pictures?: PictureModel[];
 }
 
-export type Message = MessageModel | string;
+export type Message<I extends MenuItem = MenuItem> = MessageModel<I> | string;

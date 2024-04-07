@@ -3,7 +3,7 @@ import { MenuItem } from "./MenuItemModel";
 import { PopupModel } from "../../common/popup/PopupModel";
 import { PictureModel } from "../../picture/model/PictureModel";
 
-export interface MenuModel extends PopupModel {
+export interface MenuModel<I extends MenuItem = MenuItem> extends PopupModel {
   pictures?: PictureModel[];
-  items?: List<MenuItem> | MenuItem[];
+  items?: List<I> | I[];
 }

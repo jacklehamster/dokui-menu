@@ -1,15 +1,15 @@
 import { DialogModel } from "../../dialog/model/DialogModel";
 import { MenuModel } from "./MenuModel";
 import { PromptModel } from "../../prompt/model/PromptModel";
-import { PictureModel } from "@/picture/model/PictureModel";
-import { Image } from "@/picture/model/ImageModel";
+import { PictureModel } from "../../picture/model/PictureModel";
+import { Image } from "../../picture/model/ImageModel";
 
-export interface MenuItemModel {
+export interface MenuItemModel<I extends MenuItem = MenuItem> {
   icon?: Image | Image[];
   emoji?: string;
   label: string;
-  submenu?: MenuModel;
-  dialog?: DialogModel;
+  submenu?: MenuModel<I>;
+  dialog?: DialogModel<I>;
   prompt?: PromptModel;
   back?: boolean;
   hideOnSelect?: boolean;
@@ -19,7 +19,7 @@ export interface MenuItemModel {
   selected?: boolean;
   showTriangle?: boolean;
   onHover?: {
-    dialog?: DialogModel;
+    dialog?: DialogModel<I>;
     pictures: PictureModel[];
   }
 }
