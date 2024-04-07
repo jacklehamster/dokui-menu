@@ -16,7 +16,7 @@ var __toESM = (mod, isNodeMode, target) => {
 };
 var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 
-// /Users/vincent/dokui-menu/node_modules/react/cjs/react.development.js
+// ../node_modules/react/cjs/react.development.js
 var require_react_development = __commonJS((exports, module) => {
   if (true) {
     (function() {
@@ -1800,7 +1800,7 @@ var require_react_development = __commonJS((exports, module) => {
   }
 });
 
-// /Users/vincent/dokui-menu/node_modules/react/index.js
+// ../node_modules/react/index.js
 var require_react = __commonJS((exports, module) => {
   var react_development = __toESM(require_react_development(), 1);
   if (false) {
@@ -1809,7 +1809,7 @@ var require_react = __commonJS((exports, module) => {
   }
 });
 
-// /Users/vincent/dokui-menu/node_modules/react/cjs/react-jsx-dev-runtime.development.js
+// ../node_modules/react/cjs/react-jsx-dev-runtime.development.js
 var require_react_jsx_dev_runtime_development = __commonJS((exports) => {
   var React = __toESM(require_react(), 1);
   if (true) {
@@ -2662,7 +2662,7 @@ var require_react_jsx_dev_runtime_development = __commonJS((exports) => {
   }
 });
 
-// /Users/vincent/dokui-menu/node_modules/react/jsx-dev-runtime.js
+// ../node_modules/react/jsx-dev-runtime.js
 var require_jsx_dev_runtime = __commonJS((exports, module) => {
   var react_jsx_dev_runtime_development = __toESM(require_react_jsx_dev_runtime_development(), 1);
   if (false) {
@@ -2949,7 +2949,7 @@ var Popup2 = function({
           right,
           bottom,
           width,
-          height,
+          height: fit ? 0 : height,
           fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
           display: visible ? "" : "none"
         },
@@ -4007,6 +4007,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
       style: prompt2.style,
       removed,
       disabled,
+      onBack: onClose,
       fit: true,
       children: jsx_dev_runtime12.jsxDEV("div", {
         style: { padding: 5 },
@@ -4751,7 +4752,7 @@ var Menu2 = function({
         style,
         disabled,
         removed: removed || hidden,
-        onBack,
+        onBack: menu.backEnabled ? onBack : undefined,
         children: [
           jsx_dev_runtime15.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
@@ -27626,7 +27627,6 @@ function showMenu() {
   const { popupControl } = openMenu({
     editor: true,
     dialog: {
-      disableBack: true,
       messages: [
         {
           text: "hello",
@@ -27657,7 +27657,6 @@ function showMenu() {
       ]
     },
     menu: {
-      disableBack: true,
       layout: {
         name: "main"
       },
@@ -27849,13 +27848,17 @@ function showMenu() {
         {
           label: "subdialog",
           dialog: {
+            layout: {
+              position: [200, 200],
+              size: [300, 200]
+            },
             messages: [
               "text1",
               {
                 text: "main dialog",
                 subdialog: {
                   layout: {
-                    position: [150, 100],
+                    position: [150, 300],
                     size: [600, 300]
                   },
                   messages: [

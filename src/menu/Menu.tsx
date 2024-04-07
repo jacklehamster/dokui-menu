@@ -86,7 +86,7 @@ export function Menu({
         style={style}
         disabled={disabled}
         removed={removed || hidden}
-        onBack={onBack}
+        onBack={menu.backEnabled ? onBack : undefined}
       >
         <svg xmlns="http://www.w3.org/2000/svg" style={{
             position: "absolute",

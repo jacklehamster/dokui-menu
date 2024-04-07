@@ -71,7 +71,7 @@ export function Popup({
       }} onClick={onBack} /> : undefined}
       <div style={{
           ...OVERLAP,
-          left, top, right, bottom, width, height,
+          left, top, right, bottom, width, height: fit ? 0 : height,
           fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
           display: visible ? "" : "none",
         }}>

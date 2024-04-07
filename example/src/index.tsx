@@ -14,7 +14,6 @@ export function showMenu() {
   const { popupControl } = openMenu({
     editor: true,
     dialog: {
-      disableBack: true,
       messages: [
         {
           text: "hello",
@@ -45,7 +44,6 @@ export function showMenu() {
       ],
     },
     menu: {
-      disableBack: true,
       layout: {
         name: "main",
       },
@@ -236,13 +234,17 @@ export function showMenu() {
         {
           label: "subdialog",
           dialog: {
+            layout: {
+              position: [200, 200],
+              size: [300, 200],
+            },
             messages: [
               "text1",
               {
                 text: "main dialog",
                 subdialog: {
                   layout: {
-                    position: [150, 100],
+                    position: [150, 300],
                     size: [600, 300],
                   },
                   messages: [

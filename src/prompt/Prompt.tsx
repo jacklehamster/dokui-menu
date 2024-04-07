@@ -49,6 +49,7 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
         style={prompt.style}
         removed={removed}
         disabled={disabled}
+        onBack={onClose}
         fit
       >
         <div style={{ padding: 5 }}>
