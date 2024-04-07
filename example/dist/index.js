@@ -4227,6 +4227,7 @@ var Container2 = function({
       dialog ? jsx_dev_runtime13.jsxDEV(Dialog, {
         dialog,
         onSelect,
+        onPrompt,
         onClose: onNext,
         focusLess
       }, undefined, false, undefined, this) : undefined,
@@ -4857,7 +4858,7 @@ var useEditDialog = function({ dialog, active }) {
     editMessage
   };
 };
-var Dialog = function({ dialog, onSelect, onClose, focusLess }) {
+var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
   const { next: next2, index } = useDialogState();
   const [menu, setMenu] = import_react31.useState();
   const [prompt2, setPrompt] = import_react31.useState();
@@ -4978,6 +4979,7 @@ var Dialog = function({ dialog, onSelect, onClose, focusLess }) {
         prompt: !textProgressing ? prompt2 : undefined,
         onSelect,
         onClose: onCloseMenu,
+        onPrompt,
         removed
       }, undefined, false, undefined, this),
       editDialogOn && jsx_dev_runtime16.jsxDEV(Container2, {

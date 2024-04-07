@@ -38,7 +38,7 @@ export function Container({
 
   const elems = useMemo(() => {
     return [
-      dialog ? <Dialog dialog={dialog} onSelect={onSelect} onClose={onNext} focusLess={focusLess} /> : undefined,
+      dialog ? <Dialog dialog={dialog} onSelect={onSelect} onPrompt={onPrompt}  onClose={onNext} focusLess={focusLess} /> : undefined,
       menu ? <Menu menu={menu} onSelect={onSelect} onPrompt={onPrompt} onClose={onNext} /> : undefined,
       prompt ? <Prompt prompt={prompt} onConfirm={onPrompt} onClose={onNext} /> : undefined,
     ].filter((e): e is JSX.Element => !!e);

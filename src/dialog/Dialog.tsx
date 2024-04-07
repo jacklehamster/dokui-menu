@@ -22,12 +22,13 @@ export interface Props {
   dialog: DialogModel;
   onSelect(item: MenuItem): void
   onClose(): void;
+  onPrompt(text: string): void;
   focusLess?: boolean;
 }
 
 const PERIOD = 30;
 
-export function Dialog({ dialog, onSelect, onClose, focusLess }: Props): JSX.Element {
+export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props): JSX.Element {
   const { next, index } = useDialogState();
   const [menu, setMenu] = useState<MenuModel>();
   const [prompt, setPrompt] = useState<PromptModel>();
@@ -151,6 +152,7 @@ export function Dialog({ dialog, onSelect, onClose, focusLess }: Props): JSX.Ele
       <Container pictures={pictures} menu={!textProgressing  ? menu : undefined} prompt={!textProgressing ? prompt : undefined}
         onSelect={onSelect}
         onClose={onCloseMenu}
+        onPrompt={onPrompt}
         removed={removed}></Container>
       {editDialogOn && <Container menu={editMenu} onClose={() => setEditDialogOn(false)} />}
     </>
