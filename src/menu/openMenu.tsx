@@ -10,7 +10,7 @@ import { PromptModel } from '../prompt/model/PromptModel';
 
 interface Props<I extends MenuItem = MenuItem> {
   pictures?: PictureModel[];
-  menu?: MenuModel,
+  menu?: MenuModel<I>,
   dialog?: DialogModel<I>,
   prompt?: PromptModel,
   onSelect?(item: I): void,
