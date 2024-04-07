@@ -45,7 +45,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
     }), [next, dialog]),
   });
 
-  const { editable, editMessage, messages } = useEditDialog({ dialog, active });
+  const { editable, editMessage, insertMessage, deleteMessage, messages } = useEditDialog({ dialog, active });
 
   const message = useMemo<MessageModel | undefined>(() => {
     const message = messages.at(index);
@@ -96,6 +96,26 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
     },
     items: [
       {
+        label: "insert new message",
+        back: true,
+        action: async () => {
+          const newText = await promptText({
+            label: "Enter a text for the new message",
+            popupControl,
+          });
+          if (newText) {
+            insertMessage?.(index, newText);
+          }
+        },
+      },
+      {
+        label: "delete message",
+        back: true,
+        action: async () => {
+          deleteMessage(index);
+        },
+      },
+      {
         label: "edit text",
         back: true,
         action: async () => {
@@ -105,13 +125,13 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
             popupControl,
           });
           if (newText) {
-            editMessage?.(index, newText);
+            editMessage(index, newText);
           }
         },
       },
       { label: "exit", builtIn: true, back: true },      
     ],
-  }), [message, index, popupControl, editMessage]);
+  }), [message, index, popupControl, editMessage, insertMessage, deleteMessage]);
 
   const pictures = useMemo(() => [...map(dialog.pictures ?? [], p => p), ...map(message?.pictures ?? [], p => p)].filter((p): p is PictureModel => !!p), [dialog, message]);
 

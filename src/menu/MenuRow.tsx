@@ -40,7 +40,7 @@ interface Props {
   builtIn?: boolean;
 }
 
-export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, builtIn, deleteMenuItem }: Props) {
+export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, builtIn, deleteMenuItem, onAddDialog, onRemoveDialog }: Props) {
   const itemModel = typeof(item) === "string" ? {label: item} : item;
   const rowSelected = selectedItem === item;
   const [editMenuOn, setEditMenuOn] = useState(false);
@@ -115,13 +115,13 @@ export function MenuRow({ item, index, selectedItem, onMouseMove, onMouseOver, o
       },
       {
         label: "create dialog",
-        action: async () => onAddSubmenu?.(index),
+        action: async () => onAddDialog?.(index),
         back: true,
         hidden: !!itemModel?.dialog,
       },
       {
         label: "remove dialog",
-        action: async () => onRemoveSubmenu?.(index),
+        action: async () => onRemoveDialog?.(index),
         back: true,
         hidden: !itemModel?.dialog,
       },

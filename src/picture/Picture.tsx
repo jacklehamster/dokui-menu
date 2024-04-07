@@ -1,7 +1,7 @@
-import { useRef } from 'react';
 import { Popup } from '..';
 import { PictureModel } from './model/PictureModel';
 import { Images } from './Images';
+import { Container } from '../container/Container';
 
 export interface Props {
   picture: PictureModel;
@@ -9,7 +9,6 @@ export interface Props {
 }
 
 export function Picture({ picture, removed }: Props): JSX.Element {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   return (
     <>
       <Popup
@@ -27,6 +26,7 @@ export function Picture({ picture, removed }: Props): JSX.Element {
           <Images images={picture.images} />
         </div>
       </Popup>
+      {picture.dialog && <Container dialog={picture.dialog} focusLess removed={removed} />}
     </>
   );
 }

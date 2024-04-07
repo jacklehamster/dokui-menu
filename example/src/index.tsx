@@ -14,6 +14,7 @@ export function showMenu() {
   const { popupControl } = openMenu({
     editor: true,
     dialog: {
+      disableBack: true,
       messages: [
         {
           text: "hello",
@@ -61,15 +62,15 @@ export function showMenu() {
                 positionFromRight: true,
               },
               images: [{ src: pikaSrc }],
+              dialog: {
+                layout: {
+                  position: [350,315],
+                  size: [200, 50],
+                  positionFromRight: true,
+                },
+                messages: ["Pika!"],
+              },  
             }],
-            dialog: {
-              layout: {
-                position: [350,315],
-                size: [200, 50],
-                positionFromRight: true,
-              },
-              messages: ["Pika!"],
-            },
           },
         },
         {

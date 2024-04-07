@@ -70,7 +70,9 @@ export function useEditMenu({ menu, active }: Props): Result {
     const item = items[index];
     const itemModel: MenuItemModel = !item ? {label: "untitled"} : (typeof(item) === "string" ? { label: item } : item);
     itemModel.dialog = itemModel.dialog ?? {
-      messages: [],
+      messages: [
+        { text: "" },
+      ],
     };
     items[index] = itemModel;
     menu.items = items;
