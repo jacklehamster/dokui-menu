@@ -5017,10 +5017,13 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
           ]
         }, undefined, true, undefined, this)
       }, undefined, false, undefined, this),
-      jsx_dev_runtime16.jsxDEV(Container2, {
-        pictures,
+      subdialog && jsx_dev_runtime16.jsxDEV(Container2, {
         dialog: subdialog,
         focusLess: true,
+        removed
+      }, undefined, false, undefined, this),
+      jsx_dev_runtime16.jsxDEV(Container2, {
+        pictures,
         menu: !textProgressing ? menu : undefined,
         prompt: !textProgressing ? prompt2 : undefined,
         onSelect,

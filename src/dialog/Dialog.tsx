@@ -168,8 +168,8 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
             </div>}
         </div>
       </Popup>
+      {subdialog && <Container dialog={subdialog} focusLess removed={removed} />}
       <Container pictures={pictures}
-        dialog={subdialog} focusLess
         menu={!textProgressing  ? menu : undefined}
         prompt={!textProgressing ? prompt : undefined}
         onSelect={onSelect}
