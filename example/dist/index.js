@@ -4863,6 +4863,7 @@ var Dialog = function({ dialog, onSelect, onClose, focusLess }) {
   const [prompt2, setPrompt] = import_react31.useState();
   const { active } = useActiveFocus({ disabled: focusLess });
   const { editing } = useEditContext();
+  const [textProgressing, setTextProgessing] = import_react31.useState(true);
   const { lockState, popupControl } = useControls({
     active,
     listener: import_react31.useMemo(() => ({
@@ -4875,6 +4876,13 @@ var Dialog = function({ dialog, onSelect, onClose, focusLess }) {
     const message2 = messages.at(index);
     return typeof message2 == "string" ? { text: message2 } : message2;
   }, [index, messages]);
+  import_react31.useEffect(() => {
+    setTextProgessing(true);
+    const timeout = setTimeout(() => {
+      setTextProgessing(false);
+    }, (message?.text?.length ?? 0) * PERIOD);
+    return () => clearTimeout(timeout);
+  }, [setTextProgessing, PERIOD, message]);
   import_react31.useEffect(() => {
     if (message?.menu || message?.prompt) {
       setMenu(message?.menu);
@@ -4946,7 +4954,7 @@ var Dialog = function({ dialog, onSelect, onClose, focusLess }) {
             jsx_dev_runtime16.jsxDEV("div", {
               style: { flex: 1 },
               children: jsx_dev_runtime16.jsxDEV("progressive-text", {
-                period: "30",
+                period: `${PERIOD}`,
                 children: message?.text
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this),
@@ -4966,8 +4974,8 @@ var Dialog = function({ dialog, onSelect, onClose, focusLess }) {
       }, undefined, false, undefined, this),
       jsx_dev_runtime16.jsxDEV(Container2, {
         pictures,
-        menu,
-        prompt: prompt2,
+        menu: !textProgressing ? menu : undefined,
+        prompt: !textProgressing ? prompt2 : undefined,
         onSelect,
         onClose: onCloseMenu,
         removed
@@ -27560,6 +27568,7 @@ class ProgressiveText extends HTMLElement {
   }
 }
 customElements.define("progressive-text", ProgressiveText);
+var PERIOD = 30;
 
 // src/index.tsx
 function showMenu() {

@@ -25,12 +25,15 @@ export interface Props {
   focusLess?: boolean;
 }
 
+const PERIOD = 30;
+
 export function Dialog({ dialog, onSelect, onClose, focusLess }: Props): JSX.Element {
   const { next, index } = useDialogState();
   const [menu, setMenu] = useState<MenuModel>();
   const [prompt, setPrompt] = useState<PromptModel>();
   const { active } = useActiveFocus({ disabled: focusLess });
   const { editing } = useEditContext();
+  const [textProgressing, setTextProgessing] = useState(true);
 
   const { lockState, popupControl } = useControls({
     active,
@@ -46,6 +49,15 @@ export function Dialog({ dialog, onSelect, onClose, focusLess }: Props): JSX.Ele
     const message = messages.at(index);
     return typeof(message) == "string" ? { text: message} : message;
   }, [index, messages]);
+
+  useEffect(() => {
+    setTextProgessing(true);
+    const timeout = setTimeout(() => {
+      setTextProgessing(false);
+    }, (message?.text?.length ?? 0) * PERIOD);
+    return () => clearTimeout(timeout);
+  }, [setTextProgessing, PERIOD, message]);
+
 
   useEffect(() => {
     if (message?.menu || message?.prompt) {
@@ -122,7 +134,7 @@ export function Dialog({ dialog, onSelect, onClose, focusLess }: Props): JSX.Ele
         }}
         onClick={() => popupControl.onAction()}>
           <div style={{ flex: 1 }}>
-            <progressive-text period="30">{message?.text}</progressive-text>
+            <progressive-text period={`${PERIOD}`}>{message?.text}</progressive-text>
           </div>
           {editing && active && <div style={{
               textAlign: "center",
@@ -136,7 +148,7 @@ export function Dialog({ dialog, onSelect, onClose, focusLess }: Props): JSX.Ele
             </div>}
         </div>
       </Popup>
-      <Container pictures={pictures} menu={menu} prompt={prompt}
+      <Container pictures={pictures} menu={!textProgressing  ? menu : undefined} prompt={!textProgressing ? prompt : undefined}
         onSelect={onSelect}
         onClose={onCloseMenu}
         removed={removed}></Container>
