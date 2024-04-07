@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { MenuModel } from "../../menu/model/MenuModel";
 import { useEditContext } from "./EditContextProvider";
 import { find, forEach, map } from "abstract-list";
-import { MenuItem, MenuItemModel } from "@/menu/model/MenuItemModel";
+import { MenuItem, MenuItemModel } from "../../menu/model/MenuItemModel";
 
 interface Props {
   menu: MenuModel;

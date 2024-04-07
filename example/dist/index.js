@@ -4030,7 +4030,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                   borderRadius: "5px",
                   padding: 10,
                   cursor: "text",
-                  minHeight: 25.5
+                  minHeight: 25
                 },
                 onClick: () => focus(),
                 children: [

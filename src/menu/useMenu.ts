@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useSelection } from "./selection/useSelection";
 import { LockStatus, useControls } from "../controls/useControls";
 import { PopupControlListener } from "../controls/PopupControlListener";
-import { MenuItem, MenuItemModel } from "./model/MenuItemModel";
+import { MenuItem } from "./model/MenuItemModel";
 import { List } from "abstract-list";
-import { useMouseHover } from "@/controls/useMouseHover";
+import { useMouseHover } from "../controls/useMouseHover";
 
 interface Props {
   items: List<MenuItem> | MenuItem[];

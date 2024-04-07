@@ -1,7 +1,7 @@
 import React, { ReactNode, useContext } from 'react';
 import { DEFAULT_EDIT_CONTEXT, EditContextType } from './EditContext';
 import { useEditControlContext } from './useInitEditContext';
-import { EditToggle } from '@/context/edit/EditToggle';
+import { EditToggle } from '../../context/edit/EditToggle';
 
 interface Props {
   children: ReactNode;

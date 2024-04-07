@@ -6,7 +6,7 @@ import { MenuItem } from './model/MenuItemModel';
 import { BasicPopup } from './BasicPopup';
 import { DialogModel } from '../dialog/model/DialogModel';
 import { PictureModel } from '../picture/model/PictureModel';
-import { PromptModel } from '@/prompt/model/PromptModel';
+import { PromptModel } from '../prompt/model/PromptModel';
 
 interface Props<I extends MenuItem = MenuItem> {
   pictures?: PictureModel[];

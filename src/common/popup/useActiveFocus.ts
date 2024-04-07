@@ -1,4 +1,4 @@
-import { useControlContext } from "@/context/controls/ControlContextProvider";
+import { useControlContext } from "../../context/controls/ControlContextProvider";
 import { useEffect, useState } from "react";
 
 interface Props {

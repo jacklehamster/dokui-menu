@@ -4,9 +4,9 @@ import { MenuModel } from "./model/MenuModel";
 import { useCallback, useMemo, useState } from "react";
 import { useKeyDown } from "../controls/useKeyDown";
 import { openMenu } from "./openMenu";
-import { useControlContext } from "@/context/controls/ControlContextProvider";
-import { promptText } from "@/prompt/promptText";
-import { Images } from "@/picture/Images";
+import { useControlContext } from "../context/controls/ControlContextProvider";
+import { promptText } from "../prompt/promptText";
+import { Images } from "../picture/Images";
 
 const ICON_STYLE: React.CSSProperties = {
   textAlign: "center",

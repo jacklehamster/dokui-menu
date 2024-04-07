@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useEditContext } from "./EditContextProvider";
-import { DialogModel } from "@/dialog/model/DialogModel";
-import { MessageModel } from "@/dialog/model/MessageModel";
+import { DialogModel } from "../../dialog/model/DialogModel";
+import { MessageModel } from "../../dialog/model/MessageModel";
 import { map } from "abstract-list";
 
 interface Props {

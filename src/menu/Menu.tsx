@@ -12,7 +12,7 @@ import { useEditMenu } from '../context/edit/useEditMenu';
 import { useActiveFocus } from '../common/popup/useActiveFocus';
 import { MenuRow } from './MenuRow';
 import { useMaxRows } from './useMaxRows';
-import { PromptModel } from '@/prompt/model/PromptModel';
+import { PromptModel } from '../prompt/model/PromptModel';
 
 export interface Props {
   menu: MenuModel;

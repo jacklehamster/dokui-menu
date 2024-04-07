@@ -1,4 +1,4 @@
-import { DialogModel } from "@/dialog/model/DialogModel";
+import { DialogModel } from "../../dialog/model/DialogModel";
 import { PopupModel } from "../../common/popup/PopupModel";
 import { Image } from "./ImageModel";
 

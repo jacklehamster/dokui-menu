@@ -64,7 +64,7 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                   borderRadius: "5px",
                   padding: 10,
                   cursor: "text",
-                  minHeight: 25.5,
+                  minHeight: 25,
                 }}
                 onClick={() => focus()}>
               <div ref={inputRef} contentEditable
