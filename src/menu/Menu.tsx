@@ -34,8 +34,8 @@ export function Menu({
   const [postClose, setPostClose] = useState<MenuItem>();
   const [hidden, setHidden] = useState(false);
  
-  const onBack = useCallback(() => {
-    if (!menu.disableBack) {
+  const onBack = useCallback((force?: boolean) => {
+    if (!menu.disableBack || force) {
       remove(onClose);
     }
   }, [remove, onClose, menu]);
@@ -59,7 +59,7 @@ export function Menu({
         setSub({});
         onSelect(item);
         if (item.back) {
-          onBack();
+          onBack(true);
         }
       }
     } else {

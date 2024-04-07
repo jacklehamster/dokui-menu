@@ -40,8 +40,8 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
     active,
     listener: useMemo(() => ({
       onAction: next,
-      onBack: next,
-    }), [next]),
+      onBack: dialog.disableBack ? undefined : next,
+    }), [next, dialog]),
   });
 
   const { editable, editMessage, messages } = useEditDialog({ dialog, active });

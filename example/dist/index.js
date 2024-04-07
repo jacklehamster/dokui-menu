@@ -4698,8 +4698,8 @@ var Menu2 = function({
   const [sub, setSub] = import_react8.useState({});
   const [postClose, setPostClose] = import_react8.useState();
   const [hidden, setHidden] = import_react8.useState(false);
-  const onBack = import_react8.useCallback(() => {
-    if (!menu.disableBack) {
+  const onBack = import_react8.useCallback((force) => {
+    if (!menu.disableBack || force) {
       remove(onClose);
     }
   }, [remove, onClose, menu]);
@@ -4720,7 +4720,7 @@ var Menu2 = function({
         setSub({});
         onSelect(item);
         if (item.back) {
-          onBack();
+          onBack(true);
         }
       }
     } else {
@@ -4869,8 +4869,8 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
     active,
     listener: import_react31.useMemo(() => ({
       onAction: next2,
-      onBack: next2
-    }), [next2])
+      onBack: dialog.disableBack ? undefined : next2
+    }), [next2, dialog])
   });
   const { editable, editMessage, messages } = useEditDialog({ dialog, active });
   const message = import_react31.useMemo(() => {
