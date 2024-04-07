@@ -40,9 +40,9 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   const { lockState, popupControl } = useControls({
     active,
     listener: useMemo(() => ({
-      onAction: next,
-      onBack: dialog.backEnabled ? next : undefined,
-    }), [next, dialog]),
+      onAction: textProgressing ? undefined : next,
+      onBack: !dialog.backEnabled || textProgressing ? undefined : next,
+    }), [next, dialog, textProgressing]),
   });
 
   const { editable, editMessage, insertMessage, deleteMessage, messages } = useEditDialog({ dialog, active });

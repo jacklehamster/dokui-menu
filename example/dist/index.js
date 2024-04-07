@@ -4894,9 +4894,9 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
   const { lockState, popupControl } = useControls({
     active,
     listener: import_react30.useMemo(() => ({
-      onAction: next2,
-      onBack: dialog.backEnabled ? next2 : undefined
-    }), [next2, dialog])
+      onAction: textProgressing ? undefined : next2,
+      onBack: !dialog.backEnabled || textProgressing ? undefined : next2
+    }), [next2, dialog, textProgressing])
   });
   const { editable, editMessage, insertMessage, deleteMessage, messages } = useEditDialog({ dialog, active });
   const message = import_react30.useMemo(() => {
@@ -27879,6 +27879,14 @@ function showMenu() {
                   ]
                 }
               }
+            ]
+          }
+        },
+        {
+          label: "long dialog",
+          dialog: {
+            messages: [
+              "eiifcbevudbghnfvjcfrt nekicvecjbuevhucvvjgrehe iifcbevudbgbecj itejinviru nftuvej bijevdcfhlk"
             ]
           }
         }

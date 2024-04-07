@@ -268,6 +268,14 @@ export function showMenu() {
             ]
           }
         },
+        {
+          label: "long dialog",
+          dialog: {
+            messages: [
+              "eiifcbevudbghnfvjcfrt nekicvecjbuevhucvvjgrehe iifcbevudbgbecj itejinviru nftuvej bijevdcfhlk",
+            ],
+          },
+        },
       ],
     },
   });
