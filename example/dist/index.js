@@ -4707,7 +4707,7 @@ var Menu2 = function({
   const [postClose, setPostClose] = import_react8.useState();
   const [hidden, setHidden] = import_react8.useState(false);
   const onBack = import_react8.useCallback((force) => {
-    if (!menu.disableBack || force) {
+    if (menu.backEnabled || force) {
       remove(onClose);
     }
   }, [remove, onClose, menu]);
@@ -4894,7 +4894,7 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
     active,
     listener: import_react30.useMemo(() => ({
       onAction: next2,
-      onBack: dialog.disableBack ? undefined : next2
+      onBack: dialog.backEnabled ? next2 : undefined
     }), [next2, dialog])
   });
   const { editable, editMessage, insertMessage, deleteMessage, messages } = useEditDialog({ dialog, active });
@@ -4984,7 +4984,7 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
         style: dialog.style,
         disabled: lockState === LockStatus.LOCKED,
         removed,
-        onBack: dialog.disableBack ? undefined : next2,
+        onBack: dialog.backEnabled ? next2 : undefined,
         clickThrough: focusLess,
         leaveBorderUnchanged: true,
         children: jsx_dev_runtime16.jsxDEV("div", {

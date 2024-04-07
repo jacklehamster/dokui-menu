@@ -4,6 +4,6 @@ import { Style } from "../Style";
 export interface PopupModel {
   layout?: Layout;
   style?: Style;
-  disableBack?: boolean;
+  backEnabled?: boolean;
   builtIn?: boolean;
 }

@@ -41,7 +41,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
     active,
     listener: useMemo(() => ({
       onAction: next,
-      onBack: dialog.disableBack ? undefined : next,
+      onBack: dialog.backEnabled ? next : undefined,
     }), [next, dialog]),
   });
 
@@ -142,7 +142,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
         style={dialog.style}
         disabled={lockState === LockStatus.LOCKED}
         removed={removed}
-        onBack={dialog.disableBack ? undefined : next}
+        onBack={dialog.backEnabled ? next : undefined}
         clickThrough={focusLess}
         leaveBorderUnchanged
       >

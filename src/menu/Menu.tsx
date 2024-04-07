@@ -35,7 +35,7 @@ export function Menu({
   const [hidden, setHidden] = useState(false);
  
   const onBack = useCallback((force?: boolean) => {
-    if (!menu.disableBack || force) {
+    if (menu.backEnabled || force) {
       remove(onClose);
     }
   }, [remove, onClose, menu]);
