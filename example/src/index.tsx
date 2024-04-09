@@ -13,16 +13,20 @@ const landscapeSrc = "https://www.adorama.com/alc/wp-content/uploads/2018/11/lan
 export function showMenu() {
   const { popupControl } = openMenu({
     editor: true,
+    layouts: [
+      {
+        name: "hello",
+        position: [350,100],
+        size: [200, 200],
+        positionFromRight: true,
+      },
+    ],
     dialog: {
       messages: [
         {
           text: "hello",
           pictures: [{
-            layout: {
-              position: [350,100],
-              size: [200, 200],
-              positionFromRight: true,
-            },
+            layout: "hello",
             images: [{
               src: landscapeSrc,
               size: "cover",
@@ -33,11 +37,7 @@ export function showMenu() {
         {
           text: "bye",
           pictures: [{
-            layout: {
-              position: [350,100],
-              size: [200, 200],
-              positionFromRight: true,
-            },
+            layout: "hello",
             images: [{ src:  byeSrc }],
           }],    
         },

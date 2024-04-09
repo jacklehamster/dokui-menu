@@ -2711,15 +2711,16 @@ var import_react24 = __toESM(require_react(), 1);
 var import_react25 = __toESM(require_react(), 1);
 var import_react26 = __toESM(require_react(), 1);
 var jsx_dev_runtime12 = __toESM(require_jsx_dev_runtime(), 1);
-var jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react27 = __toESM(require_react(), 1);
+var jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react28 = __toESM(require_react(), 1);
-var jsx_dev_runtime14 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react29 = __toESM(require_react(), 1);
-var jsx_dev_runtime15 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime14 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react30 = __toESM(require_react(), 1);
+var jsx_dev_runtime15 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react31 = __toESM(require_react(), 1);
 var import_react32 = __toESM(require_react(), 1);
+var import_react33 = __toESM(require_react(), 1);
 var jsx_dev_runtime16 = __toESM(require_jsx_dev_runtime(), 1);
 var useSelection = function({ items, maxRows = items.length.valueOf() }) {
   const [selectedIndex, setSelectedIndex] = import_react3.useState(0);
@@ -2866,7 +2867,7 @@ var useInitLayoutContext = function() {
   const layoutModels = import_react12.useMemo(() => ({}), []);
   const getLayout = import_react12.useCallback((layout) => {
     if (typeof layout === "string") {
-      return layoutModels[layout];
+      return layoutModels[layout] ?? {};
     }
     if (layout.name) {
       layoutModels[layout.name] = layout;
@@ -3118,6 +3119,7 @@ var BasicPopup = function(props) {
   }, undefined, false, undefined, this);
 };
 var openMenu = function({
+  layouts,
   pictures,
   menu,
   dialog,
@@ -3139,6 +3141,7 @@ var openMenu = function({
   const reactRoot = client.default.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
   const html = jsx_dev_runtime11.jsxDEV(BasicPopup, {
+    layouts,
     pictures,
     dialog,
     menu,
@@ -4211,7 +4214,18 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
     }, undefined, false, undefined, this)
   }, undefined, false, undefined, this);
 };
+var useLayoutRegistry = function({ layouts }) {
+  const { getLayout } = useLayoutContext();
+  import_react27.useEffect(() => {
+    A(layouts, (layout) => {
+      if (layout) {
+        getLayout(layout);
+      }
+    });
+  }, [layouts, useLayoutContext]);
+};
 var Container2 = function({
+  layouts,
   pictures,
   dialog,
   menu,
@@ -4229,6 +4243,7 @@ var Container2 = function({
   const onNext = import_react14.useCallback(async () => {
     setIndex((index2) => index2 + 1);
   }, [setIndex]);
+  useLayoutRegistry({ layouts });
   const elems = import_react14.useMemo(() => {
     return [
       dialog ? jsx_dev_runtime13.jsxDEV(Dialog, {
@@ -4269,8 +4284,8 @@ var Container2 = function({
 };
 var useEditMenu = function({ menu, active }) {
   const { editing } = useEditContext();
-  const [editCount, setEditCount] = import_react27.useState(0);
-  const addItem = import_react27.useCallback(async () => {
+  const [editCount, setEditCount] = import_react28.useState(0);
+  const addItem = import_react28.useCallback(async () => {
     const items2 = [];
     let i2;
     for (i2 = 1;x(menu.items, (item) => {
@@ -4287,7 +4302,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onAddSubmenu = import_react27.useCallback((index) => {
+  const onAddSubmenu = import_react28.useCallback((index) => {
     const items2 = [];
     A(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -4297,7 +4312,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onRemoveSubmenu = import_react27.useCallback((index) => {
+  const onRemoveSubmenu = import_react28.useCallback((index) => {
     const items2 = [];
     A(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -4307,7 +4322,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onAddDialog = import_react27.useCallback((index) => {
+  const onAddDialog = import_react28.useCallback((index) => {
     const items2 = [];
     A(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -4321,7 +4336,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onRemoveDialog = import_react27.useCallback((index) => {
+  const onRemoveDialog = import_react28.useCallback((index) => {
     const items2 = [];
     A(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -4331,7 +4346,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onToggleBack = import_react27.useCallback((index) => {
+  const onToggleBack = import_react28.useCallback((index) => {
     const items2 = [];
     A(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -4345,7 +4360,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onToggleHideOnSelect = import_react27.useCallback((index) => {
+  const onToggleHideOnSelect = import_react28.useCallback((index) => {
     const items2 = [];
     A(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -4359,7 +4374,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, [menu, setEditCount, editCount]);
-  const onEditLabel = import_react27.useCallback((index, text) => {
+  const onEditLabel = import_react28.useCallback((index, text) => {
     const items2 = [];
     A(menu.items, (item2) => items2.push(item2));
     const item = items2[index];
@@ -4369,7 +4384,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, []);
-  const deleteMenuItem = import_react27.useCallback((index) => {
+  const deleteMenuItem = import_react28.useCallback((index) => {
     const items2 = [];
     A(menu.items, (item, idx) => {
       if (index !== idx) {
@@ -4379,7 +4394,7 @@ var useEditMenu = function({ menu, active }) {
     menu.items = items2;
     setEditCount((count) => count + 1);
   }, []);
-  const items = import_react27.useMemo(() => {
+  const items = import_react28.useMemo(() => {
     if (!editing || !active) {
       return menu.items;
     }
@@ -4404,7 +4419,7 @@ var useEditMenu = function({ menu, active }) {
     ];
     return items2.concat(editMenu);
   }, [menu, editing, active, editCount, addItem]);
-  const visibleItems = import_react27.useMemo(() => {
+  const visibleItems = import_react28.useMemo(() => {
     const visibleItems2 = [];
     A(items, (item) => {
       const itemModel = !item ? { label: "untitled" } : typeof item === "string" ? { label: item } : item;
@@ -4454,10 +4469,10 @@ async function promptText({
 var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, onClick, disabled, editable, active, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, builtIn, deleteMenuItem, onAddDialog, onRemoveDialog }) {
   const itemModel = typeof item === "string" ? { label: item } : item;
   const rowSelected = selectedItem === item;
-  const [editMenuOn, setEditMenuOn] = import_react28.useState(false);
+  const [editMenuOn, setEditMenuOn] = import_react29.useState(false);
   const { popupControl } = useControlContext();
-  const builtInItem = import_react28.useMemo(() => builtIn ?? itemModel?.builtIn, [itemModel, builtIn]);
-  const promptDeleteItem = import_react28.useCallback(async () => {
+  const builtInItem = import_react29.useMemo(() => builtIn ?? itemModel?.builtIn, [itemModel, builtIn]);
+  const promptDeleteItem = import_react29.useCallback(async () => {
     const label = itemModel?.label;
     openMenu({
       dialog: {
@@ -4490,7 +4505,7 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
       }
     });
   }, [itemModel, popupControl, deleteMenuItem]);
-  const editMenu = import_react28.useMemo(() => ({
+  const editMenu = import_react29.useMemo(() => ({
     builtIn: true,
     layout: {
       position: [450, 200],
@@ -4555,9 +4570,9 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
     ]
   }), [itemModel, onAddSubmenu, onRemoveSubmenu, onToggleBack, onToggleHideOnSelect, onEditLabel, promptDeleteItem, index, popupControl]);
   useKeyDown({
-    enabled: import_react28.useMemo(() => editable && active && rowSelected && !builtInItem, [editable, active, rowSelected, itemModel, builtInItem]),
+    enabled: import_react29.useMemo(() => editable && active && rowSelected && !builtInItem, [editable, active, rowSelected, itemModel, builtInItem]),
     key: "KeyE",
-    callback: import_react28.useCallback(() => {
+    callback: import_react29.useCallback(() => {
       openMenu({
         menu: editMenu,
         popupControl
@@ -4565,7 +4580,7 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
     }, [editMenu, popupControl])
   });
   useKeyDown({
-    enabled: import_react28.useMemo(() => editable && active && rowSelected && !builtInItem, [editable, active, rowSelected, itemModel, builtInItem]),
+    enabled: import_react29.useMemo(() => editable && active && rowSelected && !builtInItem, [editable, active, rowSelected, itemModel, builtInItem]),
     key: "Backspace",
     callback: promptDeleteItem
   });
@@ -4680,9 +4695,9 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
   }, undefined, false, undefined, this);
 };
 var useMaxRows = function({ size }) {
-  const [maxRows, setMaxRows] = import_react29.useState(size);
-  const menuRef = import_react29.useRef(null);
-  import_react29.useEffect(() => {
+  const [maxRows, setMaxRows] = import_react30.useState(size);
+  const menuRef = import_react30.useRef(null);
+  import_react30.useEffect(() => {
     if (!menuRef.current)
       return;
     const resizeObserver = new ResizeObserver((entries) => {
@@ -4840,17 +4855,17 @@ var Menu2 = function({
   }, undefined, true, undefined, this);
 };
 var useDialogState = function() {
-  const [index, setIndex] = import_react31.useState(0);
+  const [index, setIndex] = import_react32.useState(0);
   return {
     index,
     setIndex,
-    next: import_react31.useCallback(() => setIndex((index2) => index2 + 1), [setIndex])
+    next: import_react32.useCallback(() => setIndex((index2) => index2 + 1), [setIndex])
   };
 };
 var useEditDialog = function({ dialog, active }) {
   const { editing } = useEditContext();
-  const [editCount, setEditCount] = import_react32.useState(0);
-  const insertMessage = import_react32.useCallback((index, text) => {
+  const [editCount, setEditCount] = import_react33.useState(0);
+  const insertMessage = import_react33.useCallback((index, text) => {
     const messages2 = B(dialog.messages, (m2) => m2).filter((m2) => !!m2);
     messages2.splice(index, 0, {
       text
@@ -4858,13 +4873,13 @@ var useEditDialog = function({ dialog, active }) {
     dialog.messages = messages2;
     setEditCount((count) => count + 1);
   }, [dialog]);
-  const deleteMessage = import_react32.useCallback((index) => {
+  const deleteMessage = import_react33.useCallback((index) => {
     const messages2 = B(dialog.messages, (m2) => m2).filter((m2) => !!m2);
     messages2.splice(index, 1);
     dialog.messages = messages2;
     setEditCount((count) => count + 1);
   }, [dialog]);
-  const editMessage = import_react32.useCallback((index, text) => {
+  const editMessage = import_react33.useCallback((index, text) => {
     const messages2 = B(dialog.messages, (m2) => m2).filter((m2) => !!m2);
     const message = messages2[index];
     const messageModel = !message ? {} : typeof message === "string" ? { text: message } : message;
@@ -4873,7 +4888,7 @@ var useEditDialog = function({ dialog, active }) {
     dialog.messages = messages2;
     setEditCount((count) => count + 1);
   }, [dialog]);
-  const messages = import_react32.useMemo(() => !active ? dialog.messages : B(dialog.messages, (m2) => m2), [dialog, editCount, active]);
+  const messages = import_react33.useMemo(() => !active ? dialog.messages : B(dialog.messages, (m2) => m2), [dialog, editCount, active]);
   return {
     ...dialog,
     messages,
@@ -4885,55 +4900,55 @@ var useEditDialog = function({ dialog, active }) {
 };
 var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
   const { next: next2, index } = useDialogState();
-  const [menu, setMenu] = import_react30.useState();
-  const [prompt2, setPrompt] = import_react30.useState();
+  const [menu, setMenu] = import_react31.useState();
+  const [prompt2, setPrompt] = import_react31.useState();
   const { active } = useActiveFocus({ disabled: focusLess });
   const { editing } = useEditContext();
-  const [textProgressing, setTextProgressing] = import_react30.useState(true);
-  const [subdialog, setSubDialog] = import_react30.useState();
+  const [textProgressing, setTextProgressing] = import_react31.useState(true);
+  const [subdialog, setSubDialog] = import_react31.useState();
   const { lockState, popupControl } = useControls({
     active,
-    listener: import_react30.useMemo(() => ({
+    listener: import_react31.useMemo(() => ({
       onAction: textProgressing ? undefined : next2,
       onBack: !dialog.backEnabled || textProgressing ? undefined : next2
     }), [next2, dialog, textProgressing])
   });
   const { editable, editMessage, insertMessage, deleteMessage, messages } = useEditDialog({ dialog, active });
-  const message = import_react30.useMemo(() => {
+  const message = import_react31.useMemo(() => {
     const message2 = messages.at(index);
     return typeof message2 == "string" ? { text: message2 } : message2;
   }, [index, messages]);
-  import_react30.useEffect(() => {
+  import_react31.useEffect(() => {
     setTextProgressing(true);
     const timeout = setTimeout(() => {
       setTextProgressing(false);
     }, (message?.text?.length ?? 0) * PERIOD);
     return () => clearTimeout(timeout);
   }, [setTextProgressing, PERIOD, message]);
-  import_react30.useEffect(() => {
+  import_react31.useEffect(() => {
     setSubDialog(message?.subdialog);
     setMenu(message?.menu);
     setPrompt(message?.prompt);
   }, [message, setMenu, setPrompt, setSubDialog]);
   const { removed, remove } = useRemove();
-  import_react30.useEffect(() => {
+  import_react31.useEffect(() => {
     if (index >= messages.length.valueOf()) {
       remove(onClose);
     }
   }, [messages, index, remove, onClose]);
-  const onCloseMenu = import_react30.useCallback(async () => {
+  const onCloseMenu = import_react31.useCallback(async () => {
     setMenu(undefined);
     next2();
   }, [setMenu, next2]);
-  const [editDialogOn, setEditDialogOn] = import_react30.useState(false);
+  const [editDialogOn, setEditDialogOn] = import_react31.useState(false);
   useKeyDown({
-    enabled: import_react30.useMemo(() => editable && active && !dialog.builtIn, [active, dialog]),
+    enabled: import_react31.useMemo(() => editable && active && !dialog.builtIn, [active, dialog]),
     key: "KeyE",
-    callback: import_react30.useCallback(() => {
+    callback: import_react31.useCallback(() => {
       setEditDialogOn((value) => !value);
     }, [setEditDialogOn])
   });
-  const editMenu = import_react30.useMemo(() => ({
+  const editMenu = import_react31.useMemo(() => ({
     builtIn: true,
     layout: {
       position: [50, 200],
@@ -4977,7 +4992,7 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
       { label: "exit", builtIn: true, back: true }
     ]
   }), [message, index, popupControl, editMessage, insertMessage, deleteMessage]);
-  const pictures = import_react30.useMemo(() => [...B(dialog.pictures ?? [], (p3) => p3), ...B(message?.pictures ?? [], (p3) => p3)].filter((p3) => !!p3), [dialog, message]);
+  const pictures = import_react31.useMemo(() => [...B(dialog.pictures ?? [], (p3) => p3), ...B(message?.pictures ?? [], (p3) => p3)].filter((p3) => !!p3), [dialog, message]);
   return jsx_dev_runtime16.jsxDEV(jsx_dev_runtime16.Fragment, {
     children: [
       jsx_dev_runtime16.jsxDEV(Popup2, {
@@ -27626,16 +27641,20 @@ var PERIOD = 30;
 function showMenu() {
   const { popupControl } = openMenu({
     editor: true,
+    layouts: [
+      {
+        name: "hello",
+        position: [350, 100],
+        size: [200, 200],
+        positionFromRight: true
+      }
+    ],
     dialog: {
       messages: [
         {
           text: "hello",
           pictures: [{
-            layout: {
-              position: [350, 100],
-              size: [200, 200],
-              positionFromRight: true
-            },
+            layout: "hello",
             images: [{
               src: landscapeSrc,
               size: "cover"
@@ -27646,11 +27665,7 @@ function showMenu() {
         {
           text: "bye",
           pictures: [{
-            layout: {
-              position: [350, 100],
-              size: [200, 200],
-              positionFromRight: true
-            },
+            layout: "hello",
             images: [{ src: byeSrc }]
           }]
         }

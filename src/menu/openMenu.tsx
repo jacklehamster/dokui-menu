@@ -7,8 +7,11 @@ import { BasicPopup } from './BasicPopup';
 import { DialogModel } from '../dialog/model/DialogModel';
 import { PictureModel } from '../picture/model/PictureModel';
 import { PromptModel } from '../prompt/model/PromptModel';
+import { LayoutModel } from '..';
+import { List } from 'abstract-list';
 
 interface Props<I extends MenuItem = MenuItem> {
+  layouts?: List<LayoutModel> | LayoutModel[];
   pictures?: PictureModel[];
   menu?: MenuModel<I>,
   dialog?: DialogModel<I>,
@@ -22,6 +25,7 @@ interface Props<I extends MenuItem = MenuItem> {
 }
 
 export function openMenu<I extends MenuItem = MenuItem>({
+  layouts,
   pictures,
   menu,
   dialog,
@@ -43,7 +47,7 @@ export function openMenu<I extends MenuItem = MenuItem>({
   const reactRoot = ReactDOM.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
 
-  const html = <BasicPopup pictures={pictures} dialog={dialog} menu={menu} prompt={prompt}
+  const html = <BasicPopup layouts={layouts} pictures={pictures} dialog={dialog} menu={menu} prompt={prompt}
     onSelect={onSelect}
     onPrompt={onPrompt}
     detach={detach}

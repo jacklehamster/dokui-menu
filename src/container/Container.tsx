@@ -1,5 +1,5 @@
 import { Menu } from "../menu/Menu";
-import { Dialog, MenuModel } from "..";
+import { Dialog, LayoutModel, MenuModel } from "..";
 import { DialogModel } from "../dialog/model/DialogModel";
 import { MenuItem } from "../menu/model/MenuItemModel";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -7,8 +7,11 @@ import { PictureModel } from "../picture/model/PictureModel";
 import { Picture } from "../picture/Picture";
 import { PromptModel } from "../prompt/model/PromptModel";
 import { Prompt } from "../prompt/Prompt";
+import { useLayoutRegistry } from "../common/layout/useLayoutRegistry";
+import { List } from "abstract-list";
 
 export interface Props {
+  layouts?: List<LayoutModel>;
   pictures?: PictureModel[];
   dialog?: DialogModel;
   menu?: MenuModel;
@@ -21,6 +24,7 @@ export interface Props {
 }
 
 export function Container({
+  layouts,
   pictures,
   dialog,
   menu,
@@ -35,6 +39,8 @@ export function Container({
   const onNext = useCallback(async () => {
     setIndex(index => index + 1);
   }, [setIndex]);
+
+  useLayoutRegistry({ layouts });
 
   const elems = useMemo(() => {
     return [
