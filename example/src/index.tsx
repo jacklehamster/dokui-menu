@@ -276,6 +276,33 @@ export function showMenu() {
             ],
           },
         },
+        {
+          hideOnSelect: true,
+          label: "dialog with some messages hidden",
+          dialog: {
+            messages: [
+              "next will be hidden",
+              {
+                hideDialog: true,
+              },
+              "next will be hidden, with a menu",
+              {
+                hideDialog: true,
+                menu: {
+                  items: [
+                    "item1",
+                    "item2",
+                    {
+                      label: "back",
+                      back: true,
+                    },
+                  ],
+                },
+              },
+              "back to dialog",
+            ],
+          },
+        },
       ],
     },
   });

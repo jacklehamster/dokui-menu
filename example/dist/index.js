@@ -4995,7 +4995,7 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
   const pictures = import_react31.useMemo(() => [...B(dialog.pictures ?? [], (p3) => p3), ...B(message?.pictures ?? [], (p3) => p3)].filter((p3) => !!p3), [dialog, message]);
   return jsx_dev_runtime16.jsxDEV(jsx_dev_runtime16.Fragment, {
     children: [
-      jsx_dev_runtime16.jsxDEV(Popup2, {
+      !message?.hideDialog && jsx_dev_runtime16.jsxDEV(Popup2, {
         layout: dialog.layout ?? {},
         style: dialog.style,
         disabled: lockState === LockStatus.LOCKED,
@@ -27902,6 +27902,33 @@ function showMenu() {
           dialog: {
             messages: [
               "eiifcbevudbghnfvjcfrt nekicvecjbuevhucvvjgrehe iifcbevudbgbecj itejinviru nftuvej bijevdcfhlk"
+            ]
+          }
+        },
+        {
+          hideOnSelect: true,
+          label: "dialog with some messages hidden",
+          dialog: {
+            messages: [
+              "next will be hidden",
+              {
+                hideDialog: true
+              },
+              "next will be hidden, with a menu",
+              {
+                hideDialog: true,
+                menu: {
+                  items: [
+                    "item1",
+                    "item2",
+                    {
+                      label: "back",
+                      back: true
+                    }
+                  ]
+                }
+              },
+              "back to dialog"
             ]
           }
         }

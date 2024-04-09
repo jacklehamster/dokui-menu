@@ -20,7 +20,7 @@ export interface MenuItemModel<I extends MenuItem = MenuItem> {
   showTriangle?: boolean;
   onHover?: {
     dialog?: DialogModel<I>;
-    pictures: PictureModel[];
+    pictures?: PictureModel[];
   }
 }
 

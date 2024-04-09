@@ -10,6 +10,7 @@ export interface MessageModel<I extends MenuItem = MenuItem> {
   prompt?: PromptModel;
   pictures?: PictureModel[];
   subdialog?: DialogModel;
+  hideDialog?: boolean;
 }
 
 export type Message<I extends MenuItem = MenuItem> = MessageModel<I> | string;

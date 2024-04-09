@@ -1,6 +1,6 @@
 import { forEach, List } from "abstract-list";
 import { LayoutModel } from "./Layout";
-import { useLayoutContext } from "@/context/layout/LayoutContextProvider";
+import { useLayoutContext } from "../../context/layout/LayoutContextProvider";
 import { useEffect } from "react";
 
 interface Props {
