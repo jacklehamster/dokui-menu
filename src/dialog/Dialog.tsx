@@ -36,20 +36,20 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   const { editing } = useEditContext();
   const [textProgressing, setTextProgressing] = useState(true);
   const [subdialog, setSubDialog] = useState<DialogModel>();
-  const [actionInProgress, setActionInProgress] = useState<Promise<void>>();
+  const [actionPromise, setActionPromise] = useState<Promise<void>>();
   const [waitingForAction, setWaitingForAction] = useState(false);
 
   const nextMessage = useCallback(() => {
     if (waitingForAction) {
       return;
     }
-    if (actionInProgress) {
+    if (actionPromise) {
       setWaitingForAction(true);
-      actionInProgress.then(next);
+      actionPromise.then(next);
     } else {
       next();
     }
-  }, [next, actionInProgress, setWaitingForAction, waitingForAction]);
+  }, [next, actionPromise, setWaitingForAction, waitingForAction]);
 
   const { lockState, popupControl } = useControls({
     active,
@@ -71,12 +71,21 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   }, [message, setWaitingForAction]);
 
   useEffect(() => {
-    setActionInProgress(message?.action?.());
-  }, [message, setActionInProgress]);
+    setActionPromise(message?.action?.());
+  }, [message, setActionPromise]);
 
   useEffect(() => {
-    actionInProgress?.then(() => setActionInProgress(undefined));
-  }, [actionInProgress, setActionInProgress]);
+    actionPromise?.then(() => setActionPromise(undefined));
+  }, [actionPromise, setActionPromise]);
+
+  useEffect(() => {
+    if (message?.autoNext !== undefined && !waitingForAction) {
+      const timeout = setTimeout(nextMessage, message.autoNext);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [message, nextMessage, waitingForAction]);
 
   useEffect(() => {
     setTextProgressing(true);

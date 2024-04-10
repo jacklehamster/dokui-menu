@@ -12,6 +12,7 @@ export interface MessageModel<I extends MenuItem = MenuItem> {
   subdialog?: DialogModel;
   hideDialog?: boolean;
   action?: () => Promise<void>;
+  autoNext?: number;
 }
 
 export type Message<I extends MenuItem = MenuItem> = MessageModel<I> | string;

@@ -326,6 +326,38 @@ export function showMenu() {
             ],
           },
         },
+        {
+          label: "dialog with auto next",
+          dialog: {
+            messages: [
+              {
+                autoNext: 3000,
+                text: "autoNext in 3 sec",
+              },
+              {
+                text: "autoNext in 3 sec. async first",
+                autoNext: 3000,
+                action() {
+                    return new Promise(resolve => {
+                      setTimeout(resolve, 2000);
+                    });
+                },
+              },
+              {
+                text: "autoNext in 3 sec. async afterwards",
+                autoNext: 3000,
+                action() {
+                    return new Promise(resolve => {
+                      setTimeout(resolve, 4000);
+                    });
+                },
+              },
+              {
+                text: "DONE",
+              }
+            ],
+          },
+        },        
       ],
     },
   });
