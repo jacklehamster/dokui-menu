@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Popup } from '../common/popup/Popup';
 import { PromptModel } from './model/PromptModel';
 import { Label } from './components/Label';

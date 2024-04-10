@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLayoutContext } from "../../context/layout/LayoutContextProvider";
 import { Layout } from "./Layout";
 
@@ -7,9 +7,10 @@ const DEFAULT_VERTICAL_PADDING = 50;
 
 interface Props {
   layout: Layout;
+  setVisible(visible: boolean): void;
 }
 
-export function usePopupLayout({ layout }: Props) {
+export function usePopupLayout({ layout, setVisible }: Props) {
   const { getLayout, uniqueLayout } = useLayoutContext();
   const layoutModel = getLayout(layout);
   const x = layoutModel.position?.[0] || DEFAULT_HORIZONTAL_PADDING;
@@ -21,8 +22,6 @@ export function usePopupLayout({ layout }: Props) {
   const width = layoutModel.size?.[0] || undefined;
   const height = layoutModel.size?.[1] || undefined;
 
-  const [visible, setVisible] = useState(true);
-
   useEffect(() => {
     const uid = typeof (layout) === "string" ? layout : layout.name;
     if (uid) {
@@ -32,5 +31,5 @@ export function usePopupLayout({ layout }: Props) {
 
 
 
-  return { left, top, right, bottom, width, height, visible };
+  return { left, top, right, bottom, width, height };
 }

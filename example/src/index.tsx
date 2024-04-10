@@ -357,7 +357,64 @@ export function showMenu() {
               }
             ],
           },
-        },        
+        }, 
+        {
+          label: "test menu hiding",
+          dialog: {
+            layout: {
+              name: "main-dialog",
+              position: [undefined, 200],
+              positionFromBottom: true,
+            },
+            messages: [
+              { text: "Hello there." },
+              {
+                text: "How are you?",
+                menu: {
+                  layout: {
+                    position: [400, 360],
+                    size: [undefined, 150],
+                    positionFromRight: true,
+                    positionFromBottom: true,
+                  },
+                  items: [
+                    {
+                      label: "I don't know",
+                      dialog: {
+                        layout: {
+                          position: [100, 100],
+                          size: [300, 200],
+                        },
+                        messages: [
+                          { text: "You should know!" },
+                        ],
+                      },
+                    },
+                    {
+                      back: true,
+                      label: "good",
+                      dialog: {
+                        layout: {
+                          name: "main-dialog",
+                          position: [0, 0],
+                          size: [300, 300],
+                        },
+                        messages: [
+                          { text: "That's nice to know!" },
+                        ],
+                      },
+                    },
+                    {
+                      back: true,
+                      label: "bad",
+                    },
+                  ],
+                },
+              },
+              { text: "Bye bye." },
+            ],
+          }
+        },      
       ],
     },
   });

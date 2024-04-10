@@ -46,14 +46,18 @@ export function Popup({
   zIndex,
   clickThrough,
   leaveBorderUnchanged,
+  setVisible,
+  visible,
 }: PopupProps): JSX.Element {
   const [h, setH] = useState(0);
   useEffect(() => {
     requestAnimationFrame(() => setH(100));
   }, [setH]);
 
-  const { top, left, right, bottom, width, height, visible } = usePopupLayout({
+  const [localVisible, setLocalVisible] = useState(true);
+  const { top, left, right, bottom, width, height, } = usePopupLayout({
     layout,
+    setVisible: setVisible ?? setLocalVisible,
   });
 
   return (
@@ -73,7 +77,7 @@ export function Popup({
           ...OVERLAP,
           left, top, right, bottom, width, height: fit ? 0 : height,
           fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
-          display: visible ? "" : "none",
+          display: (visible ?? localVisible) ? "" : "none",
         }}>
         <div className="pop-up"
         style={{

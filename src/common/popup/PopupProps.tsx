@@ -13,4 +13,6 @@ export interface PopupProps {
   zIndex?: number;
   clickThrough?: boolean;
   leaveBorderUnchanged?: boolean;
+  setVisible?(visible: boolean): void;
+  visible?: boolean;
 }

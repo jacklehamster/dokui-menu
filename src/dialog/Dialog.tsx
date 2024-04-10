@@ -17,6 +17,7 @@ import { useEditDialog } from '../context/edit/useEditDialog';
 import { map } from 'abstract-list';
 import { PictureModel } from '../picture/model/PictureModel';
 import { promptText } from '../prompt/promptText';
+import { useHideMessage } from './useHideMessage';
 
 export interface Props {
   dialog: DialogModel;
@@ -169,6 +170,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   }), [message, index, popupControl, editMessage, insertMessage, deleteMessage]);
 
   const pictures = useMemo(() => [...map(dialog.pictures ?? [], p => p), ...map(message?.pictures ?? [], p => p)].filter((p): p is PictureModel => !!p), [dialog, message]);
+  const { visible, setVisible } = useHideMessage({ message });
 
   return (
     <>
@@ -180,6 +182,8 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
         onBack={dialog.backEnabled ? next : undefined}
         clickThrough={focusLess}
         leaveBorderUnchanged
+        visible={visible}
+        setVisible={setVisible}
       >
         <div style={{
           width: "100%",

@@ -2,6 +2,7 @@ import { Popup } from '..';
 import { PictureModel } from './model/PictureModel';
 import { Images } from './Images';
 import { Container } from '../container/Container';
+import { useState } from 'react';
 
 export interface Props {
   picture: PictureModel;
