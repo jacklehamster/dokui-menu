@@ -36,13 +36,27 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   const { editing } = useEditContext();
   const [textProgressing, setTextProgressing] = useState(true);
   const [subdialog, setSubDialog] = useState<DialogModel>();
+  const [actionInProgress, setActionInProgress] = useState<Promise<void>>();
+  const [waitingForAction, setWaitingForAction] = useState(false);
+
+  const nextMessage = useCallback(() => {
+    if (waitingForAction) {
+      return;
+    }
+    if (actionInProgress) {
+      setWaitingForAction(true);
+      actionInProgress.then(next);
+    } else {
+      next();
+    }
+  }, [next, actionInProgress, setWaitingForAction, waitingForAction]);
 
   const { lockState, popupControl } = useControls({
     active,
     listener: useMemo(() => ({
-      onAction: textProgressing ? undefined : next,
-      onBack: !dialog.backEnabled || textProgressing ? undefined : next,
-    }), [next, dialog, textProgressing]),
+      onAction: textProgressing ? undefined : nextMessage,
+      onBack: !dialog.backEnabled || textProgressing ? undefined : nextMessage,
+    }), [nextMessage, dialog, textProgressing]),
   });
 
   const { editable, editMessage, insertMessage, deleteMessage, messages } = useEditDialog({ dialog, active });
@@ -51,6 +65,18 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
     const message = messages.at(index);
     return typeof(message) == "string" ? { text: message} : message;
   }, [index, messages]);
+ 
+  useEffect(() => {
+    setWaitingForAction(false);
+  }, [message, setWaitingForAction]);
+
+  useEffect(() => {
+    setActionInProgress(message?.action?.());
+  }, [message, setActionInProgress]);
+
+  useEffect(() => {
+    actionInProgress?.then(() => setActionInProgress(undefined));
+  }, [actionInProgress, setActionInProgress]);
 
   useEffect(() => {
     setTextProgressing(true);
@@ -76,8 +102,8 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
 
   const onCloseMenu = useCallback(async () => {
     setMenu(undefined);
-    next();
-  }, [setMenu, next]);
+    nextMessage();
+  }, [setMenu, nextMessage]);
 
   const [editDialogOn, setEditDialogOn] = useState(false);
   useKeyDown({
@@ -153,9 +179,9 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
           padding: 10,
         }}
         onClick={() => popupControl.onAction()}>
-          <div style={{ flex: 1 }}>
+          {!waitingForAction && <div style={{ flex: 1 }}>
             <progressive-text period={`${PERIOD}`}>{message?.text}</progressive-text>
-          </div>
+          </div>}
           {editing && active && <div style={{
               textAlign: "center",
               backgroundColor: "blue",

@@ -8,7 +8,6 @@ declare global {
 
 export interface ProgressiveTextProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
   period?: number | string;
-  onCharacter?: () => void;
 }
 
 export class ProgressiveText extends HTMLElement {

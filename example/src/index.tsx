@@ -303,6 +303,29 @@ export function showMenu() {
             ],
           },
         },
+        {
+          label: "dialog with async callback",
+          dialog: {
+            messages: [
+              {
+                text: "wait 3 sec",
+                action() {
+                    return new Promise(resolve => {
+                      setTimeout(resolve, 3000);
+                    });
+                },
+              },
+              {
+                text: "wait 3 sec again",
+                action() {
+                    return new Promise(resolve => {
+                      setTimeout(resolve, 3000);
+                    });
+                },
+              }
+            ],
+          },
+        },
       ],
     },
   });
