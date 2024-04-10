@@ -36,9 +36,10 @@ export function useMenu({ items, maxRows, onSelect, onBack, active }: Props): Re
       return;
     }
     if (typeof (item) === "object" && item.action) {
-      item.action();
+      item.action().then(() => onSelect(item));
+    } else {
+      onSelect(item);
     }
-    onSelect(item);
   }, [onSelect]);
 
   const onMenuAction = useCallback((index: number) => {

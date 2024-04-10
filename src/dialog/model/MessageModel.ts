@@ -11,6 +11,7 @@ export interface MessageModel<I extends MenuItem = MenuItem> {
   pictures?: PictureModel[];
   subdialog?: DialogModel;
   hideDialog?: boolean;
+  action?: () => Promise<void>;
 }
 
 export type Message<I extends MenuItem = MenuItem> = MessageModel<I> | string;

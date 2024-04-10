@@ -47,7 +47,12 @@ export function openMenu<I extends MenuItem = MenuItem>({
   const reactRoot = ReactDOM.createRoot(rootElem);
   const detach = async () => reactRoot.unmount();
 
-  const html = <BasicPopup layouts={layouts} pictures={pictures} dialog={dialog} menu={menu} prompt={prompt}
+  const html = <BasicPopup 
+    layouts={layouts} 
+    pictures={pictures} 
+    dialog={dialog} 
+    menu={menu} 
+    prompt={prompt}
     onSelect={onSelect}
     onPrompt={onPrompt}
     detach={detach}
