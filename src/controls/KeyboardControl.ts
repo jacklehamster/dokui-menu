@@ -10,7 +10,7 @@ export class KeyboardControl implements Active {
   private onKeyUp: () => void;
   private onKeyDown: (e: KeyboardEvent) => void;
 
-  constructor(popupControl: PopupControl, private keyMapping: KeyMapping = {
+  constructor(popupControl: PopupControl, keyMapping: KeyMapping = {
     KeyS: PopupControl.DOWN,
     ArrowDown: PopupControl.DOWN,
     KeyW: PopupControl.UP,

@@ -81,7 +81,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
 
   useEffect(() => {
     if (message) {
-      if ((message.autoNext !== undefined || message.text === undefined) && !waitingForAction) {
+      if (message.autoNext !== undefined && !waitingForAction) {
         const timeout = setTimeout(nextMessage, message.autoNext);
         return () => {
           clearTimeout(timeout);
@@ -176,7 +176,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
 
   return (
     <>
-      {!message?.hideDialog && <Popup
+      {message?.text && <Popup
         layout={dialog.layout ?? {}}
         style={dialog.style}
         disabled={lockState === LockStatus.LOCKED}

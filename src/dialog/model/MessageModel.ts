@@ -10,7 +10,6 @@ export interface MessageModel<I extends MenuItem = MenuItem> {
   prompt?: PromptModel;
   pictures?: PictureModel[];
   subdialog?: DialogModel;
-  hideDialog?: boolean;
   action?: () => Promise<void>;
   autoNext?: number;
 }

@@ -283,11 +283,9 @@ export function showMenu() {
             messages: [
               "next will be hidden",
               {
-                hideDialog: true,
               },
               "next will be hidden, with a menu",
               {
-                hideDialog: true,
                 menu: {
                   items: [
                     "item1",
@@ -416,6 +414,7 @@ export function showMenu() {
                   async action() {
                       console.log("DONE...");
                   },
+                  autoNext: 0,
               },
             ],
           }
