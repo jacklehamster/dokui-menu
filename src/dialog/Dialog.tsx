@@ -176,7 +176,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
 
   return (
     <>
-      {!message?.hideDialog && <Popup
+      {(!message?.hideDialog && message?.text) && <Popup
         layout={dialog.layout ?? {}}
         style={dialog.style}
         disabled={lockState === LockStatus.LOCKED}
@@ -204,9 +204,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
               width: "30px",
               height: "30px",
               color: 'white',
-            }}>
-              E
-            </div>}
+            }}>E</div>}
         </div>
       </Popup>}
       {subdialog && <Container dialog={subdialog} focusLess removed={removed} />}
