@@ -412,6 +412,11 @@ export function showMenu() {
                 },
               },
               { text: "Bye bye." },
+              {
+                  async action() {
+                      console.log("DONE...");
+                  },
+              },
             ],
           }
         },      

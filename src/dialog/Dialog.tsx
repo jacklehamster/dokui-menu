@@ -80,11 +80,13 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   }, [actionPromise, setActionPromise]);
 
   useEffect(() => {
-    if (message?.autoNext !== undefined && !waitingForAction) {
-      const timeout = setTimeout(nextMessage, message.autoNext);
-      return () => {
-        clearTimeout(timeout);
-      };
+    if (message) {
+      if ((message.autoNext !== undefined || message.text === undefined) && !waitingForAction) {
+        const timeout = setTimeout(nextMessage, message.autoNext);
+        return () => {
+          clearTimeout(timeout);
+        };
+      }  
     }
   }, [message, nextMessage, waitingForAction]);
 

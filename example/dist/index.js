@@ -4959,11 +4959,13 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
     actionPromise?.then(() => setActionPromise(undefined));
   }, [actionPromise, setActionPromise]);
   import_react31.useEffect(() => {
-    if (message?.autoNext !== undefined && !waitingForAction) {
-      const timeout = setTimeout(nextMessage, message.autoNext);
-      return () => {
-        clearTimeout(timeout);
-      };
+    if (message) {
+      if ((message.autoNext !== undefined || message.text === undefined) && !waitingForAction) {
+        const timeout = setTimeout(nextMessage, message.autoNext);
+        return () => {
+          clearTimeout(timeout);
+        };
+      }
     }
   }, [message, nextMessage, waitingForAction]);
   import_react31.useEffect(() => {
@@ -28091,7 +28093,12 @@ function showMenu() {
                   ]
                 }
               },
-              { text: "Bye bye." }
+              { text: "Bye bye." },
+              {
+                async action() {
+                  console.log("DONE...");
+                }
+              }
             ]
           }
         }
