@@ -176,7 +176,7 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
 
   return (
     <>
-      {(!message?.hideDialog && message?.text) && <Popup
+      {!message?.hideDialog && <Popup
         layout={dialog.layout ?? {}}
         style={dialog.style}
         disabled={lockState === LockStatus.LOCKED}
