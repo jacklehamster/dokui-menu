@@ -7,7 +7,7 @@ export function useInitLayoutContext() {
   const layoutModels = useMemo<Record<string, LayoutModel>>(() => ({}), []);
   const getLayout = useCallback((layout: Layout) => {
     if (typeof layout === "string") {
-      return layoutModels[layout] ?? {};
+      return layoutModels[layout] ?? undefined;
     }
     if (layout.name) {
       layoutModels[layout.name] = layout;

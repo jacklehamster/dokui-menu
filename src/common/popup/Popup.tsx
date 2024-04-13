@@ -55,7 +55,7 @@ export function Popup({
   }, [setH]);
 
   const [localVisible, setLocalVisible] = useState(true);
-  const { top, left, right, bottom, width, height, } = usePopupLayout({
+  const { top, left, right, bottom, width, height, valid } = usePopupLayout({
     layout,
     setVisible: setVisible ?? setLocalVisible,
   });
@@ -77,7 +77,7 @@ export function Popup({
           ...OVERLAP,
           left, top, right, bottom, width, height: fit ? 0 : height,
           fontSize: style?.fontSize ?? DEFAULT_FONT_SIZE,
-          display: (visible ?? localVisible) ? "" : "none",
+          display: valid && (visible ?? localVisible) ? "" : "none",
         }}>
         <div className="pop-up"
         style={{
