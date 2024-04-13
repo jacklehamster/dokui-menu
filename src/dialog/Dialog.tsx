@@ -105,12 +105,13 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   }, [message, setMenu, setPrompt, setSubDialog]);
 
   const { removed, remove } = useRemove();
+  const { visible, setVisible } = useHideMessage({ message });
 
   useEffect(() => {
-    if (index >= messages.length.valueOf()) {
+    if (index >= messages.length.valueOf() && visible) {
       remove(onClose);
     }
-  }, [messages, index, remove, onClose]);
+  }, [messages, index, remove, onClose, visible]);
 
   const onCloseMenu = useCallback(async () => {
     setMenu(undefined);
@@ -172,50 +173,51 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
   }), [message, index, popupControl, editMessage, insertMessage, deleteMessage]);
 
   const pictures = useMemo(() => [...map(dialog.pictures ?? [], p => p), ...map(message?.pictures ?? [], p => p)].filter((p): p is PictureModel => !!p), [dialog, message]);
-  const { visible, setVisible } = useHideMessage({ message });
 
   return (
     <>
-      {message?.text && <Popup
-        layout={dialog.layout ?? {}}
-        style={dialog.style}
-        disabled={lockState === LockStatus.LOCKED}
-        removed={removed}
-        onBack={dialog.backEnabled ? next : undefined}
-        clickThrough={focusLess}
-        leaveBorderUnchanged
-        visible={visible}
-        setVisible={setVisible}
-      >
-        <div style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          padding: 10,
-        }}
-        onClick={() => popupControl.onAction()}>
-          {!waitingForAction && <div style={{ flex: 1 }}>
-            <progressive-text period={`${PERIOD}`}>{message?.text}</progressive-text>
-          </div>}
-          {editing && active && <div style={{
-              textAlign: "center",
-              backgroundColor: "blue",
-              borderRadius: "50%",
-              width: "30px",
-              height: "30px",
-              color: 'white',
-            }}>E</div>}
-        </div>
-      </Popup>}
-      {subdialog && <Container dialog={subdialog} focusLess removed={removed} />}
-      <Container pictures={pictures}
-        menu={!textProgressing  ? menu : undefined}
-        prompt={!textProgressing ? prompt : undefined}
-        onSelect={onSelect}
-        onClose={onCloseMenu}
-        onPrompt={onPrompt}
-        removed={removed}></Container>
-      {editDialogOn && <Container menu={editMenu} onClose={() => setEditDialogOn(false)} />}
+      {message?.text && <>
+        <Popup
+          layout={dialog.layout ?? {}}
+          style={dialog.style}
+          disabled={lockState === LockStatus.LOCKED}
+          removed={removed}
+          onBack={dialog.backEnabled ? next : undefined}
+          clickThrough={focusLess}
+          leaveBorderUnchanged
+          visible={visible}
+          setVisible={setVisible}
+        >
+          <div style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            padding: 10,
+          }}
+          onClick={() => popupControl.onAction()}>
+            {!waitingForAction && <div style={{ flex: 1 }}>
+              <progressive-text period={`${PERIOD}`}>{message?.text}</progressive-text>
+            </div>}
+            {editing && active && <div style={{
+                textAlign: "center",
+                backgroundColor: "blue",
+                borderRadius: "50%",
+                width: "30px",
+                height: "30px",
+                color: 'white',
+              }}>E</div>}
+          </div>
+        </Popup>
+        {subdialog && <Container dialog={subdialog} focusLess removed={removed} />}
+        <Container pictures={pictures}
+          menu={!textProgressing  ? menu : undefined}
+          prompt={!textProgressing ? prompt : undefined}
+          onSelect={onSelect}
+          onClose={onCloseMenu}
+          onPrompt={onPrompt}
+          removed={removed}></Container>
+        {editDialogOn && <Container menu={editMenu} onClose={() => setEditDialogOn(false)} />}
+      </>}
     </>
   );
 }

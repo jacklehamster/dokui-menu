@@ -39,7 +39,7 @@ export function showMenu() {
           pictures: [{
             layout: "hello",
             images: [{ src:  byeSrc }],
-          }],    
+          }],
         },
       ],
     },
@@ -418,7 +418,27 @@ export function showMenu() {
               },
             ],
           }
-        },      
+        },
+        {
+          label: "exit",
+          back: true,
+          dialog: {
+            layout: {
+              position: [200, 100],
+              size: [300, 200],
+            },
+            messages: [
+              "Going down...",
+              {
+                autoNext: 0,
+              },
+              {
+                action: async () => console.log("Changing scene."),
+                autoNext: 0,
+              },
+            ],
+          }
+        }   
       ],
     },
   });

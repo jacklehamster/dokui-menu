@@ -30,7 +30,7 @@ export function Menu({
 
   const { removed, remove } = useRemove();
 
-  const [sub, setSub] = useState<{ menu?: MenuModel; dialog?: DialogModel; prompt?: PromptModel }>({});
+  const [sub, setSub] = useState<{ menu?: MenuModel; dialog?: DialogModel; prompt?: PromptModel } | undefined>();
   const [postClose, setPostClose] = useState<MenuItem>();
   const [hidden, setHidden] = useState(false);
  
@@ -56,7 +56,7 @@ export function Menu({
         setPostClose(rest);
       } else {
         setPostClose(undefined);
-        setSub({});
+        setSub(undefined);
         onSelect(item);
         if (item.back) {
           onBack(true);
@@ -70,7 +70,7 @@ export function Menu({
   const { scroll, scrollUp, scrollDown, selectedItem, select, disabled, mouseHoverEnabled, enableMouseHover, onMenuAction } = useMenu({ items, maxRows, onSelect: executeMenuItem, onBack, active });
 
   const onCloseSub = useCallback(async () => {
-    setSub({});
+    setSub(undefined);
     if (postClose) {
       executeMenuItem(postClose);
     }
@@ -141,11 +141,11 @@ export function Menu({
           <polygon points="100,20 110,10 90,10" style={{ fill: "white" }}/>
         </svg>
       </Popup>
-      <Container menu={sub.menu} dialog={sub.dialog} prompt={sub.prompt} pictures={menu.pictures}
+      {sub && <Container menu={sub.menu} dialog={sub.dialog} prompt={sub.prompt} pictures={menu.pictures}
         onSelect={onSelect}
         onClose={onCloseSub}
         onPrompt={onPrompt}
         removed={removed}
-      />
+      />}
     </>);
 }

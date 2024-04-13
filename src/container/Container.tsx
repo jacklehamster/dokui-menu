@@ -52,10 +52,9 @@ export function Container({
 
   useEffect(() => {
     if (elems.length && index >= elems.length) {
-      setIndex(0);
       onClose();
     }
-  }, [index, setIndex, elems, onClose]);
+  }, [index, elems, onClose]);
 
   return <>
     {elems[index]}
