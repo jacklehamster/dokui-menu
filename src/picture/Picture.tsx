@@ -1,7 +1,7 @@
-import { Popup } from '..';
 import { PictureModel } from './model/PictureModel';
 import { Images } from './Images';
 import { Container } from '../container/Container';
+import { Popup } from '@dobuki/react-popup';
 
 export interface Props {
   picture: PictureModel;

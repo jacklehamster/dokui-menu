@@ -1,5 +1,5 @@
 import { Keyboard } from "@etsoo/shared";
-import { PopupControl } from "./PopupControl";
+import { PopupControl } from "@dobuki/react-popup";
 import { Active } from "dok-types";
 
 type KeyMapping = {

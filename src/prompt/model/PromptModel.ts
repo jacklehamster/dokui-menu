@@ -1,6 +1,6 @@
 import { List } from "abstract-list";
-import { PopupModel } from "../../common/popup/PopupModel";
 import { Language } from "./LanguagesModel";
+import { PopupModel } from "@dobuki/react-popup";
 
 export interface PromptModel extends PopupModel {
   label?: string;

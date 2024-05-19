@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { PopupControl } from '../controls/PopupControl';
+import { PopupControl } from '@dobuki/react-popup';
 import { MenuModel } from './model/MenuModel';
 import { MenuItem } from './model/MenuItemModel';
 import { BasicPopup } from './BasicPopup';
 import { DialogModel } from '../dialog/model/DialogModel';
 import { PictureModel } from '../picture/model/PictureModel';
 import { PromptModel } from '../prompt/model/PromptModel';
-import { LayoutModel } from '..';
 import { List } from 'abstract-list';
+import { LayoutModel } from '@dobuki/react-popup';
 
 interface Props<I extends MenuItem = MenuItem> {
   layouts?: List<LayoutModel> | LayoutModel[];

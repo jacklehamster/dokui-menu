@@ -8,8 +8,8 @@ import { MenuItem } from '../menu/model/MenuItemModel';
 import { Container } from '../container/Container';
 import { MenuModel } from '../menu/model/MenuModel';
 import { LockStatus, useControls } from '../controls/useControls';
-import { Popup } from '../common/popup/Popup';
-import { useActiveFocus } from '../common/popup/useActiveFocus';
+import { Popup } from '@dobuki/react-popup';
+import { useActiveFocus } from '@dobuki/react-popup';
 import { useEditContext } from '../context/edit/EditContextProvider';
 import { PromptModel } from '../prompt/model/PromptModel';
 import { useKeyDown } from '../controls/useKeyDown';
@@ -192,7 +192,6 @@ export function Dialog({ dialog, onSelect, onClose, onPrompt, focusLess }: Props
             width: "100%",
             height: "100%",
             display: "flex",
-            padding: 10,
           }}
           onClick={() => popupControl.onAction()}>
             {!waitingForAction && <div style={{ flex: 1 }}>

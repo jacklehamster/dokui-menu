@@ -1,10 +1,10 @@
-import { useActiveFocus } from "../../common/popup/useActiveFocus";
 import { LockStatus, useControls } from "../../controls/useControls";
 import { useKeyDown } from "../../controls/useKeyDown";
 import { useMouseHover } from "../../controls/useMouseHover";
 import { useRemove } from "../../dialog/useRemove";
 import { List } from "abstract-list";
 import { useCallback, useMemo, useState } from "react";
+import { useActiveFocus } from "@dobuki/react-popup";
 
 interface Props {
   alphabet: string[];

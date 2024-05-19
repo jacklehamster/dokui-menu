@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useSelection } from "./selection/useSelection";
 import { LockStatus, useControls } from "../controls/useControls";
-import { PopupControlListener } from "../controls/PopupControlListener";
+import { PopupControlListener } from "@dobuki/react-popup";
 import { MenuItem } from "./model/MenuItemModel";
 import { List } from "abstract-list";
 import { useMouseHover } from "../controls/useMouseHover";

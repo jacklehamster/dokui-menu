@@ -4,7 +4,7 @@ import { MenuModel } from "./model/MenuModel";
 import { useCallback, useMemo, useState } from "react";
 import { useKeyDown } from "../controls/useKeyDown";
 import { openMenu } from "./openMenu";
-import { useControlContext } from "../context/controls/ControlContextProvider";
+import { useControlContext } from "@dobuki/react-popup";
 import { promptText } from "../prompt/promptText";
 import { Images } from "../picture/Images";
 

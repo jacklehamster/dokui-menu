@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useControls } from "./useControls";
-import { PopupControlListener } from "./PopupControlListener";
+import { PopupControlListener } from "@dobuki/react-popup";
 
 interface Props {
   active: boolean;

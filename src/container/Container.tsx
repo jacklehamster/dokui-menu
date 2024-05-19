@@ -1,5 +1,5 @@
 import { Menu } from "../menu/Menu";
-import { Dialog, LayoutModel, MenuModel } from "..";
+import { Dialog, MenuModel } from "..";
 import { DialogModel } from "../dialog/model/DialogModel";
 import { MenuItem } from "../menu/model/MenuItemModel";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -7,8 +7,9 @@ import { PictureModel } from "../picture/model/PictureModel";
 import { Picture } from "../picture/Picture";
 import { PromptModel } from "../prompt/model/PromptModel";
 import { Prompt } from "../prompt/Prompt";
-import { useLayoutRegistry } from "../common/layout/useLayoutRegistry";
+import { useLayoutRegistry } from "@dobuki/react-popup";
 import { List } from "abstract-list";
+import { LayoutModel } from "@dobuki/react-popup";
 
 export interface Props {
   layouts?: List<LayoutModel>;

@@ -1,9 +1,9 @@
 import React, {  } from 'react';
-import { ControlContextProvider } from '../context/controls/ControlContextProvider';
-import { LayoutContextProvider } from '../context/layout/LayoutContextProvider';
 import { Container, Props as ContainerProps } from '../container/Container';
-import { PopupControl } from '../controls/PopupControl';
 import { EditContextProvider } from '../context/edit/EditContextProvider';
+import { ControlContextProvider } from '@dobuki/react-popup';
+import { LayoutContextProvider } from "@dobuki/react-popup"
+import { PopupControl } from '@dobuki/react-popup';
 
 export interface Props extends Partial<ContainerProps> {
   detach: () => Promise<void>;

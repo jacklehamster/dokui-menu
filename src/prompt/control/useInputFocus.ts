@@ -1,5 +1,5 @@
-import { useControlContext } from "../../context/controls/ControlContextProvider";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useControlContext } from "@dobuki/react-popup";
 
 interface Props {
   text?: string;

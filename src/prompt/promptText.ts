@@ -1,5 +1,6 @@
-import { openMenu, PopupControl } from "..";
+import { openMenu } from "..";
 import { Language } from "./model/LanguagesModel";
+import { PopupControl } from "@dobuki/react-popup";
 
 interface Props {
   label?: string;

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Language, LanguageModel } from "../model/LanguagesModel";
 import { openMenu } from "../../menu/openMenu";
 import { MenuItem } from "../../menu/model/MenuItemModel";
-import { useControlContext } from "../../context/controls/ControlContextProvider";
+import { useControlContext } from "@dobuki/react-popup";
 
 interface Props {
   languages?: Language[];

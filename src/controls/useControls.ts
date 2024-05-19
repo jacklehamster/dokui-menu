@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { PopupControlListener } from "./PopupControlListener";
-import { useControlContext } from "../context/controls/ControlContextProvider";
+import { useEffect } from "react";
+import { PopupControlListener } from "@dobuki/react-popup";
+import { useControlContext } from "@dobuki/react-popup";
 
 export enum LockStatus {
   UNLOCKED,

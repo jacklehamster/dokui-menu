@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
-import { Popup } from '../common/popup/Popup';
+import { useCallback, useMemo } from 'react';
 import { PromptModel } from './model/PromptModel';
 import { Label } from './components/Label';
 import { Button } from './components/Button';
@@ -9,6 +8,7 @@ import { useTextInput } from './lang/useTextInput';
 import { useInputFocus } from './control/useInputFocus';
 import { ActionButton, usePromptControl } from './control/usePromptControl';
 import { Blink } from './components/Blink';
+import { Popup } from '@dobuki/react-popup';
 
 export interface Props {
   prompt: PromptModel;
