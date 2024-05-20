@@ -7,8 +7,8 @@ import { useAlphabet } from './lang/useAlphabet';
 import { useTextInput } from './lang/useTextInput';
 import { useInputFocus } from './control/useInputFocus';
 import { ActionButton, usePromptControl } from './control/usePromptControl';
-import { Blink } from './components/Blink';
 import { Popup } from '@dobuki/react-popup';
+import { BlinkUnderline } from './components/BlinkUnderline';
 
 export interface Props {
   prompt: PromptModel;
@@ -85,7 +85,7 @@ export function Prompt({ prompt, onConfirm, onClose }: Props): JSX.Element {
                 }}
                 onInput={({ currentTarget }) => setText(currentTarget.textContent ?? undefined)} 
               />
-              {!inputFocus && <Blink>&nbsp;&nbsp;</Blink>}
+              {!inputFocus && <BlinkUnderline />}
             </div>
             {prompt.randomText ? <Button hideOutline selected={!inputFocus && actionButtonSelected===ActionButton.RANDOM}
               padding={5} margin={5} emoji='🎲'
