@@ -2720,16 +2720,17 @@ var import_react21 = __toESM(require_react(), 1);
 var import_react22 = __toESM(require_react(), 1);
 var jsx_dev_runtime9 = __toESM(require_jsx_dev_runtime(), 1);
 var jsx_dev_runtime10 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime11 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react23 = __toESM(require_react(), 1);
 var import_react24 = __toESM(require_react(), 1);
-var jsx_dev_runtime11 = __toESM(require_jsx_dev_runtime(), 1);
-var import_react25 = __toESM(require_react(), 1);
 var jsx_dev_runtime12 = __toESM(require_jsx_dev_runtime(), 1);
+var import_react25 = __toESM(require_react(), 1);
+var jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime(), 1);
 var import_react26 = __toESM(require_react(), 1);
 var import_react27 = __toESM(require_react(), 1);
 var import_react28 = __toESM(require_react(), 1);
 var import_react29 = __toESM(require_react(), 1);
-var jsx_dev_runtime13 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime14 = __toESM(require_jsx_dev_runtime(), 1);
 var useSelection = function({ items, maxRows = items.length.valueOf() }) {
   const [selectedIndex, setSelectedIndex] = import_react6.useState(0);
   const [scroll, setScroll] = import_react6.useState(0);
@@ -3858,6 +3859,11 @@ var prefixer = function(element, index, children, callback) {
       }
   }
 };
+var BlinkUnderline = function() {
+  return jsx_dev_runtime9.jsxDEV(Blink, {
+    children: "\xA0\xA0"
+  }, undefined, false, undefined, this);
+};
 var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
   const { currentLanguageModel, chooseLanguage } = useLanguageModel({ languages: prompt2.languages });
   const { alphabet, setCapitalize } = useAlphabet({ languageModel: currentLanguageModel });
@@ -3879,24 +3885,24 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
     focus
   });
   const clickable = import_react13.useMemo(() => !disabled && mouseHoverEnabled, [disabled, mouseHoverEnabled]);
-  return jsx_dev_runtime9.jsxDEV(jsx_dev_runtime9.Fragment, {
-    children: jsx_dev_runtime9.jsxDEV(react_popup9.Popup, {
+  return jsx_dev_runtime10.jsxDEV(jsx_dev_runtime10.Fragment, {
+    children: jsx_dev_runtime10.jsxDEV(react_popup9.Popup, {
       layout: prompt2.layout ?? {},
       style: prompt2.style,
       removed,
       disabled,
       onBack: onClose,
       fit: true,
-      children: jsx_dev_runtime9.jsxDEV("div", {
+      children: jsx_dev_runtime10.jsxDEV("div", {
         style: { padding: 5 },
         children: [
-          jsx_dev_runtime9.jsxDEV(Label, {
+          jsx_dev_runtime10.jsxDEV(Label, {
             label: prompt2.label
           }, undefined, false, undefined, this),
-          jsx_dev_runtime9.jsxDEV("div", {
+          jsx_dev_runtime10.jsxDEV("div", {
             style: { padding: 5, display: "flex" },
             children: [
-              jsx_dev_runtime9.jsxDEV("div", {
+              jsx_dev_runtime10.jsxDEV("div", {
                 autoCorrect: "off",
                 autoCapitalize: "off",
                 spellCheck: "false",
@@ -3913,7 +3919,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                 },
                 onClick: () => focus(),
                 children: [
-                  jsx_dev_runtime9.jsxDEV("div", {
+                  jsx_dev_runtime10.jsxDEV("div", {
                     ref: inputRef,
                     contentEditable: true,
                     style: { width: "100%", display: "inline" },
@@ -3932,12 +3938,10 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                     },
                     onInput: ({ currentTarget }) => setText(currentTarget.textContent ?? undefined)
                   }, undefined, false, undefined, this),
-                  !inputFocus && jsx_dev_runtime9.jsxDEV(Blink, {
-                    children: "\xA0\xA0"
-                  }, undefined, false, undefined, this)
+                  !inputFocus && jsx_dev_runtime10.jsxDEV(BlinkUnderline, {}, undefined, false, undefined, this)
                 ]
               }, undefined, true, undefined, this),
-              prompt2.randomText ? jsx_dev_runtime9.jsxDEV(Button, {
+              prompt2.randomText ? jsx_dev_runtime10.jsxDEV(Button, {
                 hideOutline: true,
                 selected: !inputFocus && actionButtonSelected === ActionButton.RANDOM,
                 padding: 5,
@@ -3954,7 +3958,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
               }, undefined, false, undefined, this) : undefined
             ]
           }, undefined, true, undefined, this),
-          jsx_dev_runtime9.jsxDEV("div", {
+          jsx_dev_runtime10.jsxDEV("div", {
             style: {
               pointerEvents: inputFocus ? "none" : undefined,
               opacity: inputFocus ? 0.3 : 1,
@@ -3966,16 +3970,16 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                 enableMouseHover();
               }
             },
-            children: jsx_dev_runtime9.jsxDEV("div", {
+            children: jsx_dev_runtime10.jsxDEV("div", {
               children: [
-                jsx_dev_runtime9.jsxDEV("div", {
+                jsx_dev_runtime10.jsxDEV("div", {
                   style: {
                     margin: 5,
                     display: "grid",
                     gridTemplateColumns: GRID_TEMPLATE_COLUMN
                   },
                   children: alphabet.map((letter, index) => {
-                    return jsx_dev_runtime9.jsxDEV(Button, {
+                    return jsx_dev_runtime10.jsxDEV(Button, {
                       selected: !inputFocus && Math.floor(index / COLUMNS2) === position2[1] && index % COLUMNS2 === position2[0],
                       padding: 3,
                       text: letter,
@@ -3993,10 +3997,10 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                     }, index, false, undefined, this);
                   })
                 }, undefined, false, undefined, this),
-                jsx_dev_runtime9.jsxDEV("div", {
+                jsx_dev_runtime10.jsxDEV("div", {
                   style: { margin: 5, display: "flex", gap: 10 },
                   children: [
-                    prompt2.languages && jsx_dev_runtime9.jsxDEV(Button, {
+                    prompt2.languages && jsx_dev_runtime10.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.LANG,
                       padding: "0px 5px",
                       emoji: "\uD83C\uDF10",
@@ -4012,7 +4016,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                       },
                       onClick: onAction
                     }, undefined, false, undefined, this),
-                    currentLanguageModel.capitalize && jsx_dev_runtime9.jsxDEV(Button, {
+                    currentLanguageModel.capitalize && jsx_dev_runtime10.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.CAP,
                       padding: "0px 5px",
                       text: "Aa",
@@ -4028,7 +4032,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                       },
                       onClick: onAction
                     }, undefined, false, undefined, this),
-                    jsx_dev_runtime9.jsxDEV(Button, {
+                    jsx_dev_runtime10.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.SPACE,
                       padding: "0px 10px",
                       stretch: true,
@@ -4045,7 +4049,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                       },
                       onClick: onAction
                     }, undefined, false, undefined, this),
-                    jsx_dev_runtime9.jsxDEV(Button, {
+                    jsx_dev_runtime10.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.DEL,
                       padding: "0px 10px",
                       text: "del",
@@ -4062,7 +4066,7 @@ var Prompt = function({ prompt: prompt2, onConfirm, onClose }) {
                       },
                       onClick: onAction
                     }, undefined, false, undefined, this),
-                    jsx_dev_runtime9.jsxDEV(Button, {
+                    jsx_dev_runtime10.jsxDEV(Button, {
                       selected: !inputFocus && actionButtonSelected === ActionButton.OK,
                       padding: "0px 20px",
                       text: "ok",
@@ -4111,20 +4115,20 @@ var Container2 = function({
   react_popup10.useLayoutRegistry({ layouts });
   const elems = import_react11.useMemo(() => {
     return [
-      dialog ? jsx_dev_runtime10.jsxDEV(Dialog, {
+      dialog ? jsx_dev_runtime11.jsxDEV(Dialog, {
         dialog,
         onSelect,
         onPrompt,
         onClose: onNext,
         focusLess
       }, undefined, false, undefined, this) : undefined,
-      menu ? jsx_dev_runtime10.jsxDEV(Menu2, {
+      menu ? jsx_dev_runtime11.jsxDEV(Menu2, {
         menu,
         onSelect,
         onPrompt,
         onClose: onNext
       }, undefined, false, undefined, this) : undefined,
-      prompt2 ? jsx_dev_runtime10.jsxDEV(Prompt, {
+      prompt2 ? jsx_dev_runtime11.jsxDEV(Prompt, {
         prompt: prompt2,
         onConfirm: onPrompt,
         onClose: onNext
@@ -4136,10 +4140,10 @@ var Container2 = function({
       onClose();
     }
   }, [index, elems, onClose]);
-  return jsx_dev_runtime10.jsxDEV(jsx_dev_runtime10.Fragment, {
+  return jsx_dev_runtime11.jsxDEV(jsx_dev_runtime11.Fragment, {
     children: [
       elems[index],
-      pictures?.map((picture, index2) => jsx_dev_runtime10.jsxDEV(Picture, {
+      pictures?.map((picture, index2) => jsx_dev_runtime11.jsxDEV(Picture, {
         removed,
         picture
       }, index2, false, undefined, this))
@@ -4448,8 +4452,8 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
     key: "Backspace",
     callback: promptDeleteItem
   });
-  return jsx_dev_runtime11.jsxDEV(jsx_dev_runtime11.Fragment, {
-    children: jsx_dev_runtime11.jsxDEV("div", {
+  return jsx_dev_runtime12.jsxDEV(jsx_dev_runtime12.Fragment, {
+    children: jsx_dev_runtime12.jsxDEV("div", {
       style: {
         color: rowSelected ? builtInItem ? "#0000ee" : "black" : disabled ? "silver" : "white",
         backgroundColor: !rowSelected ? builtInItem ? "#0000ee" : "black" : disabled ? "silver" : "white",
@@ -4460,51 +4464,51 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
       onMouseOver,
       onClick: editable && !builtInItem ? () => setEditMenuOn(true) : onClick,
       children: [
-        jsx_dev_runtime11.jsxDEV("div", {
+        jsx_dev_runtime12.jsxDEV("div", {
           style: { flex: 1, display: "flex", padding: "0 10px" },
           children: [
-            itemModel?.icon && jsx_dev_runtime11.jsxDEV("div", {
+            itemModel?.icon && jsx_dev_runtime12.jsxDEV("div", {
               style: { width: 30 },
-              children: jsx_dev_runtime11.jsxDEV(Images, {
+              children: jsx_dev_runtime12.jsxDEV(Images, {
                 images: itemModel.icon
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this),
-            itemModel?.emoji && jsx_dev_runtime11.jsxDEV("span", {
+            itemModel?.emoji && jsx_dev_runtime12.jsxDEV("span", {
               style: { height: 30 },
               children: [
                 itemModel?.emoji,
                 "\xA0"
               ]
             }, undefined, true, undefined, this),
-            jsx_dev_runtime11.jsxDEV("span", {
+            jsx_dev_runtime12.jsxDEV("span", {
               children: itemModel?.label
             }, undefined, false, undefined, this),
-            (itemModel?.showTriangle || itemModel?.showTriangle === undefined && itemModel?.submenu) && jsx_dev_runtime11.jsxDEV("span", {
+            (itemModel?.showTriangle || itemModel?.showTriangle === undefined && itemModel?.submenu) && jsx_dev_runtime12.jsxDEV("span", {
               style: { height: 30 },
               children: "\xA0\u23F5"
             }, undefined, false, undefined, this)
           ]
         }, undefined, true, undefined, this),
-        editable && active && rowSelected && !builtInItem && jsx_dev_runtime11.jsxDEV("div", {
+        editable && active && rowSelected && !builtInItem && jsx_dev_runtime12.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "blue"
           },
           children: "E"
         }, undefined, false, undefined, this),
-        editable && !builtInItem && itemModel?.submenu && jsx_dev_runtime11.jsxDEV("div", {
+        editable && !builtInItem && itemModel?.submenu && jsx_dev_runtime12.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "green"
           },
-          children: jsx_dev_runtime11.jsxDEV("svg", {
+          children: jsx_dev_runtime12.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               height: 30,
               width: 30
             },
             children: [
-              jsx_dev_runtime11.jsxDEV("line", {
+              jsx_dev_runtime12.jsxDEV("line", {
                 x1: "10",
                 y1: "10",
                 x2: "20",
@@ -4512,7 +4516,7 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
                 stroke: "white",
                 strokeWidth: "2"
               }, undefined, false, undefined, this),
-              jsx_dev_runtime11.jsxDEV("line", {
+              jsx_dev_runtime12.jsxDEV("line", {
                 x1: "10",
                 y1: "14",
                 x2: "20",
@@ -4520,7 +4524,7 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
                 stroke: "white",
                 strokeWidth: "2"
               }, undefined, false, undefined, this),
-              jsx_dev_runtime11.jsxDEV("line", {
+              jsx_dev_runtime12.jsxDEV("line", {
                 x1: "10",
                 y1: "18",
                 x2: "20",
@@ -4531,25 +4535,25 @@ var MenuRow = function({ item, index, selectedItem, onMouseMove, onMouseOver, on
             ]
           }, undefined, true, undefined, this)
         }, undefined, false, undefined, this),
-        editable && !builtInItem && itemModel?.dialog && jsx_dev_runtime11.jsxDEV("div", {
+        editable && !builtInItem && itemModel?.dialog && jsx_dev_runtime12.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "orange"
           },
           children: "D"
         }, undefined, false, undefined, this),
-        editable && !builtInItem && itemModel?.back && jsx_dev_runtime11.jsxDEV("div", {
+        editable && !builtInItem && itemModel?.back && jsx_dev_runtime12.jsxDEV("div", {
           style: {
             ...ICON_STYLE,
             backgroundColor: "red"
           },
           children: "B"
         }, undefined, false, undefined, this),
-        editMenuOn && jsx_dev_runtime11.jsxDEV(Container2, {
+        editMenuOn && jsx_dev_runtime12.jsxDEV(Container2, {
           menu: editMenu,
           onClose: () => setEditMenuOn(false)
         }, undefined, false, undefined, this),
-        rowSelected && itemModel?.onHover && jsx_dev_runtime11.jsxDEV(Container2, {
+        rowSelected && itemModel?.onHover && jsx_dev_runtime12.jsxDEV(Container2, {
           dialog: itemModel.onHover.dialog,
           pictures: itemModel.onHover.pictures,
           focusLess: true
@@ -4624,16 +4628,16 @@ var Menu2 = function({
     setHidden(false);
   }, [setSub, executeMenuItem, setHidden, postClose]);
   const clickable = import_react.useMemo(() => !disabled && mouseHoverEnabled, [disabled, mouseHoverEnabled]);
-  return jsx_dev_runtime12.jsxDEV(jsx_dev_runtime12.Fragment, {
+  return jsx_dev_runtime13.jsxDEV(jsx_dev_runtime13.Fragment, {
     children: [
-      jsx_dev_runtime12.jsxDEV(react_popup13.Popup, {
+      jsx_dev_runtime13.jsxDEV(react_popup13.Popup, {
         layout: layout ?? {},
         style,
         disabled,
         removed: removed || hidden,
         onBack: menu.backEnabled ? onBack : undefined,
         children: [
-          jsx_dev_runtime12.jsxDEV("svg", {
+          jsx_dev_runtime13.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -4644,22 +4648,22 @@ var Menu2 = function({
               left: `calc(50% - 100px)`
             },
             onClick: () => scrollUp(),
-            children: jsx_dev_runtime12.jsxDEV("polygon", {
+            children: jsx_dev_runtime13.jsxDEV("polygon", {
               points: "100,10 110,20 90,20",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime12.jsxDEV("div", {
+          jsx_dev_runtime13.jsxDEV("div", {
             style: {
               paddingTop: 10,
               cursor: clickable ? "inherit" : "auto"
             },
-            children: jsx_dev_runtime12.jsxDEV("div", {
+            children: jsx_dev_runtime13.jsxDEV("div", {
               ref: menuRef,
               style: { height: `calc(100% - 27px)`, overflow: "hidden" },
-              children: jsx_dev_runtime12.jsxDEV("div", {
+              children: jsx_dev_runtime13.jsxDEV("div", {
                 style: { marginTop: scroll * -31, transition: "margin-top .2s" },
-                children: B(items, (item, index) => jsx_dev_runtime12.jsxDEV(MenuRow, {
+                children: B(items, (item, index) => jsx_dev_runtime13.jsxDEV(MenuRow, {
                   index,
                   item,
                   selectedItem,
@@ -4687,7 +4691,7 @@ var Menu2 = function({
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this),
-          jsx_dev_runtime12.jsxDEV("svg", {
+          jsx_dev_runtime13.jsxDEV("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             style: {
               position: "absolute",
@@ -4698,14 +4702,14 @@ var Menu2 = function({
               left: `calc(50% - 100px)`
             },
             onClick: () => scrollDown(),
-            children: jsx_dev_runtime12.jsxDEV("polygon", {
+            children: jsx_dev_runtime13.jsxDEV("polygon", {
               points: "100,20 110,10 90,10",
               style: { fill: "white" }
             }, undefined, false, undefined, this)
           }, undefined, false, undefined, this)
         ]
       }, undefined, true, undefined, this),
-      sub && jsx_dev_runtime12.jsxDEV(Container2, {
+      sub && jsx_dev_runtime13.jsxDEV(Container2, {
         menu: sub.menu,
         dialog: sub.dialog,
         prompt: sub.prompt,
@@ -4903,10 +4907,10 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
     ]
   }), [message, index, popupControl, editMessage, insertMessage, deleteMessage]);
   const pictures = import_react26.useMemo(() => [...B(dialog.pictures ?? [], (p2) => p2), ...B(message?.pictures ?? [], (p2) => p2)].filter((p2) => !!p2), [dialog, message]);
-  return jsx_dev_runtime13.jsxDEV(jsx_dev_runtime13.Fragment, {
-    children: message?.text && jsx_dev_runtime13.jsxDEV(jsx_dev_runtime13.Fragment, {
+  return jsx_dev_runtime14.jsxDEV(jsx_dev_runtime14.Fragment, {
+    children: message?.text && jsx_dev_runtime14.jsxDEV(jsx_dev_runtime14.Fragment, {
       children: [
-        jsx_dev_runtime13.jsxDEV(react_popup16.Popup, {
+        jsx_dev_runtime14.jsxDEV(react_popup16.Popup, {
           layout: dialog.layout ?? {},
           style: dialog.style,
           disabled: lockState === LockStatus.LOCKED,
@@ -4916,7 +4920,7 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
           leaveBorderUnchanged: true,
           visible,
           setVisible,
-          children: jsx_dev_runtime13.jsxDEV("div", {
+          children: jsx_dev_runtime14.jsxDEV("div", {
             style: {
               width: "100%",
               height: "100%",
@@ -4924,14 +4928,14 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
             },
             onClick: () => popupControl.onAction(),
             children: [
-              !waitingForAction && jsx_dev_runtime13.jsxDEV("div", {
+              !waitingForAction && jsx_dev_runtime14.jsxDEV("div", {
                 style: { flex: 1 },
-                children: jsx_dev_runtime13.jsxDEV("progressive-text", {
+                children: jsx_dev_runtime14.jsxDEV("progressive-text", {
                   period: `${PERIOD}`,
                   children: message?.text
                 }, undefined, false, undefined, this)
               }, undefined, false, undefined, this),
-              editing && active && jsx_dev_runtime13.jsxDEV("div", {
+              editing && active && jsx_dev_runtime14.jsxDEV("div", {
                 style: {
                   textAlign: "center",
                   backgroundColor: "blue",
@@ -4945,12 +4949,12 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
             ]
           }, undefined, true, undefined, this)
         }, undefined, false, undefined, this),
-        subdialog && jsx_dev_runtime13.jsxDEV(Container2, {
+        subdialog && jsx_dev_runtime14.jsxDEV(Container2, {
           dialog: subdialog,
           focusLess: true,
           removed
         }, undefined, false, undefined, this),
-        jsx_dev_runtime13.jsxDEV(Container2, {
+        jsx_dev_runtime14.jsxDEV(Container2, {
           pictures,
           menu: !textProgressing ? menu : undefined,
           prompt: !textProgressing ? prompt2 : undefined,
@@ -4959,7 +4963,7 @@ var Dialog = function({ dialog, onSelect, onClose, onPrompt, focusLess }) {
           onPrompt,
           removed
         }, undefined, false, undefined, this),
-        editDialogOn && jsx_dev_runtime13.jsxDEV(Container2, {
+        editDialogOn && jsx_dev_runtime14.jsxDEV(Container2, {
           menu: editMenu,
           onClose: () => setEditDialogOn(false)
         }, undefined, false, undefined, this)
@@ -26880,6 +26884,7 @@ var ActionButton;
   ActionButton2[ActionButton2["OK"] = 4] = "OK";
   ActionButton2[ActionButton2["RANDOM"] = 5] = "RANDOM";
 })(ActionButton || (ActionButton = {}));
+var react_popup9 = __toESM2(require_dist(), 1);
 var __assign = function() {
   __assign = Object.assign || function __assign(t) {
     for (var s2, i2 = 1, n = arguments.length;i2 < n; i2++) {
@@ -27648,7 +27653,6 @@ var Blink = pt.span`
   animation: ${animation};
   text-decoration: underline;
 `;
-var react_popup9 = __toESM2(require_dist(), 1);
 var COLUMNS2 = 10;
 var GRID_TEMPLATE_COLUMN = new Array(COLUMNS2).fill("auto").join(" ");
 var react_popup10 = __toESM2(require_dist(), 1);
