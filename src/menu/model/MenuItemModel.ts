@@ -2,7 +2,7 @@ import { DialogModel } from "../../dialog/model/DialogModel";
 import { MenuModel } from "./MenuModel";
 import { PromptModel } from "../../prompt/model/PromptModel";
 import { PictureModel } from "../../picture/model/PictureModel";
-import { Image } from "../../picture/model/ImageModel";
+import { Image } from "@dobuki/react-picture";
 
 export interface MenuItemModel<I extends MenuItem = MenuItem> {
   icon?: Image | Image[];

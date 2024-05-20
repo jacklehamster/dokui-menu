@@ -6,7 +6,7 @@ import { useKeyDown } from "../controls/useKeyDown";
 import { openMenu } from "./openMenu";
 import { useControlContext } from "@dobuki/react-popup";
 import { promptText } from "../prompt/promptText";
-import { Images } from "../picture/Images";
+import { Images } from "@dobuki/react-picture";
 
 const ICON_STYLE: React.CSSProperties = {
   textAlign: "center",

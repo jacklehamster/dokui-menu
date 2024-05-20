@@ -67,6 +67,7 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@dobuki/react-picture": "^1.0.2",
     "@dobuki/react-popup": "^1.0.7",
     "@etsoo/shared": "^1.2.36",
     "abstract-list": "^1.0.15",
